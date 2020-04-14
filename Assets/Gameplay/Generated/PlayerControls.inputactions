@@ -15,9 +15,17 @@
                 },
                 {
                     "name": "Shooting",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "b6883f2c-645d-4da8-9415-64802e012b71",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "9f6c7942-12d5-452c-918f-fbf68ec78319",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 }
@@ -93,10 +101,21 @@
                     "name": "",
                     "id": "d80ca28f-6e41-4ae3-ac35-b5221bbd4b64",
                     "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "processors": "",
                     "groups": "",
                     "action": "Shooting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "401470e7-d271-46fe-8a20-a73404e46f76",
+                    "path": "<Keyboard>/e",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Gameplay/PlayerControls.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Gameplay/Generated/PlayerControls.inputactions'
 
 using System;
 using System.Collections;
@@ -28,9 +28,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Shooting"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""b6883f2c-645d-4da8-9415-64802e012b71"",
-                    ""expectedControlType"": ""Key"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f6c7942-12d5-452c-918f-fbf68ec78319"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -106,10 +114,21 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""d80ca28f-6e41-4ae3-ac35-b5221bbd4b64"",
                     ""path"": ""<Keyboard>/leftCtrl"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Shooting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""401470e7-d271-46fe-8a20-a73404e46f76"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -122,6 +141,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Shooting = m_Player.FindAction("Shooting", throwIfNotFound: true);
+        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -173,12 +193,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Shooting;
+    private readonly InputAction m_Player_Inventory;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Shooting => m_Wrapper.m_Player_Shooting;
+        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -194,6 +216,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Shooting.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShooting;
                 @Shooting.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShooting;
                 @Shooting.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShooting;
+                @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -204,6 +229,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Shooting.started += instance.OnShooting;
                 @Shooting.performed += instance.OnShooting;
                 @Shooting.canceled += instance.OnShooting;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
             }
         }
     }
@@ -212,5 +240,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnShooting(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

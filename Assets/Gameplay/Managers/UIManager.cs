@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public GameObject uiCanvas;
+
     private void Awake() {
         Instance = this;    
     }
@@ -26,12 +29,21 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+
+
+    // INPUT
+
+    public void Inventory(InputAction.CallbackContext context)
+    {
+        uiCanvas.SetActive(!uiCanvas.activeSelf);
+        GameManager.Instance.PauseResume();
     }
 }
