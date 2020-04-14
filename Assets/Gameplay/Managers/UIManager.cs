@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -43,7 +45,26 @@ public class UIManager : MonoBehaviour
 
     public void Inventory(InputAction.CallbackContext context)
     {
-        uiCanvas.SetActive(!uiCanvas.activeSelf);
         GameManager.Instance.PauseResume();
+    
+        if(uiCanvas.activeSelf)
+        {
+            uiCanvas.SetActive(false);
+        }
+        else
+        {
+            ActivateCanvas();
+        }
+
+
+    }
+
+    private void ActivateCanvas()
+    {
+        uiCanvas.SetActive(true);
+        GameObject firstInventoryButton = uiCanvas.transform.GetChild(0).GetChild(0).GetChild(0).gameObject;
+        if(firstInventoryButton == null) Debug.Log("Something went wrong");
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstInventoryButton);
     }
 }
