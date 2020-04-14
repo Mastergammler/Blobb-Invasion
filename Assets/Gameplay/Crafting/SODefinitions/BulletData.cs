@@ -1,11 +1,8 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new Bullet ", menuName = "Crafting/Bullet", order = 2)]
-public class BulletData : ScriptableObject 
+public class BulletData : ScriptableBase 
 {
-    public string Name;
-    public string Tooltip;
-    public Sprite BaseArt;
     public Sprite CoreSpecificArt;
     public float DamageMod;
     public float FireRateMod;   

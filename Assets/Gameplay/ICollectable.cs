@@ -15,5 +15,8 @@ public enum CollectableType
     CORE_VOLTAGE,
     BUL_BIG,
     BUL_BOOM,
-    BUL_SPRAY
+    BUL_SPRAY,
+    GUN_PISTOL,
+    GUN_SHOTGUT,
+    GUN_MACHINE_GUN
 }

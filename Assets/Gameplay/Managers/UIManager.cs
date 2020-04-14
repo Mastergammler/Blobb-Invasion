@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Transactions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,6 +24,17 @@ public class UIManager : MonoBehaviour
 
     public GameObject uiCanvas;
 
+
+    private IInventory mInventory;
+
+    private Transform inventoryPanel;
+    private Transform craftingPanel;
+
+    private const int BULLET_BUTTON_CHILD_NO = 1;
+    private const int WEAPON_BUTTON_CHILD_NO = 2;
+    private const int CORE_BUTTON_CHILD_NO = 3;
+
+
     private void Awake() {
         Instance = this;    
     }
@@ -31,6 +43,8 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        inventoryPanel = uiCanvas.transform.GetChild(0);
+        craftingPanel = uiCanvas.transform.GetChild(1);
     }
 
     // Update is called once per frame
@@ -40,6 +54,10 @@ public class UIManager : MonoBehaviour
     }
 
 
+    public void SetInventory(IInventory inventory)
+    {
+        mInventory = inventory;
+    }
 
     // INPUT
 
@@ -55,8 +73,6 @@ public class UIManager : MonoBehaviour
         {
             ActivateCanvas();
         }
-
-
     }
 
     private void ActivateCanvas()
@@ -66,5 +82,12 @@ public class UIManager : MonoBehaviour
         if(firstInventoryButton == null) Debug.Log("Something went wrong");
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstInventoryButton);
+        UpdateUiFromInventory();
+    }
+
+    private void UpdateUiFromInventory()
+    {
+        ScriptableBase currentWeapon = mInventory.GetActiveWeaponItem();
+        craftingPanel.GetChild(WEAPON_BUTTON_CHILD_NO).GetComponentInChildren<ItemSlot>().AddItem(currentWeapon);
     }
 }
