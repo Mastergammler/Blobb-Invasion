@@ -4,20 +4,7 @@ using System.Collections.Generic;
 
 public class CharController : MonoBehaviour
 {
-
     private static int HP_GAIN_VALUE = 20;
-
-    [SerializeField]
-    private float HP = 100;
-    private float mMaxHp;
-    [SerializeField]
-    private float HealthLossPerTick = 0.01f;
-
-
-    private Color mStarHUE;
-    [SerializeField]
-    private Color mTargetHUE;
-
     public float MovementSpeed = 0.1f;
     public GameObject bullet;
 
@@ -28,18 +15,16 @@ public class CharController : MonoBehaviour
     private SpriteRenderer mSpriteRenderer;
     private Vector2 mCurMovement;
     private Vector2 mCachedDirection;
-
     private Transform mGunHinge;
 
-
+    //-------------------
+    //  Player Systems
+    //-------------------
 
     private IMoveable mMovementHandler;
-
-
+    private IHealthManager mHealthManager;
     // Preemptive inventory
     private Dictionary<CollectableType,int> mInventory = new Dictionary<CollectableType, int>();
-
-
 
 
     //************
@@ -51,9 +36,7 @@ public class CharController : MonoBehaviour
         mCachedDirection = new Vector2(1,0);
         mGunHinge = transform.GetChild(0);
         mMovementHandler = GetComponent<IMoveable>();
-        mSpriteRenderer = GetComponent<SpriteRenderer>();
-        mStarHUE = mSpriteRenderer.color;
-        mMaxHp = HP;
+        mHealthManager = GetComponent<IHealthManager>();
     }
 
     void Update()
@@ -62,43 +45,6 @@ public class CharController : MonoBehaviour
         else if(mCurMovement.x == -1) transform.localScale = new Vector3(-1,transform.localScale.y,transform.localScale.z);
 
         mGunHinge.rotation = Quaternion.LookRotation(Vector3.forward,new Vector3(mCurMovement.x,mCurMovement.y,0));
-
-        loseHealth();
-    }
-
-
-    private void loseHealth()
-    {
-        HP -= HealthLossPerTick * Time.deltaTime;
-        adjustColor();
-
-        if(HP <= 0) Die();
-    }
-
-    private void adjustColor()
-    {
-        float hpPercentage = HP/mMaxHp;
-        Color adjustedColor = Color.Lerp(mTargetHUE,mStarHUE,hpPercentage);
-        adjustedColor.a = 1;
-        mSpriteRenderer.color = adjustedColor;
-    }
-
-    private void gainHp(int hp)
-    {
-        if(HP + hp > mMaxHp)
-        {
-            HP = mMaxHp;
-        }
-        else
-        {
-            HP += hp;
-        }
-    }
-
-    private void Die()
-    {
-        Debug.Log("Player Died");
-        gameObject.SetActive(false);
     }
         
     //*****************
@@ -116,7 +62,7 @@ public class CharController : MonoBehaviour
         if(mCurMovement == Vector2.zero) bulletDirection = mCachedDirection;
 
         newBullet.GetComponent<BulletScript>().Fly(bulletDirection);
-        GetComponent<ISpriteMaterialChanger>().ChangeMaterial();
+        //GetComponent<ISpriteMaterialChanger>().ChangeMaterial();
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -144,7 +90,7 @@ public class CharController : MonoBehaviour
 
             if(type == CollectableType.HP_BOBBLE)
             {
-                gainHp(HP_GAIN_VALUE);
+                mHealthManager.GainHealth(HP_GAIN_VALUE);
                 return;
             }
 

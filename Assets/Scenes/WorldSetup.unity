@@ -33811,6 +33811,7 @@ GameObject:
   - component: {fileID: 1465300805}
   - component: {fileID: 1465300807}
   - component: {fileID: 1465300802}
+  - component: {fileID: 1465300808}
   - component: {fileID: 1465300803}
   - component: {fileID: 1465300806}
   m_Layer: 0
@@ -33993,8 +33994,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d678cae4142112f46869208435b74af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 100
-  HealthLossPerTick: 3
   mTargetHUE: {r: 0.94901943, g: 0, b: 1, a: 0}
   MovementSpeed: 4
   bullet: {fileID: 6864454353788644648, guid: 63b544fcd29e12f448ed43cb79887ce7, type: 3}
@@ -34079,6 +34078,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.05620552}
   serializedVersion: 2
   m_Radius: 0.4125445
+--- !u!114 &1465300808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465300796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b948571bbc116446a9826e49087906d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 100
+  HealthLossTick: 3
+  AdjustColor: 0
+  TargetHue: {r: 0.9490196, g: 0, b: 1, a: 0}
 --- !u!1 &1521234263
 GameObject:
   m_ObjectHideFlags: 0
