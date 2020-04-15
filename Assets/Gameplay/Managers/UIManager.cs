@@ -1,4 +1,5 @@
-﻿using System.Transactions;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -89,30 +90,35 @@ public class UIManager : MonoBehaviour
 
     public void ChangeInventoryItem(ItemSlot slot)
     {
+        CraftingType ct = Utils.ConvertCollectableType(slot.Item.Type);
+        BulletData bullet = mInventory.GetActiveBulletItem();
+        WeaponData weapon = mInventory.GetActiveWeaponItem();
+        CoreData core = mInventory.GetActiveCoreItem();
+        
         if(slot.IsInventorySlot)
         {
-            //todo - parse collectable type to other type
-            CollectableType ct = slot.Item.Type;
-            if(ct == CollectableType.CORE_PLASMA || ct == CollectableType.CORE_VOLTAGE)
+            switch(ct)
             {
-                BulletData bullet = mInventory.GetActiveBulletItem();
-                WeaponData weapon = mInventory.GetActiveWeaponItem();
-                mInventory.SetActiveItems(bullet,weapon,(CoreData)slot.Item);
+                case CraftingType.BULLET: bullet = (BulletData) slot.Item; break;
+                case CraftingType.WEAPON: weapon = (WeaponData) slot.Item; break;
+                case CraftingType.CORE: core = (CoreData) slot.Item; break;
             }
         }
         else
         {
-            CollectableType ct = slot.Item.Type;
-            if(ct == CollectableType.CORE_PLASMA || ct == CollectableType.CORE_VOLTAGE)
+            switch(ct)
             {
-                BulletData bullet = mInventory.GetActiveBulletItem();
-                WeaponData weapon = mInventory.GetActiveWeaponItem();
-                mInventory.SetActiveItems(bullet,weapon,null);
+                case CraftingType.BULLET: bullet = null; break;
+                case CraftingType.WEAPON: weapon = null; break;
+                case CraftingType.CORE: core = null; break;
             }
         }
 
+        mInventory.SetActiveItems(bullet,weapon,core);
         updateCraftingItems();
     }
+
+
 
 
     private void ActivateCanvas()
@@ -164,20 +170,15 @@ public class UIManager : MonoBehaviour
 
         int childNo = 0;
 
-        switch(item.Type)
+        switch(Utils.ConvertCollectableType(item.Type))
         {
-            case CollectableType.BUL_BIG:
-            case CollectableType.BUL_BOOM:
-            case CollectableType.BUL_SPRAY:
+            case CraftingType.BULLET:
                 childNo = BULLET_SLOTS_CHILD_NO; 
                 break;
-            case CollectableType.GUN_PISTOL:
-            case CollectableType.GUN_SHOTGUT:
-            case CollectableType.GUN_MACHINE_GUN:
+            case CraftingType.WEAPON:
                 childNo = WEAPON_SLOTS_CHILD_NO;
                 break;
-            case CollectableType.CORE_PLASMA:
-            case CollectableType.CORE_VOLTAGE:
+            case CraftingType.CORE:
                 childNo = CORE_SLOTS_CHILD_NO;
                 break;
         }
@@ -209,4 +210,9 @@ public class UIManager : MonoBehaviour
             Debug.LogError("No empty slots found");
         }
     }
+}
+
+public enum CraftingType
+{
+    BULLET, WEAPON, CORE
 }
