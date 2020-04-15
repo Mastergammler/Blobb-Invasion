@@ -31,6 +31,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
 
     public void AddInventoryItem(CollectableType type)
     {
+        Debug.Log("Adding item to inventory: " + type.ToString());
         AddInventoryItem(CollectableFactory.Instance.CreateCollectable(type));
     }
 

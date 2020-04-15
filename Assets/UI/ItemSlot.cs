@@ -6,20 +6,28 @@ public class ItemSlot : MonoBehaviour
     public ScriptableBase Item;
     private Image image;
 
-    private void Start() 
+    private void Awake() 
     {
-        image = GetComponent<Image>();   
+        image = GetComponent<Image>();  
+    }
+    private void OnEnable() 
+    {
+        if(Item != null)
+        {
+            image.sprite = Item.Art;
+            image.enabled = true;
+        }
     }
 
     public void AddItem(ScriptableBase item)
     {
-        image.sprite = item.Art;
-        image.enabled = true;
+        Item = item;
     }
 
     public void RemoveItem()
     {
         Item = null;
+        if(image == null) return;
         image.sprite = null;
         image.enabled = false;
     }

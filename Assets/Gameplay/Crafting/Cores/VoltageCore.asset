@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef60ee78e9e031f45bd17b794ffd5124, type: 3}
-  m_Name: PlasamCore
+  m_Name: VoltageCore
   m_EditorClassIdentifier: 
-  Name: Plasma Core
-  Tooltip: High Energy Power Source
-  Art: {fileID: 21300000, guid: 08a7d65399c09f44eb9718cfdb13d77b, type: 3}
-  Type: 1
+  Name: Voltage Core
+  Tooltip: Core based on electric energy
+  Art: {fileID: 21300000, guid: 35fe0229b5f08084599359ab4ae7cce5, type: 3}
+  Type: 2
   BaseDmgMod: 2
-  BaseFireRateMod: 2
-  ColorDark: {r: 0, g: 0.4812449, b: 0.49056602, a: 0}
-  ColorBright: {r: 0.61877, g: 0.957133, b: 0.9716981, a: 0}
+  BaseFireRateMod: 5
+  ColorDark: {r: 0, g: 0, b: 0, a: 0}
+  ColorBright: {r: 0, g: 0, b: 0, a: 0}
   Bullets: []

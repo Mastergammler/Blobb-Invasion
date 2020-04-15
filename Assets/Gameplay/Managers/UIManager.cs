@@ -124,6 +124,12 @@ public class UIManager : MonoBehaviour
 
     private void updateInventoryItem(ScriptableBase item, bool removeItem)
     {
+        if(item == null)
+        {
+            Debug.LogWarning("The item you try to add to the UI is null!");
+            return;
+        }
+
         int childNo = 0;
 
         switch(item.Type)
