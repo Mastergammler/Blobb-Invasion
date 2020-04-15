@@ -67,6 +67,7 @@ public class UIManager : MonoBehaviour
 
     private void OnInventoryChanged(object sender, InventoryEventArgs e)
     {
+        Debug.Log("Received event for " + e.Item.Name);
         updateCraftingItems();
         updateInventoryItem(e.Item,e.itemRemoved);
     }
@@ -86,6 +87,22 @@ public class UIManager : MonoBehaviour
             ActivateCanvas();
         }
     }
+
+    public void ChangeInventoryItem(ItemSlot slot)
+    {
+        if(slot.IsInventorySlot)
+        {
+            //todo - parse collectable type to other type
+            CollectableType ct = slot.Item.Type;
+            if(ct == CollectableType.CORE_PLASMA || ct == CollectableType.CORE_VOLTAGE)
+            {
+                BulletData bullet = mInventory.GetActiveBulletItem();
+                WeaponData weapon = mInventory.GetActiveWeaponItem();
+                mInventory.SetActiveItems(bullet,weapon,(CoreData)slot.Item);
+            }
+        }
+    }
+
 
     private void ActivateCanvas()
     {

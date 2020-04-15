@@ -73,6 +73,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
 
     private void removeIventoryItem(ScriptableBase item)
     {
+        if(item == null) return;
         if(mInventory.ContainsKey(item))
         {
             mInventory.Remove(item);
