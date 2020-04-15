@@ -31,7 +31,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
 
     public void AddInventoryItem(CollectableType type)
     {
-        Debug.Log("Adding item to inventory: " + type.ToString());
+
         AddInventoryItem(CollectableFactory.Instance.CreateCollectable(type));
     }
 
@@ -48,6 +48,8 @@ public class PlayerInventory : MonoBehaviour, IInventory
             newAmount += amount;
             mInventory.Remove(item);
         }
+
+        Debug.Log("Adding item to inventory: " + item.Name);
 
         mInventory.Add(item,newAmount);
 
@@ -76,6 +78,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
         if(item == null) return;
         if(mInventory.ContainsKey(item))
         {
+            Debug.Log("Removing from inventory: " + item.Name);
             mInventory.Remove(item);
             OnInventoryItemChanged?.Invoke(this,new InventoryEventArgs(){itemRemoved = true, Item = item, amount = 0});
         }

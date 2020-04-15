@@ -36,10 +36,10 @@ public class ItemSlot : MonoBehaviour
     }
 
     
-
-
     public void AddItem(ScriptableBase item)
     {
+        if(item == null) return;
+
         Item = item;
         if(image != null)
         {

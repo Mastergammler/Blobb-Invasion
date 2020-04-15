@@ -67,7 +67,6 @@ public class UIManager : MonoBehaviour
 
     private void OnInventoryChanged(object sender, InventoryEventArgs e)
     {
-        Debug.Log("Received event for " + e.Item.Name);
         updateCraftingItems();
         updateInventoryItem(e.Item,e.itemRemoved);
     }
@@ -101,6 +100,18 @@ public class UIManager : MonoBehaviour
                 mInventory.SetActiveItems(bullet,weapon,(CoreData)slot.Item);
             }
         }
+        else
+        {
+            CollectableType ct = slot.Item.Type;
+            if(ct == CollectableType.CORE_PLASMA || ct == CollectableType.CORE_VOLTAGE)
+            {
+                BulletData bullet = mInventory.GetActiveBulletItem();
+                WeaponData weapon = mInventory.GetActiveWeaponItem();
+                mInventory.SetActiveItems(bullet,weapon,null);
+            }
+        }
+
+        updateCraftingItems();
     }
 
 
@@ -118,6 +129,10 @@ public class UIManager : MonoBehaviour
     {
         ScriptableBase currentWeapon = mInventory.GetActiveWeaponItem();
         craftingPanel.GetChild(WEAPON_BUTTON_CHILD_NO).GetComponentInChildren<ItemSlot>().AddItem(currentWeapon);
+        ScriptableBase curBullet = mInventory.GetActiveBulletItem();
+        craftingPanel.GetChild(BULLET_BUTTON_CHILD_NO).GetComponentInChildren<ItemSlot>().AddItem(curBullet);
+        ScriptableBase curCore = mInventory.GetActiveCoreItem();
+        craftingPanel.GetChild(CORE_BUTTON_CHILD_NO).GetComponentInChildren<ItemSlot>().AddItem(curCore);
     }
 
     private void updateCraftingItems()
