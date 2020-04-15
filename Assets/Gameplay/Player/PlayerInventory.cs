@@ -28,8 +28,16 @@ public class PlayerInventory : MonoBehaviour, IInventory
     {
         throw new NotImplementedException("Not neccessary yet!");
     }
-    public void AddInventoryItem(ScriptableBase item,int amount = 1)
+
+    public void AddInventoryItem(CollectableType type)
     {
+        AddInventoryItem(CollectableFactory.Instance.CreateCollectable(type));
+    }
+
+    private void AddInventoryItem(ScriptableBase item,int amount = 1)
+    {
+        if(item == null) return;
+
         int newAmount = amount;
 
         // dodo check if the equals works
@@ -45,11 +53,30 @@ public class PlayerInventory : MonoBehaviour, IInventory
         OnInventoryItemChanged?.Invoke(this,new InventoryEventArgs(){ Item = item,amount = newAmount});
     }
 
+    // Removes the active item from the inventory and saves it in the local variable
     public void SetActiveItems(BulletData bullet, WeaponData weapon, CoreData core)
     {
+        AddInventoryItem(mActiveBullet);
+        removeIventoryItem(bullet);
+
+        AddInventoryItem(mActiveWeapon);
+        removeIventoryItem(weapon);
+
+        AddInventoryItem(mActiveCore);
+        removeIventoryItem(core);
+
         mActiveBullet = bullet;
         mActiveWeapon = weapon;
         mActiveCore = core;
+    }
+
+    private void removeIventoryItem(ScriptableBase item)
+    {
+        if(mInventory.ContainsKey(item))
+        {
+            mInventory.Remove(item);
+            OnInventoryItemChanged?.Invoke(this,new InventoryEventArgs(){itemRemoved = true, Item = item, amount = 0});
+        }
     }
 
     public CoreData GetActiveCoreItem()

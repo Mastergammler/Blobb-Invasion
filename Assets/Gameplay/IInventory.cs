@@ -5,9 +5,10 @@ using UnityEngine;
 
 public interface IInventory 
 {
+    // Called when items are added or removed from the inventory
     event EventHandler<InventoryEventArgs> OnInventoryItemChanged;
     int GetItemAmountFor(CollectableType type);
-    void AddInventoryItem(ScriptableBase item,int amount);
+    void AddInventoryItem(CollectableType type);
 
     CoreData GetActiveCoreItem();
     BulletData GetActiveBulletItem();
@@ -18,6 +19,7 @@ public interface IInventory
 
 public class InventoryEventArgs : EventArgs
 {
+    public bool itemRemoved = false;
     public ScriptableBase Item;
     public int amount;
 }

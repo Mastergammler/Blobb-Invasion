@@ -34,8 +34,13 @@ public class UIManager : MonoBehaviour
     private const int WEAPON_BUTTON_CHILD_NO = 2;
     private const int CORE_BUTTON_CHILD_NO = 3;
 
+    private const int BULLET_SLOTS_CHILD_NO = 0;
+    private const int WEAPON_SLOTS_CHILD_NO = 1;
+    private const int CORE_SLOTS_CHILD_NO = 2;
 
-    private void Awake() {
+
+    private void Awake() 
+    {
         Instance = this;    
     }
 
@@ -57,6 +62,13 @@ public class UIManager : MonoBehaviour
     public void SetInventory(IInventory inventory)
     {
         mInventory = inventory;
+        inventory.OnInventoryItemChanged += OnInventoryChanged;
+    }
+
+    private void OnInventoryChanged(object sender, InventoryEventArgs e)
+    {
+        updateCraftingItems();
+        updateInventoryItem(e.Item,e.itemRemoved);
     }
 
     // INPUT
@@ -89,5 +101,74 @@ public class UIManager : MonoBehaviour
     {
         ScriptableBase currentWeapon = mInventory.GetActiveWeaponItem();
         craftingPanel.GetChild(WEAPON_BUTTON_CHILD_NO).GetComponentInChildren<ItemSlot>().AddItem(currentWeapon);
+    }
+
+    private void updateCraftingItems()
+    {
+        BulletData bullet = mInventory.GetActiveBulletItem();
+        WeaponData weapon = mInventory.GetActiveWeaponItem();
+        CoreData core = mInventory.GetActiveCoreItem();
+
+        addOrRemoveCraftingItem(BULLET_BUTTON_CHILD_NO,bullet);
+        addOrRemoveCraftingItem(WEAPON_BUTTON_CHILD_NO,weapon);
+        addOrRemoveCraftingItem(CORE_BUTTON_CHILD_NO,core);
+    }
+
+    private void addOrRemoveCraftingItem(int childNo,ScriptableBase item)
+    {
+        ItemSlot slot = craftingPanel.GetChild(childNo).GetComponentInChildren<ItemSlot>();
+
+        if(item == null) slot.RemoveItem();
+        else slot.AddItem(item);
+    }
+
+    private void updateInventoryItem(ScriptableBase item, bool removeItem)
+    {
+        int childNo = 0;
+
+        switch(item.Type)
+        {
+            case CollectableType.BUL_BIG:
+            case CollectableType.BUL_BOOM:
+            case CollectableType.BUL_SPRAY:
+                childNo = BULLET_SLOTS_CHILD_NO; 
+                break;
+            case CollectableType.GUN_PISTOL:
+            case CollectableType.GUN_SHOTGUT:
+            case CollectableType.GUN_MACHINE_GUN:
+                childNo = WEAPON_SLOTS_CHILD_NO;
+                break;
+            case CollectableType.CORE_PLASMA:
+            case CollectableType.CORE_VOLTAGE:
+                childNo = CORE_SLOTS_CHILD_NO;
+                break;
+        }
+
+        ItemSlot[] itemSlots = inventoryPanel.GetChild(childNo).GetComponentsInChildren<ItemSlot>();
+
+        if(removeItem)
+        {
+            foreach(ItemSlot slot in itemSlots)
+            {
+                if(slot.Item.Equals(item))
+                {
+                    slot.RemoveItem();
+                    return;
+                } 
+            }
+            Debug.LogWarning("Asked to remove item, but item not found in the inventory slots ....");
+        }
+        else
+        {
+            foreach(ItemSlot slot in itemSlots)
+            {
+                if(slot.IsEmpty())
+                {
+                    slot.AddItem(item);
+                    return;
+                }
+            }
+            Debug.LogError("No empty slots found");
+        }
     }
 }

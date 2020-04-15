@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596abe2320b8ae14eb50f69c9e9930a5, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  Name: 
-  Tooltip: 
-  Art: {fileID: 0}
-  Type: 0
-  BaseDamage: 0
-  FireRate: 0
+  Name: Pistol
+  Tooltip: A usual pistol
+  Art: {fileID: 21300000, guid: 64a5fec8745361c46a6994f4481e00d8, type: 3}
+  Type: 6
+  BaseDamage: 10
+  FireRate: 5
   ShootPattern: {fileID: 0}

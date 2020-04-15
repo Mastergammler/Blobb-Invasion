@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour 
 {
-
-    ScriptableBase Item;
+    public ScriptableBase Item;
     private Image image;
 
     private void Start() 
@@ -23,6 +22,11 @@ public class ItemSlot : MonoBehaviour
         Item = null;
         image.sprite = null;
         image.enabled = false;
+    }
+
+    public bool IsEmpty()
+    {
+        return Item == null;
     }
 
 

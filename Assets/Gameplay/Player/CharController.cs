@@ -23,8 +23,7 @@ public class CharController : MonoBehaviour
 
     private IMoveable mMovementHandler;
     private IHealthManager mHealthManager;
-    // Preemptive inventory
-    private Dictionary<CollectableType,int> mInventory = new Dictionary<CollectableType, int>();
+    private IInventory mInventory;
 
 
     //************
@@ -37,6 +36,7 @@ public class CharController : MonoBehaviour
         mGunHinge = transform.GetChild(0);
         mMovementHandler = GetComponent<IMoveable>();
         mHealthManager = GetComponent<IHealthManager>();
+        mInventory = GetComponent<IInventory>();
     }
 
     void Update()
@@ -94,22 +94,7 @@ public class CharController : MonoBehaviour
                 return;
             }
 
-
-            int curAmount = 1;
-
-            if(mInventory.ContainsKey(type))
-            {
-                mInventory.TryGetValue(type,out curAmount);
-                mInventory.Remove(type);
-                curAmount++;
-            }
-
-            mInventory.Add(type,curAmount);
-
-
-            int value = -1;
-            mInventory.TryGetValue(type,out value);
-            Debug.Log("Current value of: " + type.ToString() + " is " + value);
+            mInventory.AddInventoryItem(type);
         }
     }
 }
