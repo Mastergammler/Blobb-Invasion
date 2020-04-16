@@ -7,6 +7,7 @@ public interface IInventory
 {
     // Called when items are added or removed from the inventory
     event EventHandler<InventoryEventArgs> OnInventoryItemChanged;
+    // Gets the amount of one item the player has
     int GetItemAmountFor(CollectableType type);
     void AddInventoryItem(CollectableType type);
 

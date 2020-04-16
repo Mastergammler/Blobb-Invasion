@@ -9,14 +9,11 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-
     //#################
     //##  INSPECTOR  ##
     //#################
 
-
     public GameObject uiCanvas;
-
     public static UIManager Instance { private set; get; }
 
     //#################
