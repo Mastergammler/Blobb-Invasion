@@ -94,7 +94,7 @@ public class UIManager : MonoBehaviour
         BulletData bullet = mInventory.GetActiveBulletItem();
         WeaponData weapon = mInventory.GetActiveWeaponItem();
         CoreData core = mInventory.GetActiveCoreItem();
-        
+    
         if(slot.IsInventorySlot)
         {
             switch(ct)
