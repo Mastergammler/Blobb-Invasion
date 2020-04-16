@@ -14,7 +14,7 @@ public class CharController : MonoBehaviour
 
     private SpriteRenderer mSpriteRenderer;
     private Vector2 mCurMovement;
-    private Vector2 mCachedDirection;
+    private Vector2 mDefaultDirection;
     private Transform mGunHinge;
 
     //-------------------
@@ -24,6 +24,7 @@ public class CharController : MonoBehaviour
     private IMoveable mMovementHandler;
     private IHealthManager mHealthManager;
     private IInventory mInventory;
+    private IWeaponSystem mWeaponHandler;
 
 
     //************
@@ -32,11 +33,12 @@ public class CharController : MonoBehaviour
 
     void Start()
     {
-        mCachedDirection = new Vector2(1,0);
+        mDefaultDirection = new Vector2(0,1);
         mGunHinge = transform.GetChild(0);
         mMovementHandler = GetComponent<IMoveable>();
         mHealthManager = GetComponent<IHealthManager>();
         mInventory = GetComponent<IInventory>();
+        mWeaponHandler = GetComponent<IWeaponSystem>();
     }
 
     void Update()
@@ -53,15 +55,15 @@ public class CharController : MonoBehaviour
 
     public void Shoot(InputAction.CallbackContext context)
     {
-        if(bullet == null) Debug.Log("Bullet not set!");
+        //if(bullet == null) Debug.Log("Bullet not set!");
 
-        Transform spawn = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
-        GameObject newBullet = Instantiate(bullet,spawn.position,spawn.rotation);
+        //Transform spawn = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
+        //GameObject newBullet = Instantiate(bullet,spawn.position,spawn.rotation);
 
         Vector2 bulletDirection = mCurMovement;
-        if(mCurMovement == Vector2.zero) bulletDirection = mCachedDirection;
-
-        newBullet.GetComponent<BulletScript>().Fly(bulletDirection);
+        if(mCurMovement == Vector2.zero) bulletDirection = mDefaultDirection;
+        mWeaponHandler.Shoot(bulletDirection);
+        //newBullet.GetComponent<BulletScript>().Fly(bulletDirection);
         //GetComponent<ISpriteMaterialChanger>().ChangeMaterial();
     }
 
@@ -71,7 +73,8 @@ public class CharController : MonoBehaviour
 
         if(newMovement == Vector2.zero)
         {
-            mCachedDirection = mCurMovement;
+            // this makes no sense
+            //mCachedDirection = mCurMovement;
         }
 
         mCurMovement = newMovement;

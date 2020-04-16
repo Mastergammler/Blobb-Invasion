@@ -3,7 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(IInventory))]
 public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 {
-    public BulletData DefaultBullet;
+    public CoreData DefaultCore;
+    public WeaponData DefaultWeapon;
+    public Transform GunJoint;
 
     //###############
     //##  MEMBERS  ##
@@ -33,6 +35,14 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     {
         mInventory = GetComponent<IInventory>();
         mInventory.OnActiveItemsChanged += InitNewWeapon;
+        mCurWeapon = DefaultWeapon;
+        CalculateWeaponValues();
+    }
+
+    private void Update() 
+    {
+        // update time when last shot was
+        mTimeSinceLastShot += Time.deltaTime;    
     }
 
     //######################
@@ -43,7 +53,22 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     {
         if(canShootAgain())
         {
-            
+            // bullets in inventory are only for the bullet type, and don't hold the actual values
+            BulletData realBullet = mCurCore.Bullets[(int)mCurBullet.BulletType];
+            // each gun has a child object that defines outward position
+            Transform gunExitPoint = GunJoint.GetChild(0).GetChild(0);
+            // todo include multiple bullets (later)
+
+            GameObject prefab = realBullet.BulletPrefab;
+            GameObject inst = Instantiate(prefab,gunExitPoint.position,Quaternion.LookRotation(Vector3.forward,direction));
+            inst.GetComponent<IBullet>().Shoot(direction);
+            /*
+                This is not simple anymore, do this if you want to expand only -> NOW ONLY PREFABS WITH ALL
+                Prefabs should have all relevant data already
+                prefab get bullet script
+                prefab add behaviour?
+                prefab add animation?
+            */
         }
     }
 
@@ -85,16 +110,15 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 
     private void AddCoreValue()
     {
-        if(mCurCore != null)
-        {
-            mFireRate *= mCurCore.BaseFireRateMod;
-            mDmgPerShot *= mCurCore.BaseDmgMod;
-        }
+        if(mCurCore == null) mCurCore = DefaultCore;
+
+        mFireRate *= mCurCore.BaseFireRateMod;
+        mDmgPerShot *= mCurCore.BaseDmgMod;
     }
 
     private void AddBulletValue()
     {
-        if(mCurBullet == null) mCurBullet = DefaultBullet;
+        if(mCurBullet == null) mCurBullet = mCurCore.Bullets[0];
 
         mFireRate *= mCurBullet.FireRateMod;
         mDmgPerShot *= mCurBullet.DamageMod;
@@ -109,11 +133,9 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     {
         if(mTimeSinceLastShot >= mTimeBetweenShots)
         {
-            mTimeSinceLastShot = 0;
+            mTimeSinceLastShot = mTimeSinceLastShot - mTimeBetweenShots;
             return true;
         }
-
-        mTimeSinceLastShot += Time.deltaTime;
         return false;
     }
 

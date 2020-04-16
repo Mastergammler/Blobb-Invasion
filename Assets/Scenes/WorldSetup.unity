@@ -34171,7 +34171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &947825302
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -39947,6 +39947,7 @@ GameObject:
   - component: {fileID: 1465300803}
   - component: {fileID: 1465300806}
   - component: {fileID: 1465300809}
+  - component: {fileID: 1465300810}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -40178,7 +40179,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 1465300796}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 532d83cda272ef841a7da927d8682819, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -40244,6 +40245,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartWeapon: {fileID: 11400000, guid: 4dc342b3ddd47af4e9913ae829baef29, type: 2}
+--- !u!114 &1465300810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465300796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f34122b90832147908947ebbb2d2db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultCore: {fileID: 11400000, guid: cf1fd15fb9e175f4a9820bbac546efe3, type: 2}
+  DefaultWeapon: {fileID: 11400000, guid: 4dc342b3ddd47af4e9913ae829baef29, type: 2}
+  GunJoint: {fileID: 336365854}
 --- !u!1 &1515608998
 GameObject:
   m_ObjectHideFlags: 0
@@ -41849,15 +41865,24 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 336365854}
     m_Modifications:
+    - target: {fileID: 704983751, guid: 14c681b64fc512e4cb09a7dbed21abf9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.111
+      objectReference: {fileID: 0}
+    - target: {fileID: 7932767545522672664, guid: 14c681b64fc512e4cb09a7dbed21abf9,
+        type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7932767545522672665, guid: 14c681b64fc512e4cb09a7dbed21abf9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.04
+      value: 0.013
       objectReference: {fileID: 0}
     - target: {fileID: 7932767545522672665, guid: 14c681b64fc512e4cb09a7dbed21abf9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.018
+      value: 0.257
       objectReference: {fileID: 0}
     - target: {fileID: 7932767545522672665, guid: 14c681b64fc512e4cb09a7dbed21abf9,
         type: 3}

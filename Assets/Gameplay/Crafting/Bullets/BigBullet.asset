@@ -16,7 +16,9 @@ MonoBehaviour:
   Tooltip: Big bullet for higher damage
   Art: {fileID: 21300000, guid: e292de7f9aeaf4c4ca6de29fb39a5979, type: 3}
   Type: 3
-  CoreSpecificArt: {fileID: 0}
+  CoreSpecificArt: {fileID: 21300000, guid: e292de7f9aeaf4c4ca6de29fb39a5979, type: 3}
   DamageMod: 2
   FireRateMod: 0.5
   BulletType: 1
+  BulletPrefab: {fileID: 6864454353788644648, guid: d2c62b2c3f63edb45aa3896bda8770da,
+    type: 3}

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  Name: 
-  Tooltip: 
-  Art: {fileID: 0}
-  Type: 0
-  CoreSpecificArt: {fileID: 0}
-  DamageMod: 0
-  FireRateMod: 0
+  Name: Default Bullet
+  Tooltip: The usual Amunition used for guns
+  Art: {fileID: 21300000, guid: 1dd105ec32416bc468425aecceaf96df, type: 3}
+  Type: 3
+  CoreSpecificArt: {fileID: 21300000, guid: 1dd105ec32416bc468425aecceaf96df, type: 3}
+  DamageMod: 1
+  FireRateMod: 1
   BulletType: 0
+  BulletPrefab: {fileID: 6864454353788644648, guid: 63b544fcd29e12f448ed43cb79887ce7,
+    type: 3}

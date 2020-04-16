@@ -16,7 +16,8 @@ MonoBehaviour:
   Tooltip: Bullet that deals dmg with explosion
   Art: {fileID: 21300000, guid: fb5feb19c6170584b836ab9027805ce6, type: 3}
   Type: 4
-  CoreSpecificArt: {fileID: 0}
+  CoreSpecificArt: {fileID: 21300000, guid: fb5feb19c6170584b836ab9027805ce6, type: 3}
   DamageMod: 5
   FireRateMod: 0.2
   BulletType: 2
+  BulletPrefab: {fileID: 0}

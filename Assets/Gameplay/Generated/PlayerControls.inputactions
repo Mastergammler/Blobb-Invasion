@@ -19,7 +19,7 @@
                     "id": "b6883f2c-645d-4da8-9415-64802e012b71",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Hold"
                 },
                 {
                     "name": "Inventory",

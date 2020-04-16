@@ -9,6 +9,7 @@ public class BulletData : ScriptableBase
     public BulletType BulletType;
     public IBulletBehaviour BulletBehaviour;
     public IBulletAnimation BulletAnimation;
+    public GameObject BulletPrefab;
 }
 
 public enum BulletType
