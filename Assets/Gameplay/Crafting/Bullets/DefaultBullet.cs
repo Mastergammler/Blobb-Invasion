@@ -1,10 +1,8 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D),typeof(Collider2D))]
-public class DefaultBullet : MonoBehaviour,IBullet 
+public class DefaultBullet : BulletBase
 {
-    public float BulletSpeed { set; get;} = 8;
-
     //###############
     //##  MEMBERS  ##
     //###############
@@ -13,10 +11,11 @@ public class DefaultBullet : MonoBehaviour,IBullet
     //##  MONO  ##
     //############
 
-    public void Shoot(Vector2 direction)
+    public override void Shoot(Vector2 direction)
     {
         direction.Normalize();
         GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
+        StartCoroutine(initSelfDestructionSequence());
     }
 
 

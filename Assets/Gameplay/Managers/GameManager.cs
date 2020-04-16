@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         if(mGameRunning)
         {
             mGameRunning = false;
-            Time.timeScale = 0;
+            Time.timeScale = 0f;
         }
         else
         {
