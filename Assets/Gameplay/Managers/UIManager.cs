@@ -9,27 +9,19 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    private static UIManager mInstance;
-    public static UIManager Instance 
-    {
-        get
-        {
-            if(mInstance == null) throw new UnityException("Trying to access UI manager b4 game object is initialized");
-            return mInstance;
-        }
-        private set
-        {
-            mInstance = value;
-        }
-    }
+
+    //#################
+    //##  INSPECTOR  ##
+    //#################
+
 
     public GameObject uiCanvas;
 
+    public static UIManager Instance { private set; get; }
 
-    private IInventory mInventory;
-
-    private Transform inventoryPanel;
-    private Transform craftingPanel;
+    //#################
+    //##  CONSTANTS  ##
+    //#################
 
     private const int BULLET_BUTTON_CHILD_NO = 1;
     private const int WEAPON_BUTTON_CHILD_NO = 2;
@@ -39,40 +31,66 @@ public class UIManager : MonoBehaviour
     private const int WEAPON_SLOTS_CHILD_NO = 1;
     private const int CORE_SLOTS_CHILD_NO = 2;
 
+    //###############
+    //##  MEMBERS  ##
+    //###############
+
+    private IInventory mInventory;
+    private Transform inventoryPanel;
+    private Transform craftingPanel;
+
+    //#############
+    //##  MONO  ##
+    //############
 
     private void Awake() 
     {
         Instance = this;    
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         inventoryPanel = uiCanvas.transform.GetChild(0);
         craftingPanel = uiCanvas.transform.GetChild(1);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //#################
+    //##  INTERFACE  ##
+    //#################
 
-
+    // Sets the inventory to the ui manager that the interactions work
+    // Hos to be set by the inventory right at the start
     public void SetInventory(IInventory inventory)
     {
         mInventory = inventory;
         inventory.OnInventoryItemChanged += OnInventoryChanged;
     }
 
-    private void OnInventoryChanged(object sender, InventoryEventArgs e)
+    // Changed Item when they get moved around in the inventory
+    public void ChangeInventoryItem(ItemSlot slot)
     {
+        CraftingType ct = Utils.ConvertCollectableType(slot.Item.Type);
+        BulletData bullet = mInventory.GetActiveBulletItem();
+        WeaponData weapon = mInventory.GetActiveWeaponItem();
+        CoreData core = mInventory.GetActiveCoreItem();
+    
+        ScriptableObject slotItem = slot.Item;
+        if( ! slot.IsInventorySlot) slotItem = null;
+
+        switch(ct)
+        {
+            case CraftingType.BULLET: bullet = (BulletData) slotItem; break;
+            case CraftingType.WEAPON: weapon = (WeaponData) slotItem; break;
+            case CraftingType.CORE: core = (CoreData) slotItem; break;
+        }
+
+        mInventory.SetActiveItems(bullet,weapon,core);
         updateCraftingItems();
-        updateInventoryItem(e.Item,e.itemRemoved);
     }
 
-    // INPUT
+    //------------------
+    //  Input Handler 
+    //------------------
 
     public void Inventory(InputAction.CallbackContext context)
     {
@@ -88,38 +106,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ChangeInventoryItem(ItemSlot slot)
-    {
-        CraftingType ct = Utils.ConvertCollectableType(slot.Item.Type);
-        BulletData bullet = mInventory.GetActiveBulletItem();
-        WeaponData weapon = mInventory.GetActiveWeaponItem();
-        CoreData core = mInventory.GetActiveCoreItem();
-    
-        if(slot.IsInventorySlot)
-        {
-            switch(ct)
-            {
-                case CraftingType.BULLET: bullet = (BulletData) slot.Item; break;
-                case CraftingType.WEAPON: weapon = (WeaponData) slot.Item; break;
-                case CraftingType.CORE: core = (CoreData) slot.Item; break;
-            }
-        }
-        else
-        {
-            switch(ct)
-            {
-                case CraftingType.BULLET: bullet = null; break;
-                case CraftingType.WEAPON: weapon = null; break;
-                case CraftingType.CORE: core = null; break;
-            }
-        }
-
-        mInventory.SetActiveItems(bullet,weapon,core);
-        updateCraftingItems();
-    }
-
-
-
+    //##############
+    //##  HELPER  ##
+    //##############
 
     private void ActivateCanvas()
     {
@@ -130,7 +119,6 @@ public class UIManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstInventoryButton);
         UpdateUiFromInventory();
     }
-
     private void UpdateUiFromInventory()
     {
         ScriptableBase currentWeapon = mInventory.GetActiveWeaponItem();
@@ -140,7 +128,12 @@ public class UIManager : MonoBehaviour
         ScriptableBase curCore = mInventory.GetActiveCoreItem();
         craftingPanel.GetChild(CORE_BUTTON_CHILD_NO).GetComponentInChildren<ItemSlot>().AddItem(curCore);
     }
-
+    
+    private void OnInventoryChanged(object sender, InventoryEventArgs e)
+    {
+        updateCraftingItems();
+        updateInventoryItem(e.Item,e.itemRemoved);
+    }
     private void updateCraftingItems()
     {
         BulletData bullet = mInventory.GetActiveBulletItem();
@@ -151,7 +144,6 @@ public class UIManager : MonoBehaviour
         addOrRemoveCraftingItem(WEAPON_BUTTON_CHILD_NO,weapon);
         addOrRemoveCraftingItem(CORE_BUTTON_CHILD_NO,core);
     }
-
     private void addOrRemoveCraftingItem(int childNo,ScriptableBase item)
     {
         ItemSlot slot = craftingPanel.GetChild(childNo).GetComponentInChildren<ItemSlot>();
@@ -159,7 +151,6 @@ public class UIManager : MonoBehaviour
         if(item == null) slot.RemoveItem();
         else slot.AddItem(item);
     }
-
     private void updateInventoryItem(ScriptableBase item, bool removeItem)
     {
         if(item == null)
