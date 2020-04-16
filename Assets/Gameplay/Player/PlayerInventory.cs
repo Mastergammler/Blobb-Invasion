@@ -34,6 +34,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
     //###################
 
     public event EventHandler<InventoryEventArgs> OnInventoryItemChanged;
+    public event EventHandler<ActiveItemEventArgs> OnActiveItemsChanged;
 
     public void AddInventoryItem(CollectableType type)
     {
@@ -55,6 +56,13 @@ public class PlayerInventory : MonoBehaviour, IInventory
         mActiveBullet = bullet;
         mActiveWeapon = weapon;
         mActiveCore = core;
+
+        OnActiveItemsChanged?.Invoke(this,new ActiveItemEventArgs()
+        {
+            NewBullet = bullet,
+            NewWeapon = weapon,
+            NewCore = core
+        });
     }
 
     //------------
