@@ -20,4 +20,5 @@ MonoBehaviour:
   DamageMod: 5
   FireRateMod: 0.2
   BulletType: 2
-  BulletPrefab: {fileID: 0}
+  BulletPrefab: {fileID: 6864454353788644648, guid: 1d8337defd36c7e4e83f752445dee9ca,
+    type: 3}
