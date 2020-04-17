@@ -6,7 +6,7 @@ using System.Collections;
 public class CharController : MonoBehaviour
 {
     private static int HP_GAIN_VALUE = 20;
-    private const float STUN_TIME = 1;
+    private const float STUN_TIME = .5f;
     public float MovementSpeed = 0.1f;
     public GameObject bullet;
 
@@ -19,6 +19,7 @@ public class CharController : MonoBehaviour
     private Vector2 mDefaultDirection;
     private Transform mGunHinge;
     private bool isStunned = false;
+    private AudioSource mAudioSource;
 
     //-------------------
     //  Player Systems
@@ -42,6 +43,7 @@ public class CharController : MonoBehaviour
         mHealthManager = GetComponent<IHealthManager>();
         mInventory = GetComponent<IInventory>();
         mWeaponHandler = GetComponent<IWeaponSystem>();
+        mAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -103,6 +105,8 @@ public class CharController : MonoBehaviour
 
         if(other.tag.Equals(Tags.ENEMY))
         {
+            mAudioSource.Stop();
+            mAudioSource.Play();
             isStunned = true;
             StartCoroutine(resetStun());
             return;
@@ -113,6 +117,7 @@ public class CharController : MonoBehaviour
         if(collectable != null)
         {
             CollectableType type = collectable.Collect();
+            if(type == CollectableType.NONE) return;
 
             if(type == CollectableType.HP_BOBBLE)
             {

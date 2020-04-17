@@ -38,6 +38,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
 
     public void AddInventoryItem(CollectableType type)
     {
+        if(type == CollectableType.NONE) return;
         AddInventoryItem(CollectableFactory.Instance.CreateCollectable(type));
     }
 

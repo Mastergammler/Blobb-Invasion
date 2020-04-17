@@ -11,14 +11,20 @@ public abstract class CollectableBase : MonoBehaviour,ICollectable
     protected CollectableType mType;
     private CollectionCallback mCallback;
     public delegate void CollectionCallback();
+    private bool mIsAlreadyCollected = false;
 
     public void RequestCallback(CollectionCallback cb)
     {
         mCallback = cb;
     }
 
+
     public CollectableType Collect()
     {
+        // double triggering happens because of physics collider and trigger collider for enemies
+        if(mIsAlreadyCollected) return CollectableType.NONE;
+
+        mIsAlreadyCollected = true;
         transform.GetChild(0).gameObject.SetActive(false);
         GetComponent<Collider2D>().enabled = false;
         StartCoroutine(SelfDestruct());

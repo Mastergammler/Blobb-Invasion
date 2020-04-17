@@ -18,5 +18,6 @@ public enum CollectableType
     BUL_SPRAY,
     GUN_PISTOL,
     GUN_SHOTGUT,
-    GUN_MACHINE_GUN
+    GUN_MACHINE_GUN,
+    NONE
 }
