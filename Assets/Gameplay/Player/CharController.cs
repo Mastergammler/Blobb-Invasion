@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System.Collections;
 
 public class CharController : MonoBehaviour
 {
     private static int HP_GAIN_VALUE = 20;
+    private const float STUN_TIME = 1;
     public float MovementSpeed = 0.1f;
     public GameObject bullet;
 
@@ -16,6 +18,7 @@ public class CharController : MonoBehaviour
     private Vector2 mCurMovement;
     private Vector2 mDefaultDirection;
     private Transform mGunHinge;
+    private bool isStunned = false;
 
     //-------------------
     //  Player Systems
@@ -69,6 +72,12 @@ public class CharController : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
+        if(isStunned) 
+        {
+            mMovementHandler.Move(Vector2.zero);
+            return;
+        }
+
         Vector2 newMovement = context.action.ReadValue<Vector2>();
 
         if(newMovement == Vector2.zero)
@@ -82,10 +91,24 @@ public class CharController : MonoBehaviour
     }
 
 
+
+    private IEnumerator resetStun()
+    {
+        yield return new WaitForSeconds(STUN_TIME);
+        isStunned = false;
+        yield return null;
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
+
+        if(other.tag.Equals(Tags.ENEMY))
+        {
+            isStunned = true;
+            StartCoroutine(resetStun());
+            return;
+        }
+
         ICollectable collectable = other.GetComponent<ICollectable>();
-        
         // we only care if we collid with an collectable
         if(collectable != null)
         {

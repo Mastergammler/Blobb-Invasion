@@ -8,7 +8,7 @@ public class ShieldEnemy : MonoBehaviour
 
     public Transform PlayerPosition;
     public int AggressionRange;
-    public int StoppingDistance;
+    public float StoppingDistance;
     
     //###############
     //##  MEMBERS  ##
