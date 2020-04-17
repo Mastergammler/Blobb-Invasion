@@ -6,9 +6,10 @@ public abstract class CollectableBase : MonoBehaviour,ICollectable
 {
     public CollectableType Type { get { return mType; } }
     protected CollectableType mType;
-    private ICollectionCallback mCallback;
+    private CollectionCallback mCallback;
+    public delegate void CollectionCallback();
 
-    public void RequestCallback(ICollectionCallback cb)
+    public void RequestCallback(CollectionCallback cb)
     {
         mCallback = cb;
     }
@@ -18,7 +19,7 @@ public abstract class CollectableBase : MonoBehaviour,ICollectable
         StartCoroutine(SelfDestruct());
         if(mCallback != null)
         {
-            mCallback.HasBeenCollected();
+            mCallback();
         }
         return Type;
     }

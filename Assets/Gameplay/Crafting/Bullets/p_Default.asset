@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
   m_Name: p_Default
   m_EditorClassIdentifier: 
-  Name: 
-  Tooltip: 
-  Art: {fileID: 0}
+  Name: Plasma Default
+  Tooltip: Usual Plasma Blast
+  Art: {fileID: 21300000, guid: 1dd105ec32416bc468425aecceaf96df, type: 3}
   Type: 0
-  CoreSpecificArt: {fileID: 0}
-  DamageMod: 0
-  FireRateMod: 0
+  CoreSpecificArt: {fileID: 21300000, guid: b89617a28f9ebbf49a541cfd03902439, type: 3}
+  DamageMod: 2
+  FireRateMod: 2
   BulletType: 0
-  BulletPrefab: {fileID: 0}
+  BulletPrefab: {fileID: 6864454353788644648, guid: d79ac791f22ca3b42aa038047302d5f2,
+    type: 3}

@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
   m_Name: p_Big
   m_EditorClassIdentifier: 
-  Name: 
-  Tooltip: 
-  Art: {fileID: 0}
+  Name: Highe Plasma Blast
+  Tooltip: A high energy bullet
+  Art: {fileID: 21300000, guid: e292de7f9aeaf4c4ca6de29fb39a5979, type: 3}
   Type: 0
-  CoreSpecificArt: {fileID: 0}
-  DamageMod: 0
-  FireRateMod: 0
-  BulletType: 0
-  BulletPrefab: {fileID: 0}
+  CoreSpecificArt: {fileID: 21300000, guid: 6941948597575324c9b990e6814fb8ea, type: 3}
+  DamageMod: 5
+  FireRateMod: 1
+  BulletType: 1
+  BulletPrefab: {fileID: 6864454353788644648, guid: 8b6b4236ac3edc44cb3a11d6965e9c26,
+    type: 3}

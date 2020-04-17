@@ -4,7 +4,6 @@ using UnityEngine;
 // Base class for all the bullets, holds the functinos to destroy themselfes
 public abstract class BulletBase : MonoBehaviour, IBullet 
 {
-
    protected const float SELF_DESTRUCT_TIME = 5f;
    public float BulletSpeed { set; get;} = 8f;
 

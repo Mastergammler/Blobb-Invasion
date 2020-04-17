@@ -20,4 +20,7 @@ MonoBehaviour:
   BaseFireRateMod: 2
   ColorDark: {r: 0, g: 0.4812449, b: 0.49056602, a: 0}
   ColorBright: {r: 0.61877, g: 0.957133, b: 0.9716981, a: 0}
-  Bullets: []
+  Bullets:
+  - {fileID: 11400000, guid: 457d329f2ba6e7c439ae9482937e7cef, type: 2}
+  - {fileID: 11400000, guid: 8b5207df29eedef4ca7c2839e8230cfe, type: 2}
+  - {fileID: 11400000, guid: 6bdc105ad58738749bb1ed375d444e4d, type: 2}

@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
   m_Name: p_Explode
   m_EditorClassIdentifier: 
-  Name: 
-  Tooltip: 
-  Art: {fileID: 0}
+  Name: An surging energy blast
+  Tooltip: A high energy projetile that explodes and deals even more dmg
+  Art: {fileID: 21300000, guid: fb5feb19c6170584b836ab9027805ce6, type: 3}
   Type: 0
-  CoreSpecificArt: {fileID: 0}
-  DamageMod: 0
-  FireRateMod: 0
+  CoreSpecificArt: {fileID: 21300000, guid: a09fd39c3630ffc49bbb638a0e8471ff, type: 3}
+  DamageMod: 10
+  FireRateMod: 0.5
   BulletType: 0
-  BulletPrefab: {fileID: 0}
+  BulletPrefab: {fileID: 6864454353788644648, guid: c7c4baac7d31657478aecf376eadc122,
+    type: 3}
