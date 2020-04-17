@@ -21,7 +21,9 @@ public abstract class BulletBase : MonoBehaviour, IBullet
     {
         if(other.tag.Equals(Tags.ENEMY))
         {
-            Debug.Log("Hit an Enemy");
+            IHealthManager hpMan = other.GetComponent<IHealthManager>();
+            // todo change for real dmg value
+            hpMan.LoseHealth(20);
             Destroy(gameObject);    
         }
     }

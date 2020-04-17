@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(IMoveable))]
 public class ShieldEnemy : MonoBehaviour
 {
-
     public Transform PlayerPosition;
     public int AggressionRange;
     public float StoppingDistance;
@@ -23,6 +22,10 @@ public class ShieldEnemy : MonoBehaviour
     private void Start() 
     {
         mMoveHandler = GetComponent<IMoveable>();
+        if(PlayerPosition == null)
+        {
+            PlayerPosition = GameObject.FindGameObjectWithTag(Tags.PLAYER).transform;
+        }
     }
 
     private void Update() 

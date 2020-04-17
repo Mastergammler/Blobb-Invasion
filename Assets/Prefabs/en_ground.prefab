@@ -96,6 +96,9 @@ GameObject:
   - component: {fileID: 4379719837293298326}
   - component: {fileID: 4108265445010054210}
   - component: {fileID: -5966381806994698059}
+  - component: {fileID: 186094846}
+  - component: {fileID: 8277278762233605318}
+  - component: {fileID: 456193053379053132}
   m_Layer: 0
   m_Name: en_ground
   m_TagString: Enemy
@@ -226,7 +229,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 20
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -249,3 +252,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementSpeed: 2.5
   MoveByForce: 0
+  MaxSpeed: 0
+--- !u!114 &186094846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710265382859783363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d89bf9f75c6bf4ab42ae1af75137fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerPosition: {fileID: 0}
+  AggressionRange: 10
+  StoppingDistance: 1.4
+--- !u!114 &8277278762233605318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710265382859783363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9fcfff67e7dac41b97094c7565f11f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaximumHp: 100
+--- !u!114 &456193053379053132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710265382859783363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3250ee7e9d29c2149b6b5df94a71ee8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NewMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  ChangeBackTime: 0.2
