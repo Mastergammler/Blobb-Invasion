@@ -6,6 +6,7 @@ TagManager:
   tags:
   - spawn-point
   - EventSystem
+  - Enemy
   layers:
   - Default
   - TransparentFX

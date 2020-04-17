@@ -19,7 +19,10 @@ public abstract class BulletBase : MonoBehaviour, IBullet
 
     protected void OnTriggerExit2D(Collider2D other) 
     {
-        Debug.Log("Hit something");
-        Destroy(gameObject);    
+        if(other.tag.Equals(Tags.ENEMY))
+        {
+            Debug.Log("Hit an Enemy");
+            Destroy(gameObject);    
+        }
     }
 }
