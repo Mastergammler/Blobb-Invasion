@@ -24,7 +24,7 @@ public class HpSpawnerSystem : MonoBehaviour
     //##  CONSTANTS  ##
     //#################
 
-    private const float TIME_TILL_RE_SPAWN = 5f;
+    private const float TIME_TILL_RE_SPAWN = 15f;
     private const float MAX_SPAWN_MOD_CAP = 3f;
     private const float SPAWN_MOD_BALANCED_AT = 25f;
 
@@ -51,25 +51,21 @@ public class HpSpawnerSystem : MonoBehaviour
             spawner.GetComponent<IHpSpawner>().OnItemCollected += SpawnerActivated;
         }   
 
-        SpawnCycle();
+        InitSpawnCycle();
     }
 
     //###############
     //##  METHODS  ##
     //###############
 
-    private void SpawnCycle()
+    private void InitSpawnCycle()
     {
-        StartCoroutine(SpawnHealthPoints());
+        InvokeRepeating("SpawnHealthPoints",0,TIME_TILL_RE_SPAWN);
     }
 
-    private IEnumerator SpawnHealthPoints()
+    private void SpawnHealthPoints()
     {
         Spawn();
-
-        yield return new WaitForSeconds(TIME_TILL_RE_SPAWN);
-        if(mStopSpawning) yield return null;
-        yield return SpawnHealthPoints();
     }
 
     private void Spawn()
@@ -124,7 +120,8 @@ public class HpSpawnerSystem : MonoBehaviour
 
     private void SpawnerActivated(object sender, SpawnerEventArgs e)
     {
-        mOccupiedSpawners.Add(e.Position);
+        mIdleSpawners.Add(e.Position);
+        mOccupiedSpawners.Remove(e.Position);
         mCurrentlyActiveSpawners --;
     }
 
