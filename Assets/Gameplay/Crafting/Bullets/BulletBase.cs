@@ -8,9 +8,9 @@ public abstract class BulletBase : MonoBehaviour, IBullet
    protected const float TIME_TO_DESTROY_AFTER_HIT = 1.5f;
    public float BulletSpeed { set; get;} = 8f;
 
-   public abstract void Shoot(Vector2 direction);    
+   protected float mBulletDamage;
 
-
+   public abstract void Shoot(Vector2 direction, float damage);
     protected IEnumerator initSelfDestructionSequence()
     {
         yield return new WaitForSeconds(SELF_DESTRUCT_TIME);
@@ -24,7 +24,7 @@ public abstract class BulletBase : MonoBehaviour, IBullet
         {
             IHealthManager hpMan = other.GetComponent<IHealthManager>();
             // todo change for real dmg value
-            hpMan.LoseHealth(20);
+            hpMan.LoseHealth(mBulletDamage);
             DestroyWithDelay();
         }
     }

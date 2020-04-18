@@ -11,8 +11,9 @@ public class DefaultBullet : BulletBase
     //##  MONO  ##
     //############
 
-    public override void Shoot(Vector2 direction)
+    public override void Shoot(Vector2 direction, float damage)
     {
+        mBulletDamage = damage;
         direction.Normalize();
         GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
         StartCoroutine(initSelfDestructionSequence());

@@ -16,8 +16,9 @@ public class BigBulletProjectile : BulletBase
     //##  MONO  ##
     //############
 
-    public override void Shoot(Vector2 direction)
+    public override void Shoot(Vector2 direction, float damage)
     {
+        mBulletDamage = damage;
         direction.Normalize();
         GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
         StartCoroutine(initSelfDestructionSequence());
@@ -30,7 +31,7 @@ public class BigBulletProjectile : BulletBase
         {
             IHealthManager hpMan = other.GetComponent<IHealthManager>();
             // todo change for real dmg value
-            hpMan.LoseHealth(20);
+            hpMan.LoseHealth(mBulletDamage);
             if(! mIsAboutToBeDestroyed)
             {
                 StartCoroutine(DestoryOfterDelay());

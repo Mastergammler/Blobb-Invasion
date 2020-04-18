@@ -6,4 +6,5 @@ public class WeaponData : ScriptableBase
     public float BaseDamage;
     public float FireRate;
     public SprayPattern ShootPattern;
+    public GameObject GunPrefab;
 }

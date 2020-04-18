@@ -10,4 +10,6 @@ public class CoreData : ScriptableBase
     public Color ColorBright;
 
     public BulletData[] Bullets; 
+
+    public AnimationClip ColorAnimation;
 }

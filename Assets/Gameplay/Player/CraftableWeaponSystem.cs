@@ -16,6 +16,7 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     private WeaponData mCurWeapon;
     private BulletData mCurBullet;
     private CoreData mCurCore;
+    private GameObject mCurrentWeaponPrefab;
 
 
     //----------------
@@ -62,7 +63,7 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 
             GameObject prefab = realBullet.BulletPrefab;
             GameObject inst = Instantiate(prefab,gunExitPoint.position,Quaternion.LookRotation(Vector3.forward,direction));
-            inst.GetComponent<IBullet>().Shoot(direction);
+            inst.GetComponent<IBullet>().Shoot(direction,mDmgPerShot);
             /*
                 This is not simple anymore, do this if you want to expand only -> NOW ONLY PREFABS WITH ALL
                 Prefabs should have all relevant data already
@@ -96,6 +97,12 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 
     private void InitWeaponValue()
     {
+
+        if(GunJoint.GetChildCount() > 0)
+        {
+            Destroy(GunJoint.GetChild(0).gameObject);
+        }
+
         if(mCurWeapon == null)
         {
             Debug.Log("No weapon chosen");
@@ -106,6 +113,9 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
         {
             mFireRate = mCurWeapon.FireRate;
             mDmgPerShot = mCurWeapon.BaseDamage;
+
+            // the gun prefab nees the right offsets!!!
+            mCurrentWeaponPrefab = Instantiate(mCurWeapon.GunPrefab,GunJoint);
         }
     }
 
@@ -115,6 +125,12 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 
         mFireRate *= mCurCore.BaseFireRateMod;
         mDmgPerShot *= mCurCore.BaseDmgMod;
+
+        int animInt = 0;
+
+        if(mCurCore.Type == CollectableType.CORE_PLASMA) animInt = 1;
+        else if(mCurCore.Type == CollectableType.CORE_VOLTAGE) animInt = 2;
+        mCurrentWeaponPrefab.GetComponent<Animator>().SetInteger("play_anim",animInt);
     }
 
     private void AddBulletValue()

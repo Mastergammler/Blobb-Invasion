@@ -19,8 +19,9 @@ public class ExplodingBulletProjectile : BulletBase
     //##  MONO  ##
     //############
 
-    public override void Shoot(Vector2 direction)
+    public override void Shoot(Vector2 direction, float damage)
     {
+        mBulletDamage = damage;
         direction.Normalize();
         GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
         StartCoroutine(initSelfDestructionSequence());
@@ -32,9 +33,6 @@ public class ExplodingBulletProjectile : BulletBase
         if(other.tag.Equals(Tags.ENEMY) && mFirstHit)
         {
             mFirstHit = false;
-            IHealthManager hpMan = other.GetComponent<IHealthManager>();
-            // todo change for real dmg value
-            hpMan.LoseHealth(20);
             if(! mIsAboutToBeDestroyed)
             {
                 StartCoroutine(DestoryOfterDelay());
@@ -56,7 +54,7 @@ public class ExplodingBulletProjectile : BulletBase
         mIsAboutToBeDestroyed = true;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<SpriteRenderer>().enabled = false;
-        Instantiate(Explosion,transform.position,Quaternion.identity);
+        createExplosion();
         StartCoroutine(ActuallyDestroyObject());
     }
 
@@ -70,5 +68,12 @@ public class ExplodingBulletProjectile : BulletBase
     private void OnTriggerExit2D(Collider2D other) 
     {
         //base.OnTriggerEnter2D(other);
+    }
+
+    private void createExplosion()
+    {
+        GameObject explosion = Instantiate(Explosion,transform.position,Quaternion.identity);
+        IExplosion exp = explosion.GetComponent<IExplosion>();
+        exp.SetDamage(mBulletDamage);
     }
 }

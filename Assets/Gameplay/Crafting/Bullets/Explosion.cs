@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Explosion : MonoBehaviour, IExplosion
 {
     private const float DESTORY_DELAY = 2f;
     private const float IMPACT_DELAY = 0.2f;
+    private float explosionDamage;
 
     void Start()
     {
         StartCoroutine(destroyAfterDelay());
     }
 
+    public void SetDamage(float damage)
+    {
+        explosionDamage = damage;
+    }
 
     private IEnumerator destroyAfterDelay()
     {
@@ -26,7 +31,8 @@ public class Explosion : MonoBehaviour
     {
         if(other.tag.Equals(Tags.ENEMY))
         {
-            // todo do dmg
+            IHealthManager hm = other.GetComponent<IHealthManager>();
+            if(hm != null) hm.LoseHealth(explosionDamage);
         }   
     }
 
