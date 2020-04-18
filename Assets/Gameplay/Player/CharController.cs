@@ -48,8 +48,8 @@ public class CharController : MonoBehaviour
 
     void Update()
     {
-        if(mCurMovement.x == 1) transform.localScale = new Vector3(1,transform.localScale.y,transform.localScale.z);
-        else if(mCurMovement.x == -1) transform.localScale = new Vector3(-1,transform.localScale.y,transform.localScale.z);
+        if(mCurMovement.x >0) transform.localScale = new Vector3(1,transform.localScale.y,transform.localScale.z);
+        else if(mCurMovement.x < 0) transform.localScale = new Vector3(-1,transform.localScale.y,transform.localScale.z);
 
         mGunHinge.rotation = Quaternion.LookRotation(Vector3.forward,new Vector3(mCurMovement.x,mCurMovement.y,0));
     }

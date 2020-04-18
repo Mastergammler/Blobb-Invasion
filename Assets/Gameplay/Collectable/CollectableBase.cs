@@ -25,6 +25,9 @@ public abstract class CollectableBase : MonoBehaviour,ICollectable
         if(mIsAlreadyCollected) return CollectableType.NONE;
 
         mIsAlreadyCollected = true;
+
+        SpriteRenderer ren = GetComponent<SpriteRenderer>();
+        if(ren != null) ren.enabled = false;
         transform.GetChild(0).gameObject.SetActive(false);
         GetComponent<Collider2D>().enabled = false;
         StartCoroutine(SelfDestruct());

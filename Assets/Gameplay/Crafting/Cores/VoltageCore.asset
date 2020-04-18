@@ -18,6 +18,7 @@ MonoBehaviour:
   Type: 2
   BaseDmgMod: 2
   BaseFireRateMod: 5
-  ColorDark: {r: 0, g: 0, b: 0, a: 0}
+  ColorDark: {r: 0.6509434, g: 0.5933218, b: 0, a: 0}
   ColorBright: {r: 0, g: 0, b: 0, a: 0}
   Bullets: []
+  ColorAnimation: {fileID: 7400000, guid: f72af97858f8c614e88127803154a43c, type: 2}

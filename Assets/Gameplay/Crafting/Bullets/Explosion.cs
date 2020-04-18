@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour, IExplosion
 {
-    private const float DESTORY_DELAY = 2f;
+    private const float DESTORY_DELAY = 2.5f;
     private const float IMPACT_DELAY = 0.2f;
     private float explosionDamage;
 
