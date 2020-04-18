@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IMoveable))]
-public class ShieldEnemy : MonoBehaviour
+public class ShieldEnemy : MonoBehaviour, IObservable
 {
     public Transform PlayerPosition;
     public int AggressionRange;
@@ -14,6 +14,7 @@ public class ShieldEnemy : MonoBehaviour
     //###############
 
     private IMoveable mMoveHandler;
+    private Callback mCallbacks;
 
     //################
     //##    MONO    ##
@@ -33,9 +34,25 @@ public class ShieldEnemy : MonoBehaviour
         checkPlayerDistance();
     }
 
+    private void OnDestroy() 
+    {
+        mCallbacks?.Invoke();
+    }
+
+    //##################
+    //##  OBSERVABLE  ##
+    //##################
+
+    public void RegisterCallback(Callback callback)
+    {
+        mCallbacks += callback;
+    }
+
     //###############
     //##  METHODS  ##
     //###############
+
+
 
     private void checkPlayerDistance()
     {

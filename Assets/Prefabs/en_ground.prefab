@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPosition: {fileID: 0}
-  AggressionRange: 10
+  AggressionRange: 5
   StoppingDistance: 1.4
 --- !u!114 &8277278762233605318
 MonoBehaviour:
