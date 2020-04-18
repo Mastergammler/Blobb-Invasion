@@ -13,6 +13,7 @@ public class ExplodingBulletProjectile : BulletBase
     private bool mIsAboutToBeDestroyed = false;
     public GameObject Explosion;
     public float TimeUntilExplosion = 1f;
+    private bool mFirstHit = true;
 
     //############
     //##  MONO  ##
@@ -28,8 +29,9 @@ public class ExplodingBulletProjectile : BulletBase
 
     private new void OnTriggerEnter2D(Collider2D other) 
     {
-        if(other.tag.Equals(Tags.ENEMY))
+        if(other.tag.Equals(Tags.ENEMY) && mFirstHit)
         {
+            mFirstHit = false;
             IHealthManager hpMan = other.GetComponent<IHealthManager>();
             // todo change for real dmg value
             hpMan.LoseHealth(20);
@@ -50,6 +52,8 @@ public class ExplodingBulletProjectile : BulletBase
 
     protected new void DestroyWithDelay()
     {
+        if(mIsAboutToBeDestroyed) return;
+        mIsAboutToBeDestroyed = true;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<SpriteRenderer>().enabled = false;
         Instantiate(Explosion,transform.position,Quaternion.identity);
@@ -58,7 +62,6 @@ public class ExplodingBulletProjectile : BulletBase
 
     private IEnumerator DestoryOfterDelay()
     {
-        mIsAboutToBeDestroyed = true;
         yield return new WaitForSeconds(DESTROY_DELAY);
         DestroyWithDelay();
         yield return null;
