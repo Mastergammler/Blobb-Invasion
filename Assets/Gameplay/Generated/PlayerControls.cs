@@ -114,7 +114,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""d80ca28f-6e41-4ae3-ac35-b5221bbd4b64"",
                     ""path"": ""<Keyboard>/leftCtrl"",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Shooting"",
