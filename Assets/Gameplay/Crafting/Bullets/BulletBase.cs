@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class BulletBase : MonoBehaviour, IBullet 
 {
    protected const float SELF_DESTRUCT_TIME = 5f;
+   protected const float TIME_TO_DESTROY_AFTER_HIT = 1.5f;
    public float BulletSpeed { set; get;} = 8f;
 
    public abstract void Shoot(Vector2 direction);    
@@ -24,7 +25,20 @@ public abstract class BulletBase : MonoBehaviour, IBullet
             IHealthManager hpMan = other.GetComponent<IHealthManager>();
             // todo change for real dmg value
             hpMan.LoseHealth(20);
-            Destroy(gameObject);    
+            DestroyWithDelay();
         }
+    }
+
+    protected void DestroyWithDelay()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        GetComponentInChildren<SpriteRenderer>().enabled = false;
+        StartCoroutine(ActuallyDestroyObject());
+    }
+
+    private IEnumerator ActuallyDestroyObject()
+    {
+        yield return new WaitForSeconds(TIME_TO_DESTROY_AFTER_HIT);
+        Destroy(gameObject);
     }
 }

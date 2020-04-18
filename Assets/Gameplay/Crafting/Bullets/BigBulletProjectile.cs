@@ -43,7 +43,7 @@ public class BigBulletProjectile : BulletBase
     {
         mIsAboutToBeDestroyed = true;
         yield return new WaitForSeconds(DESTROY_DELAY);
-        Destroy(gameObject);
+        DestroyWithDelay();
         yield return null;
     }
 

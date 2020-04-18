@@ -7,6 +7,7 @@ public class BulletData : ScriptableBase
     public float DamageMod;
     public float FireRateMod;   
     public BulletType BulletType;
+    public AudioClip BulletSound;
     public IBulletBehaviour BulletBehaviour;
     public IBulletAnimation BulletAnimation;
     public GameObject BulletPrefab;

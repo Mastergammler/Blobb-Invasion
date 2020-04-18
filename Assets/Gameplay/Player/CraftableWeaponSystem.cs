@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(IInventory))]
+[RequireComponent(typeof(IInventory),typeof(AudioSource))]
 public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 {
     public CoreData DefaultCore;
@@ -16,6 +16,7 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     private WeaponData mCurWeapon;
     private BulletData mCurBullet;
     private CoreData mCurCore;
+
 
     //----------------
     //  Weapon Data
