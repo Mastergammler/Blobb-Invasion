@@ -17,10 +17,4 @@ public class DefaultBullet : BulletBase
         GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
         StartCoroutine(initSelfDestructionSequence());
     }
-
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        
-    }
 }

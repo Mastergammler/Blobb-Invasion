@@ -17,7 +17,7 @@ public abstract class BulletBase : MonoBehaviour, IBullet
         yield return null;
     }
 
-    protected void OnTriggerExit2D(Collider2D other) 
+    protected void OnTriggerEnter2D(Collider2D other) 
     {
         if(other.tag.Equals(Tags.ENEMY))
         {

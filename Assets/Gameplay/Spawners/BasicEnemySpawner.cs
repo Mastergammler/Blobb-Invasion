@@ -16,7 +16,7 @@ public class BasicEnemySpawner : MonoBehaviour
     public int MaxAvailbaleEnemies;
     [Range(0,1)]
     public float DefaultSpawnChance;
-    public float SpawnRadius;
+    public float PlayerDeadZone;
     public bool PairSpawnMode = false;
 
     public GameObject EnemySpawnerPrefab;
@@ -75,6 +75,8 @@ public class BasicEnemySpawner : MonoBehaviour
         foreach(Transform t in mSpawnerList)
         {
             float distanceToPlayer = Vector3.Distance(t.position,PlayerPosition.position);
+            if(distanceToPlayer <= PlayerDeadZone) continue;
+
              if (trySpawnFor(t,distanceToPlayer))
              {
                  //mChangeList.Add(t);
