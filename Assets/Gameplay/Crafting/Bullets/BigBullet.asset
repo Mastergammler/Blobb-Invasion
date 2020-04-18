@@ -20,5 +20,6 @@ MonoBehaviour:
   DamageMod: 2
   FireRateMod: 0.5
   BulletType: 1
+  BulletSound: {fileID: 8300000, guid: 3d6bdd0679d43254ba370eb80e020b36, type: 3}
   BulletPrefab: {fileID: 6864454353788644648, guid: d2c62b2c3f63edb45aa3896bda8770da,
     type: 3}

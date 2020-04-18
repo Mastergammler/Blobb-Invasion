@@ -134,7 +134,7 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     {
         if(mTimeSinceLastShot >= mTimeBetweenShots)
         {
-            mTimeSinceLastShot = mTimeSinceLastShot - mTimeBetweenShots;
+            mTimeSinceLastShot = mTimeSinceLastShot%mTimeBetweenShots;
             return true;
         }
         return false;

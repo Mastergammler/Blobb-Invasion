@@ -90,11 +90,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6864454353788644655}
-  - component: {fileID: 7428123952966015578}
   - component: {fileID: 976061865747310380}
   - component: {fileID: 9215098117263091771}
-  - component: {fileID: 516562298055412542}
   - component: {fileID: 5761012341633162898}
+  - component: {fileID: 6801413801677355226}
   m_Layer: 0
   m_Name: bullet_explode
   m_TagString: Untagged
@@ -117,19 +116,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7428123952966015578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6864454353788644648}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e227abb938a0a7541819cfef5b7af140, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BulletSpeed: 8
 --- !u!61 &976061865747310380
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -177,18 +163,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &516562298055412542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6864454353788644648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 983b3919209e447438b93747b95fd2da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &5761012341633162898
 AudioSource:
   m_ObjectHideFlags: 0
@@ -285,3 +259,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6801413801677355226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6864454353788644648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fdb0f935bf59e469f07abb2c6d230d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 791646587645269816, guid: eef2dea5d3c0dff4f9b79d9d3ece058e,
+    type: 3}
+  TimeUntilExplosion: 1

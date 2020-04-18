@@ -36,7 +36,7 @@ public abstract class BulletBase : MonoBehaviour, IBullet
         StartCoroutine(ActuallyDestroyObject());
     }
 
-    private IEnumerator ActuallyDestroyObject()
+    protected IEnumerator ActuallyDestroyObject()
     {
         yield return new WaitForSeconds(TIME_TO_DESTROY_AFTER_HIT);
         Destroy(gameObject);
