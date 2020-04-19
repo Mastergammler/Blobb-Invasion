@@ -39,6 +39,7 @@ public class HealthTickSystem : MonoBehaviour , IHealthManager
         if(Health <= 0)
         {
             gameObject.active = false;
+            MusicManager.Instance.StopMusic();
             Debug.Log("Player died");
         }
     }

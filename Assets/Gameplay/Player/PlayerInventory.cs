@@ -25,7 +25,7 @@ public class PlayerInventory : MonoBehaviour, IInventory
 
     private void Start() 
     {
-        mActiveWeapon = StartWeapon;   
+        mActiveWeapon = StartWeapon;
         UIManager.Instance.SetInventory(this);
     }
 

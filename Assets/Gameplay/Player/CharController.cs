@@ -20,6 +20,7 @@ public class CharController : MonoBehaviour
     private Transform mGunHinge;
     private bool isStunned = false;
     private bool isShooting = false;
+    private bool lastShootingState = false;
     private AudioSource mAudioSource;
 
     //-------------------
@@ -55,7 +56,6 @@ public class CharController : MonoBehaviour
         mGunHinge.rotation = Quaternion.LookRotation(Vector3.forward,new Vector3(mCurMovement.x,mCurMovement.y,0));
 
         if(isShooting) justShoot();
-
     }
         
     //*****************
@@ -69,8 +69,8 @@ public class CharController : MonoBehaviour
         //Transform spawn = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
         //GameObject newBullet = Instantiate(bullet,spawn.position,spawn.rotation);
 
-        context.action.started += (ctx) => isShooting = true;
-        context.action.canceled += (ctx) => isShooting = false;
+        context.action.started += (ctx) => { isShooting = true; lastShootingState = false; };
+        context.action.canceled += (ctx) => { isShooting = false; lastShootingState = true; };
 
         //newBullet.GetComponent<BulletScript>().Fly(bulletDirection);
         //GetComponent<ISpriteMaterialChanger>().ChangeMaterial();

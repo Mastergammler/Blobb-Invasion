@@ -96,6 +96,7 @@ public class UIManager : MonoBehaviour
         if(uiCanvas.activeSelf)
         {
             uiCanvas.SetActive(false);
+            MusicManager.Instance.DuckMusic(false);
         }
         else
         {
@@ -109,6 +110,7 @@ public class UIManager : MonoBehaviour
 
     private void ActivateCanvas()
     {
+        MusicManager.Instance.DuckMusic(true);
         uiCanvas.SetActive(true);
         GameObject firstInventoryButton = uiCanvas.transform.GetChild(0).GetChild(0).GetChild(0).gameObject;
         if(firstInventoryButton == null) Debug.Log("Something went wrong");
