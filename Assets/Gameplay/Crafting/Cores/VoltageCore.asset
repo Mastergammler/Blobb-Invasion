@@ -23,4 +23,5 @@ MonoBehaviour:
   Bullets:
   - {fileID: 11400000, guid: 4b396039284ddb44dbeb708b44193b98, type: 2}
   - {fileID: 11400000, guid: b41815040b839904e884c9e00ebed59e, type: 2}
+  - {fileID: 11400000, guid: 036dfb103c132ef4ab23bb5a2b172ee1, type: 2}
   ColorAnimation: {fileID: 7400000, guid: f72af97858f8c614e88127803154a43c, type: 2}

@@ -8,6 +8,7 @@ public class BulletRayBase : MonoBehaviour, IBullet
     private const float TIME_UNTIL_DESTROY = 0.05f;
 
     public bool DestroyImmediately = true;
+    public float LineLengthOffset = 0f;
 
      //###############
     //##  MEMBERS  ##
@@ -54,7 +55,7 @@ public class BulletRayBase : MonoBehaviour, IBullet
 
     private Vector2 calculateEvenEnemyHitPoint(Vector2 direction, Vector2 enemyPosition)
     {
-       float dist =  Vector2.Distance(transform.position,enemyPosition);
+       float dist =  Vector2.Distance(transform.position,enemyPosition) + LineLengthOffset;
        Vector2 dirVec = direction * dist;
        Vector2 curPos = new Vector2(transform.position.x, transform.position.y);
        return curPos + dirVec;

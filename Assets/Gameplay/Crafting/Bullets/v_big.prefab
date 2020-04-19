@@ -240,6 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyImmediately: 0
+  LineLengthOffset: -0.5
 --- !u!1 &7761933028054888634
 GameObject:
   m_ObjectHideFlags: 0

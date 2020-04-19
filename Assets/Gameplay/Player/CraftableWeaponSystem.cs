@@ -80,9 +80,9 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 
     private void InitNewWeapon(object sender, ActiveItemEventArgs e)
     {
-        mCurBullet = e.NewBullet;
         mCurWeapon = e.NewWeapon;
         mCurCore = e.NewCore;
+        mCurBullet = e.NewBullet;
 
         CalculateWeaponValues();
     }
@@ -136,6 +136,11 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     private void AddBulletValue()
     {
         if(mCurBullet == null) mCurBullet = mCurCore.Bullets[0];
+        else
+        {
+            // set real bullet
+            mCurBullet = mCurCore.Bullets[(int)mCurBullet.BulletType];
+        }
 
         mFireRate *= mCurBullet.FireRateMod;
         mDmgPerShot *= mCurBullet.DamageMod;

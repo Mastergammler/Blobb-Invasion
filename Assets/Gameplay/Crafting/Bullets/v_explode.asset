@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
-  m_Name: p_Explode
+  m_Name: v_explode
   m_EditorClassIdentifier: 
-  Name: An surging energy blast
-  Tooltip: A high energy projetile that explodes and deals even more dmg
+  Name: A electric bomb that stays after hitting the ground
+  Tooltip: Electric projectile that lands and surges for a few moments
   Art: {fileID: 21300000, guid: fb5feb19c6170584b836ab9027805ce6, type: 3}
   Type: 0
-  CoreSpecificArt: {fileID: 21300000, guid: a09fd39c3630ffc49bbb638a0e8471ff, type: 3}
-  DamageMod: 7
-  FireRateMod: 0.5
-  BulletType: 0
+  CoreSpecificArt: {fileID: 21300000, guid: 153de88f97b43694ca416c5c9bb9a667, type: 3}
+  DamageMod: 1
+  FireRateMod: 1
+  BulletType: 2
   BulletSound: {fileID: 8300000, guid: f5f7b0323042ab4478aabe287a4185e6, type: 3}
-  BulletPrefab: {fileID: 6864454353788644648, guid: c7c4baac7d31657478aecf376eadc122,
+  BulletPrefab: {fileID: 6864454353788644648, guid: ff85cd4fb62857b48b95b9a2caeeb2e7,
     type: 3}
