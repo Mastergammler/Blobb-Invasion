@@ -39677,6 +39677,7 @@ GameObject:
   - component: {fileID: 1324499402}
   - component: {fileID: 1324499403}
   - component: {fileID: 1324499404}
+  - component: {fileID: 1324499405}
   m_Layer: 0
   m_Name: SYSTEMS
   m_TagString: Untagged
@@ -39796,6 +39797,18 @@ MonoBehaviour:
   MachineGun: {fileID: 11400000, guid: b65d4359e5ce7a046abad677a24acf45, type: 2}
   PlasmaCore: {fileID: 11400000, guid: a3a124b31cab4f14ca46854345febd77, type: 2}
   VoltageCore: {fileID: 11400000, guid: ce2011cad5f17904b856bd965f6453e8, type: 2}
+--- !u!114 &1324499405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324499399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd13564b19bb0c4ea6962dc7cf9ce55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1375380999
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -36,6 +36,7 @@ public class ShieldEnemy : MonoBehaviour, IObservable
 
     private void OnDestroy() 
     {
+        HighscoreManager.Instance.AddToScore(HighscoreManager.KILL_ENEMY);
         mCallbacks?.Invoke();
     }
 

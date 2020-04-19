@@ -133,10 +133,12 @@ public class CharController : MonoBehaviour
 
             if(type == CollectableType.HP_BOBBLE)
             {
+                HighscoreManager.Instance.AddToScore(HighscoreManager.GET_HEALTH);
                 mHealthManager.GainHealth(HP_GAIN_VALUE);
                 return;
             }
 
+            HighscoreManager.Instance.AddToScore(HighscoreManager.FIND_CORE);
             mInventory.AddInventoryItem(type);
         }
     }

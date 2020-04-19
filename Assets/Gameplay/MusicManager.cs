@@ -20,22 +20,19 @@ public class MusicManager : MonoBehaviour
     private AudioSource mMusicSource;
     private AudioSource mGunShotSource;
 
+    private AudioSource mDefaultSource;
+
     private void Awake() 
     {
+        if(Instance != null) Destroy(gameObject);
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        mMusicSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        mMusicSource = gameObject.AddComponent<AudioSource>();
-        mMusicSource.clip = GameMusic;
-        mMusicSource.loop = true;   
-        mGunShotSource = gameObject.AddComponent<AudioSource>();
-        mGunShotSource.clip = GunSound;
-        mGunShotSource.loop = true;
-
         if(PlayMenuMusicOnStart) PlayMusic(true);
     }
 

@@ -34,4 +34,10 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         }
     }
+
+    public void PlayerDead()
+    {
+        Time.timeScale = 0;
+        GetComponent<SceneLoader>().LoadMenu();
+    }
 }

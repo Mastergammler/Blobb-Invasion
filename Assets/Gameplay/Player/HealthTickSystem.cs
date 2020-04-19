@@ -40,6 +40,7 @@ public class HealthTickSystem : MonoBehaviour , IHealthManager
         {
             gameObject.active = false;
             MusicManager.Instance.StopMusic();
+            GameManager.Instance.PlayerDead();
             Debug.Log("Player died");
         }
     }

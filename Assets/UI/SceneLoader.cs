@@ -16,6 +16,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadGame()
     {
+        HighscoreManager.Instance.NewGame();
         SceneManager.LoadScene(GAME_SCENE,LoadSceneMode.Single);
     }
 

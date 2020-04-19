@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 791204184}
   - component: {fileID: 791204185}
   m_Layer: 0
-  m_Name: Explosion_Plasma
+  m_Name: Explosion_Plasma 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4862,7 +4862,8 @@ AudioSource:
   m_GameObject: {fileID: 791646587645269816}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6927668173814005355, guid: 9bcbdc02c718f134e9803b488f0e66a8,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 8bfc99f3408816c458da39c94ccd9de4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
