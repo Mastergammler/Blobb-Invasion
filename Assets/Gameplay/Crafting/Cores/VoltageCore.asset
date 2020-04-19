@@ -16,9 +16,10 @@ MonoBehaviour:
   Tooltip: Core based on electric energy
   Art: {fileID: 21300000, guid: 35fe0229b5f08084599359ab4ae7cce5, type: 3}
   Type: 2
-  BaseDmgMod: 2
+  BaseDmgMod: 1.2
   BaseFireRateMod: 5
   ColorDark: {r: 0.6509434, g: 0.5933218, b: 0, a: 0}
   ColorBright: {r: 0, g: 0, b: 0, a: 0}
-  Bullets: []
+  Bullets:
+  - {fileID: 11400000, guid: 4b396039284ddb44dbeb708b44193b98, type: 2}
   ColorAnimation: {fileID: 7400000, guid: f72af97858f8c614e88127803154a43c, type: 2}

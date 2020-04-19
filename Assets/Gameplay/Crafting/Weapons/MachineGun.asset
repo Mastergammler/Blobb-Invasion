@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596abe2320b8ae14eb50f69c9e9930a5, type: 3}
   m_Name: MachineGun
   m_EditorClassIdentifier: 
-  Name: 
-  Tooltip: 
-  Art: {fileID: 0}
-  Type: 0
-  BaseDamage: 0
-  FireRate: 0
+  Name: Machine Gun
+  Tooltip: Gun that shoots alot of bullets but with less dmg
+  Art: {fileID: 21300000, guid: c58a7e8d82d85a84a95a686da04aed9a, type: 3}
+  Type: 8
+  BaseDamage: 3
+  FireRate: 4
   ShootPattern: {fileID: 0}
-  GunPrefab: {fileID: 0}
+  GunPrefab: {fileID: 2747029561313624732, guid: 0343c718956a92b4a903b02e1c8357af,
+    type: 3}

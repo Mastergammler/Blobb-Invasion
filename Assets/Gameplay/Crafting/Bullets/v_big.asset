@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
+  m_Name: v_def
+  m_EditorClassIdentifier: 
+  Name: Voltage Default Ray
+  Tooltip: Ray like energy surge
+  Art: {fileID: 0}
+  Type: 0
+  CoreSpecificArt: {fileID: 0}
+  DamageMod: 0.1
+  FireRateMod: 10
+  BulletType: 0
+  BulletSound: {fileID: 0}
+  BulletPrefab: {fileID: 4397322069398655018, guid: ad18826bd1389694191d1e3d7a18b287,
+    type: 3}
