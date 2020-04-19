@@ -22,4 +22,5 @@ MonoBehaviour:
   ColorBright: {r: 0, g: 0, b: 0, a: 0}
   Bullets:
   - {fileID: 11400000, guid: 4b396039284ddb44dbeb708b44193b98, type: 2}
+  - {fileID: 11400000, guid: b41815040b839904e884c9e00ebed59e, type: 2}
   ColorAnimation: {fileID: 7400000, guid: f72af97858f8c614e88127803154a43c, type: 2}

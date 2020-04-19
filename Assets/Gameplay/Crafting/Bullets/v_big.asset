@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b4224822e7d5774eaf2fdbd20c6a7e7, type: 3}
-  m_Name: v_def
+  m_Name: v_big
   m_EditorClassIdentifier: 
-  Name: Voltage Default Ray
-  Tooltip: Ray like energy surge
+  Name: Voltage High Energy Ray
+  Tooltip: Short high dmg energy surges
   Art: {fileID: 0}
   Type: 0
   CoreSpecificArt: {fileID: 0}
-  DamageMod: 0.1
-  FireRateMod: 10
-  BulletType: 0
+  DamageMod: 0.4
+  FireRateMod: 2
+  BulletType: 1
   BulletSound: {fileID: 0}
-  BulletPrefab: {fileID: 4397322069398655018, guid: ad18826bd1389694191d1e3d7a18b287,
+  BulletPrefab: {fileID: 4397322069398655018, guid: 300803cdaa383944ba17d4644d546991,
     type: 3}
