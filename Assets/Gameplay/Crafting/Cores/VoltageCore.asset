@@ -17,7 +17,7 @@ MonoBehaviour:
   Art: {fileID: 21300000, guid: 35fe0229b5f08084599359ab4ae7cce5, type: 3}
   Type: 2
   BaseDmgMod: 1.2
-  BaseFireRateMod: 5
+  BaseFireRateMod: 2
   ColorDark: {r: 0.6509434, g: 0.5933218, b: 0, a: 0}
   ColorBright: {r: 0, g: 0, b: 0, a: 0}
   Bullets:

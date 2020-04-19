@@ -17,8 +17,8 @@ MonoBehaviour:
   Art: {fileID: 0}
   Type: 0
   CoreSpecificArt: {fileID: 0}
-  DamageMod: 0.4
-  FireRateMod: 2
+  DamageMod: 1
+  FireRateMod: 0.8
   BulletType: 1
   BulletSound: {fileID: 0}
   BulletPrefab: {fileID: 4397322069398655018, guid: 300803cdaa383944ba17d4644d546991,

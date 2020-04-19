@@ -19,7 +19,7 @@ MonoBehaviour:
   CoreSpecificArt: {fileID: 21300000, guid: a09fd39c3630ffc49bbb638a0e8471ff, type: 3}
   DamageMod: 7
   FireRateMod: 0.5
-  BulletType: 0
+  BulletType: 2
   BulletSound: {fileID: 8300000, guid: f5f7b0323042ab4478aabe287a4185e6, type: 3}
-  BulletPrefab: {fileID: 6864454353788644648, guid: c7c4baac7d31657478aecf376eadc122,
+  BulletPrefab: {fileID: 5138640937492952574, guid: 2ba38d9ab1a7c7a4fab47e0b5de421b3,
     type: 3}

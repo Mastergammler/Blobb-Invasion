@@ -6,8 +6,10 @@ public class BulletRayBase : MonoBehaviour, IBullet
 
     public float BulletSpeed { set; get;}
     private const float TIME_UNTIL_DESTROY = 0.05f;
+    private const float TIME_UNTIL_SOUND_PLAYED = 1f;
 
     public bool DestroyImmediately = true;
+    public bool WaitForSound = false;
     public float LineLengthOffset = 0f;
 
      //###############
@@ -78,6 +80,22 @@ public class BulletRayBase : MonoBehaviour, IBullet
         {
             yield return new WaitForSeconds(TIME_UNTIL_DESTROY);
         }
+        if(WaitForSound)
+        {
+            StartCoroutine(DestroyAfterSoundPlayed());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        yield return null;
+    }
+
+
+    private IEnumerator DestroyAfterSoundPlayed()
+    {
+        GetComponent<LineRenderer>().enabled = false;
+        yield return new WaitForSeconds(TIME_UNTIL_SOUND_PLAYED);
         Destroy(gameObject);
         yield return null;
     }
