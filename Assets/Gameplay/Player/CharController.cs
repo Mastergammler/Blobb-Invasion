@@ -5,7 +5,7 @@ using System.Collections;
 
 public class CharController : MonoBehaviour
 {
-    private static int HP_GAIN_VALUE = 20;
+    private static int HP_GAIN_VALUE = 40;
     private const float STUN_TIME = .5f;
     public float MovementSpeed = 0.1f;
     public GameObject bullet;
