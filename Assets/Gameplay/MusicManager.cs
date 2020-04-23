@@ -26,13 +26,15 @@ public class MusicManager : MonoBehaviour
     {
         if(Instance != null) Destroy(gameObject);
         Instance = this;
-        DontDestroyOnLoad(gameObject);
         mMusicSource = GetComponent<AudioSource>();
+        //DontDestroyOnLoad(gameObject);
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
+
         if(PlayMenuMusicOnStart) PlayMusic(true);
     }
 
@@ -46,12 +48,15 @@ public class MusicManager : MonoBehaviour
     {
         if(menuMusic)
         {
+
             mMusicSource.clip = MainMenuMusic;
+            mMusicSource.volume = 1f;
 
         }
         else
         {
             mMusicSource.clip = GameMusic;
+            mMusicSource.volume = DEFAULT_MUSIC_VOLUME;
         }
         mMusicSource.Play();
     }
