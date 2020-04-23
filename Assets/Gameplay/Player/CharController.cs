@@ -69,14 +69,18 @@ public class CharController : MonoBehaviour
         //Transform spawn = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
         //GameObject newBullet = Instantiate(bullet,spawn.position,spawn.rotation);
         
+        float value = context.ReadValue<float>();
+        isShooting = value >= 0.9;
+        Debug.Log(value);
+
         if(context.phase == InputActionPhase.Started)
         {
-            isShooting = true;
+            //isShooting = true;
             Debug.Log("Started");
         }
         else if(context.phase == InputActionPhase.Canceled)
         {
-            isShooting = false;
+            //isShooting = false;
             Debug.Log("Canceled");
         }
         else if(context.phase == InputActionPhase.Performed)

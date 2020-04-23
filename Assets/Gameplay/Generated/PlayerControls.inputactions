@@ -15,11 +15,11 @@
                 },
                 {
                     "name": "Shooting",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "b6883f2c-645d-4da8-9415-64802e012b71",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": "Hold(duration=0.1,pressPoint=0.1)"
+                    "interactions": ""
                 },
                 {
                     "name": "Inventory",
@@ -101,7 +101,7 @@
                     "name": "",
                     "id": "d80ca28f-6e41-4ae3-ac35-b5221bbd4b64",
                     "path": "<Keyboard>/leftCtrl",
-                    "interactions": "Hold(duration=0.1,pressPoint=0.1)",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Shooting",
