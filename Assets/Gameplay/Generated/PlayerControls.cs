@@ -32,7 +32,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""id"": ""b6883f2c-645d-4da8-9415-64802e012b71"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold""
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)""
                 },
                 {
                     ""name"": ""Inventory"",

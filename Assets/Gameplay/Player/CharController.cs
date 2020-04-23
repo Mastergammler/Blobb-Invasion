@@ -68,9 +68,25 @@ public class CharController : MonoBehaviour
 
         //Transform spawn = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
         //GameObject newBullet = Instantiate(bullet,spawn.position,spawn.rotation);
+        
+        if(context.phase == InputActionPhase.Started)
+        {
+            isShooting = true;
+            Debug.Log("Started");
+        }
+        else if(context.phase == InputActionPhase.Canceled)
+        {
+            isShooting = false;
+            Debug.Log("Canceled");
+        }
+        else if(context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("Performed");
+        }
 
-        context.action.started += (ctx) => { isShooting = true; lastShootingState = false; };
-        context.action.canceled += (ctx) => { isShooting = false; lastShootingState = true; };
+        //context.action.started += (ctx) => { Debug.Log("Shoting was started");isShooting = true; lastShootingState = false; };
+        //context.action.performed += (ctx) => { isShooting = false;};
+       //context.action.canceled += (ctx) => { Debug.Log("Shooting was canceled");isShooting = false; lastShootingState = true; };
 
         //newBullet.GetComponent<BulletScript>().Fly(bulletDirection);
         //GetComponent<ISpriteMaterialChanger>().ChangeMaterial();
