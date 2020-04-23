@@ -31,8 +31,13 @@ public class HighscoreManager : MonoBehaviour
     {
         if(scene.buildIndex == 0)
         {
+            if(HighestScoreEver < Highscore)
+            {
+                HighestScoreEver = Highscore;
+            }
             GameObject obj = GameObject.Find("HighScoreValue");
             mText = obj.GetComponent<TextMeshProUGUI>();
+
             if(mText != null)
             {
                 mText.text = Highscore.ToString();
@@ -53,10 +58,6 @@ public class HighscoreManager : MonoBehaviour
 
     public void NewGame()
     {
-        if(HighestScoreEver < Highscore)
-        {
-            HighestScoreEver = Highscore;
-        }
         Highscore = 0;
     }
 
