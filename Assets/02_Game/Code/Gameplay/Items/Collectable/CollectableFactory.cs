@@ -1,4 +1,5 @@
 using UnityEngine;
+using BlobbInvasion.Gameplay.Items.Crafting;
 
 // Object for creating or holding the scriptable objects
 namespace BlobbInvasion.Gameplay.Items

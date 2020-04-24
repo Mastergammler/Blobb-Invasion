@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using BlobbInvasion.Utilities;
+using BlobbInvasion.Gameplay.Character;
 
 namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {

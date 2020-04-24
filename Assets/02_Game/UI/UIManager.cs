@@ -8,6 +8,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using BlobbInvasion.UI;
 using BlobbInvasion.Utilities;
+using BlobbInvasion.Gameplay.Character.Player;
+using BlobbInvasion.Gameplay.Items.Crafting;
+using BlobbInvasion.Core;
 
 namespace BlobbInvasion.UI
 {

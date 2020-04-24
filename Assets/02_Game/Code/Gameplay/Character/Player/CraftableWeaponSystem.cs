@@ -1,4 +1,7 @@
 using UnityEngine;
+using BlobbInvasion.Gameplay.Items;
+using BlobbInvasion.Gameplay.Items.Crafting;
+using BlobbInvasion.Gameplay.Items.Crafting.Bullets;
 
 namespace BlobbInvasion.Gameplay.Character.Player
 {

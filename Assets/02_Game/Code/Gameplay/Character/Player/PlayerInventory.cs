@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using BlobbInvasion.UI;
+using BlobbInvasion.Gameplay.Items.Crafting;
+using BlobbInvasion.Gameplay.Items;
 
 namespace BlobbInvasion.Gameplay.Character.Player
 {

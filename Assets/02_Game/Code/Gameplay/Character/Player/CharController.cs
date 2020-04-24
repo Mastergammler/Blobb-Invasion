@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Collections;
 using BlobbInvasion.Utilities;
+using BlobbInvasion.Gameplay.Items.Collectables;
+using BlobbInvasion.Gameplay.Items;
+using BlobbInvasion.Core;
 
 namespace BlobbInvasion.Gameplay.Character.Player
 {

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Character
 {
-public interface
- IMoveable
-{
-    void Move(Vector2 direction);
+    public interface IMoveable
+    {
+        void Move(Vector2 direction);
+    }
 }

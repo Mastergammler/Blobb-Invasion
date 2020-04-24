@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using BlobbInvasion.Gameplay.Items;
 
 namespace BlobbInvasion.Environment.SpawnSystems
 {

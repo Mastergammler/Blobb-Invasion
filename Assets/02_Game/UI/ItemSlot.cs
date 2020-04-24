@@ -1,6 +1,7 @@
 using System.Diagnostics.Tracing;
 using UnityEngine;
 using UnityEngine.UI;
+using BlobbInvasion.Gameplay.Items.Crafting;
 
 namespace BlobbInvasion.UI
 {

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using BlobbInvasion.Utilities;
+using BlobbInvasion.Gameplay.Character;
 
 namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
@@ -23,6 +24,7 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
         {
             mLine = GetComponent<LineRenderer>();
         }
+
 
         public override void Shoot(Vector2 direction, float damage)
         {
