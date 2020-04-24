@@ -2,95 +2,95 @@ using UnityEngine;
 
 
 // Removes health based on ticks
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Character.Player
 {
-public class
- HealthTickSystem : MonoBehaviour , IHealthManager
-{
-    [SerializeField]
-    private float Health = 100;
-    [SerializeField]
-    private float HealthLossTick = 3;
-    private float MAX_HEALTH;
-
-    [SerializeField]
-    private bool AdjustColor = false;
-    [SerializeField]
-    private Color TargetHue;
-    private Color mStartingHue;
-    private SpriteRenderer mSpriteRenderer;
-
-    private void Start() 
+    public class HealthTickSystem : MonoBehaviour, IHealthManager
     {
-        MAX_HEALTH = Health;
-        mSpriteRenderer = GetComponent<SpriteRenderer>();
-        mStartingHue = mSpriteRenderer.color;
-    }
+        [SerializeField]
+        private float Health = 100;
+        [SerializeField]
+        private float HealthLossTick = 3;
+        private float MAX_HEALTH;
 
-    private void Update() 
-    {
-        healthTick();
-        adjustColor();
-        checkForDeath();
-    }
+        [SerializeField]
+        private bool AdjustColor = false;
+        [SerializeField]
+        private Color TargetHue;
+        private Color mStartingHue;
+        private SpriteRenderer mSpriteRenderer;
 
-    private void healthTick()
-    {
-        Health -= HealthLossTick * Time.deltaTime;
-    }
-    private void checkForDeath()
-    {
-        if(Health <= 0)
+        private void Start()
         {
-            gameObject.active = false;
-            MusicManager.Instance.StopMusic();
-            GameManager.Instance.PlayerDead();
-            Debug.Log("Player died");
+            MAX_HEALTH = Health;
+            mSpriteRenderer = GetComponent<SpriteRenderer>();
+            mStartingHue = mSpriteRenderer.color;
         }
-    }
-    private void adjustColor()
-    {
-        if(AdjustColor)
+
+        private void Update()
         {
-            Color adjustedColor = Color.Lerp(TargetHue,mStartingHue,GetCurrentHealthPercentage());
-            adjustedColor.a = 1;
-            mSpriteRenderer.color = adjustedColor;
+            healthTick();
+            adjustColor();
+            checkForDeath();
         }
-    }
 
-    //------------------
-    //  IHealthManager
-    //------------------
+        private void healthTick()
+        {
+            Health -= HealthLossTick * Time.deltaTime;
+        }
+        private void checkForDeath()
+        {
+            if (Health <= 0)
+            {
+                gameObject.active = false;
+                MusicManager.Instance.StopMusic();
+                GameManager.Instance.PlayerDead();
+                Debug.Log("Player died");
+            }
+        }
+        private void adjustColor()
+        {
+            if (AdjustColor)
+            {
+                Color adjustedColor = Color.Lerp(TargetHue, mStartingHue, GetCurrentHealthPercentage());
+                adjustedColor.a = 1;
+                mSpriteRenderer.color = adjustedColor;
+            }
+        }
 
-    public void Init()
-    {
-        Health = MAX_HEALTH;
-    }
+        //------------------
+        //  IHealthManager
+        //------------------
 
-    public void GainHealth(float amount)
-    {
-        Health += amount;
-        if(Health > MAX_HEALTH) Health = MAX_HEALTH;
-    }
+        public void Init()
+        {
+            Health = MAX_HEALTH;
+        }
 
-    public void LoseHealth(float amount)
-    {
-        Health -= amount;
-        checkForDeath();
-    }
+        public void GainHealth(float amount)
+        {
+            Health += amount;
+            if (Health > MAX_HEALTH) Health = MAX_HEALTH;
+        }
 
-    public float GetCurrentHealth()
-    {
-        return Health;
-    }
+        public void LoseHealth(float amount)
+        {
+            Health -= amount;
+            checkForDeath();
+        }
 
-    public float GetCurrentHealthPercentage()
-    {
-        return Health/MAX_HEALTH;
-    }
+        public float GetCurrentHealth()
+        {
+            return Health;
+        }
 
-    public void AdjustColorBasedOnHp(bool adjust)
-    {
-        AdjustColor = adjust;
+        public float GetCurrentHealthPercentage()
+        {
+            return Health / MAX_HEALTH;
+        }
+
+        public void AdjustColorBasedOnHp(bool adjust)
+        {
+            AdjustColor = adjust;
+        }
     }
 }

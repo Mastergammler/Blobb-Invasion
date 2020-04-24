@@ -1,7 +1,7 @@
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Crafting
 {
-public interface
- IBulletBehaviour
-{
-    // todo
+    public interface IBulletBehaviour
+    {
+        // todo
+    }
 }

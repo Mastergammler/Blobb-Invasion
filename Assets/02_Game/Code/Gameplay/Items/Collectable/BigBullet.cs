@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Collectables
 {
-public class
- BigBullet : CollectableBase
-{
-    // Start is called before the first frame update
-    void Start()
+    public class BigBullet : CollectableBase
     {
-        mType = CollectableType.BUL_BIG;
+        // Start is called before the first frame update
+        void Start()
+        {
+            mType = CollectableType.BUL_BIG;
+        }
     }
 }

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items
 {
-public class
- VoltageCore : CollectableBase
-{
-    void Start()
+    public class VoltageCore : CollectableBase
     {
-        mType = CollectableType.CORE_VOLTAGE;
+        void Start()
+        {
+            mType = CollectableType.CORE_VOLTAGE;
+        }
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Character.Player
 {
-public interface
- IWeaponSystem
-{
-    void Shoot(Vector2 direction);
+    public interface IWeaponSystem
+    {
+        void Shoot(Vector2 direction);
+    }
 }

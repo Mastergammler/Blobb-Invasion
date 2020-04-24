@@ -3,81 +3,81 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using BlobbInvasion.Utilities;
 
-[RequireComponent(typeof(Rigidbody2D),typeof(Collider2D))]
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
-public class
- ExplodingBulletProjectile : BulletBase
-{
-    //#################
-    //##  CONSTANTS  ##
-    //#################
-
-    private const float DESTROY_DELAY = 0.05f;
-    private bool mIsAboutToBeDestroyed = false;
-    public GameObject Explosion;
-    public float TimeUntilExplosion = 1f;
-    private bool mFirstHit = true;
-
-    //############
-    //##  MONO  ##
-    //############
-
-    public override void Shoot(Vector2 direction, float damage)
+    [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+    public class ExplodingBulletProjectile : BulletBase
     {
-        mBulletDamage = damage;
-        direction.Normalize();
-        GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
-        StartCoroutine(initSelfDestructionSequence());
-    }
+        //#################
+        //##  CONSTANTS  ##
+        //#################
 
+        private const float DESTROY_DELAY = 0.05f;
+        private bool mIsAboutToBeDestroyed = false;
+        public GameObject Explosion;
+        public float TimeUntilExplosion = 1f;
+        private bool mFirstHit = true;
 
-    private new void OnTriggerEnter2D(Collider2D other) 
-    {
-        if(other.tag.Equals(Tags.ENEMY) && mFirstHit)
+        //############
+        //##  MONO  ##
+        //############
+
+        public override void Shoot(Vector2 direction, float damage)
         {
-            mFirstHit = false;
-            if(! mIsAboutToBeDestroyed)
+            mBulletDamage = damage;
+            direction.Normalize();
+            GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
+            StartCoroutine(initSelfDestructionSequence());
+        }
+
+
+        private new void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.tag.Equals(Tags.ENEMY) && mFirstHit)
             {
-                StartCoroutine(DestoryOfterDelay());
+                mFirstHit = false;
+                if (!mIsAboutToBeDestroyed)
+                {
+                    StartCoroutine(DestoryOfterDelay());
+                }
             }
         }
-    }
 
 
-    protected new IEnumerator initSelfDestructionSequence()
-    {
-        yield return new WaitForSeconds(TimeUntilExplosion);
-        DestroyWithDelay();
-        yield return null;
-    }
+        protected new IEnumerator initSelfDestructionSequence()
+        {
+            yield return new WaitForSeconds(TimeUntilExplosion);
+            DestroyWithDelay();
+            yield return null;
+        }
 
-    protected new void DestroyWithDelay()
-    {
-        if(mIsAboutToBeDestroyed) return;
-        mIsAboutToBeDestroyed = true;
-        GetComponent<Collider2D>().enabled = false;
-        GetComponentInChildren<SpriteRenderer>().enabled = false;
-        createExplosion();
-        StartCoroutine(ActuallyDestroyObject());
-    }
+        protected new void DestroyWithDelay()
+        {
+            if (mIsAboutToBeDestroyed) return;
+            mIsAboutToBeDestroyed = true;
+            GetComponent<Collider2D>().enabled = false;
+            GetComponentInChildren<SpriteRenderer>().enabled = false;
+            createExplosion();
+            StartCoroutine(ActuallyDestroyObject());
+        }
 
-    private IEnumerator DestoryOfterDelay()
-    {
-        yield return new WaitForSeconds(DESTROY_DELAY);
-        DestroyWithDelay();
-        yield return null;
-    }
+        private IEnumerator DestoryOfterDelay()
+        {
+            yield return new WaitForSeconds(DESTROY_DELAY);
+            DestroyWithDelay();
+            yield return null;
+        }
 
-    private void OnTriggerExit2D(Collider2D other) 
-    {
-        //base.OnTriggerEnter2D(other);
-    }
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            //base.OnTriggerEnter2D(other);
+        }
 
-    private void createExplosion()
-    {
-        GameObject explosion = Instantiate(Explosion,transform.position,Quaternion.identity);
-        IExplosion exp = explosion.GetComponent<IExplosion>();
-        exp.SetDamage(mBulletDamage);
+        private void createExplosion()
+        {
+            GameObject explosion = Instantiate(Explosion, transform.position, Quaternion.identity);
+            IExplosion exp = explosion.GetComponent<IExplosion>();
+            exp.SetDamage(mBulletDamage);
+        }
     }
 }

@@ -1,8 +1,8 @@
 public delegate void Callback();
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items
 {
-public interface
- IObservable
-{
-    void RegisterCallback(Callback cb);
+    public interface IObservable
+    {
+        void RegisterCallback(Callback cb);
+    }
 }

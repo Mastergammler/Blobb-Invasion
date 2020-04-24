@@ -1,37 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(SpriteRenderer))]
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Effects
 {
-public class
- BlinkAnimation : MonoBehaviour,ISpriteMaterialChanger
-{
-
-    [SerializeField]
-    private Material NewMaterial;
-    [SerializeField]
-    private float ChangeBackTime = 0.2f;
-    private Material mDefaultMaterial;
-    private SpriteRenderer mRenderer;
-
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class BlinkAnimation : MonoBehaviour, ISpriteMaterialChanger
     {
-        mRenderer = GetComponent<SpriteRenderer>();
-        mDefaultMaterial = mRenderer.material;
-    }
 
-    public void ChangeMaterial()
-    {
-        mRenderer.material = NewMaterial;
-        StartCoroutine(changeMaterialBack());
-    }
+        [SerializeField]
+        private Material NewMaterial;
+        [SerializeField]
+        private float ChangeBackTime = 0.2f;
+        private Material mDefaultMaterial;
+        private SpriteRenderer mRenderer;
 
-    private IEnumerator changeMaterialBack()
-    {
-        yield return new WaitForSeconds(ChangeBackTime);
-        mRenderer.material = mDefaultMaterial;
-        yield return null;
+        // Start is called before the first frame update
+        void Start()
+        {
+            mRenderer = GetComponent<SpriteRenderer>();
+            mDefaultMaterial = mRenderer.material;
+        }
+
+        public void ChangeMaterial()
+        {
+            mRenderer.material = NewMaterial;
+            StartCoroutine(changeMaterialBack());
+        }
+
+        private IEnumerator changeMaterialBack()
+        {
+            yield return new WaitForSeconds(ChangeBackTime);
+            mRenderer.material = mDefaultMaterial;
+            yield return null;
+        }
     }
 }

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items
 {
-public class
- PlasmaCore : CollectableBase
-{
-    void Start()
+    public class PlasmaCore : CollectableBase
     {
-        mType = CollectableType.CORE_PLASMA;
+        void Start()
+        {
+            mType = CollectableType.CORE_PLASMA;
+        }
     }
 }

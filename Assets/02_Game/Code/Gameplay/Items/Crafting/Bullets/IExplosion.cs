@@ -1,7 +1,7 @@
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
-public interface
- IExplosion
-{
-    void SetDamage(float damage);
+    public interface IExplosion
+    {
+        void SetDamage(float damage);
+    }
 }

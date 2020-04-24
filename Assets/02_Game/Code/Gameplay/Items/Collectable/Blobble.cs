@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items
 {
-public class
- Blobble : CollectableBase
-{
-    void Start()
+    [RequireComponent(typeof(AudioSource))]
+    public class Blobble : CollectableBase
     {
-        mType = CollectableType.HP_BOBBLE;
+        void Start()
+        {
+            mType = CollectableType.HP_BOBBLE;
+        }
     }
 }

@@ -2,106 +2,106 @@ using UnityEngine;
 using System.Collections;
 using BlobbInvasion.Utilities;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
-public class
- BulletRayBase : MonoBehaviour, IBullet 
-{
-
-    public float BulletSpeed { set; get;}
-    private const float TIME_UNTIL_DESTROY = 0.05f;
-    private const float TIME_UNTIL_SOUND_PLAYED = 1f;
-
-    public bool DestroyImmediately = true;
-    public bool WaitForSound = false;
-    public float LineLengthOffset = 0f;
-
-     //###############
-    //##  MEMBERS  ##
-    //###############
-    private LineRenderer mLine;
-
-    //################
-    //##    MONO    ##
-    //################
-
-    private void Awake()
+    public class BulletRayBase : MonoBehaviour, IBullet
     {
-        mLine = GetComponent<LineRenderer>();
-    }
 
-    public void Shoot(Vector2 direction, float damage)
-    {
-        direction.Normalize();
-        checkHitEnemy(direction,damage);
-        StartCoroutine(DestroyAfterOneFrame());
-    }
+        public float BulletSpeed { set; get; }
+        private const float TIME_UNTIL_DESTROY = 0.05f;
+        private const float TIME_UNTIL_SOUND_PLAYED = 1f;
 
+        public bool DestroyImmediately = true;
+        public bool WaitForSound = false;
+        public float LineLengthOffset = 0f;
 
-    private void checkHitEnemy(Vector2 direction, float damage)
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position,direction);
+        //###############
+        //##  MEMBERS  ##
+        //###############
+        private LineRenderer mLine;
 
-        mLine.SetPosition(0,transform.position);
+        //################
+        //##    MONO    ##
+        //################
 
-        if(hit && hit.transform.tag.Equals(Tags.ENEMY))
+        private void Awake()
         {
-            IHealthManager enemyHp = hit.transform.GetComponent<IHealthManager>();
-            enemyHp.LoseHealth(damage);
-
-            float distance = Vector2.Distance(transform.position,hit.transform.position);
-            Vector2 enemyPos = new Vector2(hit.transform.position.x,hit.transform.position.y);
-            mLine.SetPosition(1,calculateEvenEnemyHitPoint(direction,enemyPos));
+            mLine = GetComponent<LineRenderer>();
         }
-        else
-        {
-            mLine.SetPosition(1,calculateEvenEndPoint(direction));
-        }
-    }
 
-    private Vector2 calculateEvenEnemyHitPoint(Vector2 direction, Vector2 enemyPosition)
-    {
-       float dist =  Vector2.Distance(transform.position,enemyPosition) + LineLengthOffset;
-       Vector2 dirVec = direction * dist;
-       Vector2 curPos = new Vector2(transform.position.x, transform.position.y);
-       return curPos + dirVec;
-    }
+        public void Shoot(Vector2 direction, float damage)
+        {
+            direction.Normalize();
+            checkHitEnemy(direction, damage);
+            StartCoroutine(DestroyAfterOneFrame());
+        }
 
-    private Vector2 calculateEvenEndPoint(Vector2 direction)
-    {
-        Vector2 directionVector = direction * 50;
-        Vector2 shootDirection = new Vector2(transform.position.x,transform.position.y);
-        return shootDirection + directionVector;
-    }
 
-    private IEnumerator DestroyAfterOneFrame()
-    {
-        if(DestroyImmediately)
+        private void checkHitEnemy(Vector2 direction, float damage)
         {
-            yield return 1;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction);
+
+            mLine.SetPosition(0, transform.position);
+
+            if (hit && hit.transform.tag.Equals(Tags.ENEMY))
+            {
+                IHealthManager enemyHp = hit.transform.GetComponent<IHealthManager>();
+                enemyHp.LoseHealth(damage);
+
+                float distance = Vector2.Distance(transform.position, hit.transform.position);
+                Vector2 enemyPos = new Vector2(hit.transform.position.x, hit.transform.position.y);
+                mLine.SetPosition(1, calculateEvenEnemyHitPoint(direction, enemyPos));
+            }
+            else
+            {
+                mLine.SetPosition(1, calculateEvenEndPoint(direction));
+            }
         }
-        else
+
+        private Vector2 calculateEvenEnemyHitPoint(Vector2 direction, Vector2 enemyPosition)
         {
-            yield return new WaitForSeconds(TIME_UNTIL_DESTROY);
+            float dist = Vector2.Distance(transform.position, enemyPosition) + LineLengthOffset;
+            Vector2 dirVec = direction * dist;
+            Vector2 curPos = new Vector2(transform.position.x, transform.position.y);
+            return curPos + dirVec;
         }
-        if(WaitForSound)
+
+        private Vector2 calculateEvenEndPoint(Vector2 direction)
         {
-            StartCoroutine(DestroyAfterSoundPlayed());
+            Vector2 directionVector = direction * 50;
+            Vector2 shootDirection = new Vector2(transform.position.x, transform.position.y);
+            return shootDirection + directionVector;
         }
-        else
+
+        private IEnumerator DestroyAfterOneFrame()
         {
+            if (DestroyImmediately)
+            {
+                yield return 1;
+            }
+            else
+            {
+                yield return new WaitForSeconds(TIME_UNTIL_DESTROY);
+            }
+            if (WaitForSound)
+            {
+                StartCoroutine(DestroyAfterSoundPlayed());
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            yield return null;
+        }
+
+
+        private IEnumerator DestroyAfterSoundPlayed()
+        {
+            GetComponent<LineRenderer>().enabled = false;
+            yield return new WaitForSeconds(TIME_UNTIL_SOUND_PLAYED);
             Destroy(gameObject);
+            yield return null;
         }
-        yield return null;
+
     }
-
-
-    private IEnumerator DestroyAfterSoundPlayed()
-    {
-        GetComponent<LineRenderer>().enabled = false;
-        yield return new WaitForSeconds(TIME_UNTIL_SOUND_PLAYED);
-        Destroy(gameObject);
-        yield return null;
-    }
-
 }

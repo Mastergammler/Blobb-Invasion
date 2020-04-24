@@ -1,10 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
-public class
- VoltageBulletRay : BulletRayBase 
-{
+    [RequireComponent(typeof(LineRenderer))]
+    public class VoltageBulletRay : BulletRayBase
+    {
+    }
 }

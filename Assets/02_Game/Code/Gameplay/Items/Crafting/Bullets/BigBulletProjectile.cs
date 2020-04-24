@@ -3,57 +3,57 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using BlobbInvasion.Utilities;
 
-[RequireComponent(typeof(Rigidbody2D),typeof(Collider2D))]
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
-public class
- BigBulletProjectile : BulletBase
-{
-    //#################
-    //##  CONSTANTS  ##
-    //#################
-
-    private const float DESTROY_DELAY = 0.125f;
-    private bool mIsAboutToBeDestroyed = false;
-
-    //############
-    //##  MONO  ##
-    //############
-
-    public override void Shoot(Vector2 direction, float damage)
+    [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+    public class BigBulletProjectile : BulletBase
     {
-        mBulletDamage = damage;
-        direction.Normalize();
-        GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
-        StartCoroutine(initSelfDestructionSequence());
-    }
+        //#################
+        //##  CONSTANTS  ##
+        //#################
 
+        private const float DESTROY_DELAY = 0.125f;
+        private bool mIsAboutToBeDestroyed = false;
 
-    private new void OnTriggerEnter2D(Collider2D other) 
-    {
-        if(other.tag.Equals(Tags.ENEMY))
+        //############
+        //##  MONO  ##
+        //############
+
+        public override void Shoot(Vector2 direction, float damage)
         {
-            IHealthManager hpMan = other.GetComponent<IHealthManager>();
-            // todo change for real dmg value
-            hpMan.LoseHealth(mBulletDamage);
-            if(! mIsAboutToBeDestroyed)
+            mBulletDamage = damage;
+            direction.Normalize();
+            GetComponent<Rigidbody2D>().velocity = direction * BulletSpeed;
+            StartCoroutine(initSelfDestructionSequence());
+        }
+
+
+        private new void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.tag.Equals(Tags.ENEMY))
             {
-                StartCoroutine(DestoryOfterDelay());
+                IHealthManager hpMan = other.GetComponent<IHealthManager>();
+                // todo change for real dmg value
+                hpMan.LoseHealth(mBulletDamage);
+                if (!mIsAboutToBeDestroyed)
+                {
+                    StartCoroutine(DestoryOfterDelay());
+                }
             }
         }
-    }
 
 
-    private IEnumerator DestoryOfterDelay()
-    {
-        mIsAboutToBeDestroyed = true;
-        yield return new WaitForSeconds(DESTROY_DELAY);
-        DestroyWithDelay();
-        yield return null;
-    }
+        private IEnumerator DestoryOfterDelay()
+        {
+            mIsAboutToBeDestroyed = true;
+            yield return new WaitForSeconds(DESTROY_DELAY);
+            DestroyWithDelay();
+            yield return null;
+        }
 
-    private void OnTriggerExit2D(Collider2D other) 
-    {
-        //base.OnTriggerEnter2D(other);
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            //base.OnTriggerEnter2D(other);
+        }
     }
 }

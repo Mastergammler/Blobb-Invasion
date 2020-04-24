@@ -1,28 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class ScriptableBase : ScriptableObject
+namespace BlobbInvasion.Gameplay.Items.Crafting
 {
-    public string Name;
-    public string Tooltip;
-    public Sprite Art;
-    public CollectableType Type;
 
-
-    public override bool Equals(object obj)
+    public abstract class ScriptableBase : ScriptableObject
     {
-        if (obj == null || GetType() != obj.GetType())
+        public string Name;
+        public string Tooltip;
+        public Sprite Art;
+        public CollectableType Type;
+
+
+        public override bool Equals(object obj)
         {
-            return false;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            ScriptableBase sb = obj as ScriptableBase;
+            return Name.Equals(sb.Name) && Type == sb.Type;
         }
-        
-        ScriptableBase sb = obj as ScriptableBase;
-        return Name.Equals(sb.Name) && Type == sb.Type;
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
-    
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
+
 }

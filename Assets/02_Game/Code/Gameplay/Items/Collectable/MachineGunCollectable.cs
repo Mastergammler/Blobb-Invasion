@@ -1,13 +1,13 @@
 using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items
 {
-public class
- MachineGunCollectable : CollectableBase 
-{
-    private void Start() 
+    public class MachineGunCollectable : CollectableBase
     {
-        mType = CollectableType.GUN_MACHINE_GUN;
+        private void Start()
+        {
+            mType = CollectableType.GUN_MACHINE_GUN;
+        }
+
     }
-    
 }

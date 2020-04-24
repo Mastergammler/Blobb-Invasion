@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlobbInvasion. 
+namespace BlobbInvasion.Gameplay.Items
 {
-public class
- ExplodingBullet : CollectableBase
-{
-    // Start is called before the first frame update
-    void Start()
+    public class ExplodingBullet : CollectableBase
     {
-        mType = CollectableType.BUL_BOOM;
+        // Start is called before the first frame update
+        void Start()
+        {
+            mType = CollectableType.BUL_BOOM;
+        }
     }
 }
