@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using BlobbInvasion.Utilities;
 
 [RequireComponent(typeof(LineRenderer))]
 public class VoltageBigRay : BulletBase 

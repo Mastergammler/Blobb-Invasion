@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using BlobbInvasion.Utilities;
 
 public class BulletRayBase : MonoBehaviour, IBullet 
 {

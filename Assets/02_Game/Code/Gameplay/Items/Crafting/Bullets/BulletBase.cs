@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using BlobbInvasion.Utilities;
 
 // Base class for all the bullets, holds the functinos to destroy themselfes
 public abstract class BulletBase : MonoBehaviour, IBullet 

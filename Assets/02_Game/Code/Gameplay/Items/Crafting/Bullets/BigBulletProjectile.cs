@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using BlobbInvasion.Utilities;
 
 [RequireComponent(typeof(Rigidbody2D),typeof(Collider2D))]
 public class BigBulletProjectile : BulletBase
