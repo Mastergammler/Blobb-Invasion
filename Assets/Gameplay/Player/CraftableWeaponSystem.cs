@@ -98,7 +98,7 @@ public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
     private void InitWeaponValue()
     {
 
-        if(GunJoint.GetChildCount() > 0)
+        if(GunJoint.childCount > 0)
         {
             Destroy(GunJoint.GetChild(0).gameObject);
         }
