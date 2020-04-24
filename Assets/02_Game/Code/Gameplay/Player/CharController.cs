@@ -63,37 +63,15 @@ public class CharController : MonoBehaviour
     //*****************
 
     public void Shoot(InputAction.CallbackContext context)
-    {
-        //if(bullet == null) Debug.Log("Bullet not set!");
-
-        //Transform spawn = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
-        //GameObject newBullet = Instantiate(bullet,spawn.position,spawn.rotation);
-        
+    {  
         float value = context.ReadValue<float>();
         isShooting = value >= 0.9;
-        Debug.Log(value);
 
-        if(context.phase == InputActionPhase.Started)
-        {
-            //isShooting = true;
-            Debug.Log("Started");
-        }
-        else if(context.phase == InputActionPhase.Canceled)
-        {
-            //isShooting = false;
-            Debug.Log("Canceled");
-        }
-        else if(context.phase == InputActionPhase.Performed)
-        {
-            Debug.Log("Performed");
-        }
-
-        //context.action.started += (ctx) => { Debug.Log("Shoting was started");isShooting = true; lastShootingState = false; };
-        //context.action.performed += (ctx) => { isShooting = false;};
-       //context.action.canceled += (ctx) => { Debug.Log("Shooting was canceled");isShooting = false; lastShootingState = true; };
-
-        //newBullet.GetComponent<BulletScript>().Fly(bulletDirection);
-        //GetComponent<ISpriteMaterialChanger>().ChangeMaterial();
+        // example for checking
+        //if(context.phase == InputActionPhase.Started)
+        //{
+        //    Debug.Log("Started");
+        //}
     }
 
 
@@ -113,18 +91,9 @@ public class CharController : MonoBehaviour
         }
 
         Vector2 newMovement = context.action.ReadValue<Vector2>();
-
-        if(newMovement == Vector2.zero)
-        {
-            // this makes no sense
-            //mCachedDirection = mCurMovement;
-        }
-
         mCurMovement = newMovement;
         mMovementHandler.Move(newMovement);
     }
-
-
 
     private IEnumerator resetStun()
     {

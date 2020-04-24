@@ -85,7 +85,73 @@ ScriptedImporter:
     tessellationDetail: 0
     parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
-  mosaicSpriteImportData: []
+  mosaicSpriteImportData:
+  - name: Head
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 24
+      height: 30
+    spriteID: fc2207c3afbb3f64f9e5a759c40a0c4d
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 0, y: 3}
+  - name: Shild
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 42
+      width: 17
+      height: 18
+    spriteID: bd8fc237e5a7f7a4e8de24c5b47aaca5
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 1, y: 40}
+  - name: Body
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 36
+      y: 4
+      width: 24
+      height: 30
+    spriteID: 078cbd883e93e3940a52b82dd619e890
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 32, y: 3}
   rigSpriteImportData:
   - name: Head
     originalName: 
@@ -181,7 +247,42 @@ ScriptedImporter:
   spritePackingTag: 
   resliceFromLayer: 0
   characterMode: 0
-  mosaicPSDLayers: []
+  mosaicPSDLayers:
+  - name: 02
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 
+    layerID: 9
+    mosaicPosition: {x: 0, y: 0}
+  - name: Head
+    spriteName: Head
+    isGroup: 0
+    parentIndex: 0
+    spriteID: fc2207c3afbb3f64f9e5a759c40a0c4d
+    layerID: 12
+    mosaicPosition: {x: 4, y: 4}
+  - name: 01
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 
+    layerID: 4
+    mosaicPosition: {x: 0, y: 0}
+  - name: Shild
+    spriteName: Shild
+    isGroup: 0
+    parentIndex: 2
+    spriteID: bd8fc237e5a7f7a4e8de24c5b47aaca5
+    layerID: 3
+    mosaicPosition: {x: 4, y: 42}
+  - name: Body
+    spriteName: Body
+    isGroup: 0
+    parentIndex: 2
+    spriteID: 078cbd883e93e3940a52b82dd619e890
+    layerID: 2
+    mosaicPosition: {x: 36, y: 4}
   rigPSDLayers:
   - name: 02
     spriteName: 
