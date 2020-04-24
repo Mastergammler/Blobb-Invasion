@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlasmaCore : CollectableBase
+namespace BlobbInvasion. 
+{
+public class
+ PlasmaCore : CollectableBase
 {
     void Start()
     {

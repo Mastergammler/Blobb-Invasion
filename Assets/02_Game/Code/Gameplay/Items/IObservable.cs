@@ -1,5 +1,8 @@
 public delegate void Callback();
-public interface IObservable
+namespace BlobbInvasion. 
+{
+public interface
+ IObservable
 {
     void RegisterCallback(Callback cb);
 }

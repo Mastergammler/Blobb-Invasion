@@ -1,4 +1,7 @@
-public interface IBulletBehaviour
+namespace BlobbInvasion. 
+{
+public interface
+ IBulletBehaviour
 {
     // todo
 }

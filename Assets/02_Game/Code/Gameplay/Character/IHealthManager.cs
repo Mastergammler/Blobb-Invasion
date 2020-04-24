@@ -1,5 +1,8 @@
 // Responsible to manage health of all kinds of creatures
-public interface IHealthManager
+namespace BlobbInvasion. 
+{
+public interface
+ IHealthManager
 {
     void Init();
     // Summary:

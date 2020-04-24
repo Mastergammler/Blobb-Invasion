@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICollectable
+namespace BlobbInvasion. 
+{
+public interface
+ ICollectable
 {
     CollectableType Type { get; }
     CollectableType Collect();

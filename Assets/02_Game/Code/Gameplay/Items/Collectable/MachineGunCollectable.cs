@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class MachineGunCollectable : CollectableBase 
+namespace BlobbInvasion. 
+{
+public class
+ MachineGunCollectable : CollectableBase 
 {
     private void Start() 
     {

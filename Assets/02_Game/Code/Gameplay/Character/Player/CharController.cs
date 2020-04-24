@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Collections;
 using BlobbInvasion.Utilities;
 
-public class CharController : MonoBehaviour
+namespace BlobbInvasion. 
+{
+public class
+ CharController : MonoBehaviour
 {
     private static int HP_GAIN_VALUE = 40;
     private const float STUN_TIME = .5f;

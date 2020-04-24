@@ -1,7 +1,10 @@
 using UnityEngine;
 
 // Object for creating or holding the scriptable objects
-public class CollectableFactory : MonoBehaviour 
+namespace BlobbInvasion. 
+{
+public class
+ CollectableFactory : MonoBehaviour 
 {
 
     //*****************

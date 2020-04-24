@@ -3,7 +3,10 @@ using System;
 using UnityEngine;
 using BlobbInvasion.UI;
 
-public class PlayerInventory : MonoBehaviour, IInventory 
+namespace BlobbInvasion. 
+{
+public class
+ PlayerInventory : MonoBehaviour, IInventory 
 {
     //#################
     //##  INSPECTOR  ##

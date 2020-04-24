@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicHealthSystem : MonoBehaviour, IHealthManager
+namespace BlobbInvasion. 
+{
+public class
+ BasicHealthSystem : MonoBehaviour, IHealthManager
 {
     public float MaximumHp = 100;
 

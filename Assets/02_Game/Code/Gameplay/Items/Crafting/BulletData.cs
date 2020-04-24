@@ -1,7 +1,10 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new Bullet ", menuName = "Crafting/Bullet", order = 2)]
-public class BulletData : ScriptableBase 
+namespace BlobbInvasion. 
+{
+public class
+ BulletData : ScriptableBase 
 {
     public Sprite CoreSpecificArt;
     public float DamageMod;

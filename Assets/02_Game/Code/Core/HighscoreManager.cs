@@ -5,61 +5,65 @@ using TMPro;
 using System;
 using UnityEngine.SceneManagement;
 
-public class HighscoreManager : MonoBehaviour
+namespace BlobbInvasion.Core
 {
-
-    public const int KILL_ENEMY = 100;
-    public const int FIND_CORE = 1000;
-    public const int FIND_BULLET = 500;
-    public const int GET_HEALTH = 50;
-
-
-    public static HighscoreManager Instance { private set;get;}
-
-    private static int HighestScoreEver = 0;
-    private static int Highscore = 0;
-    private TextMeshProUGUI mText;
-
-    private void Awake() {
-        if(Instance != null) Destroy(gameObject);
-        Instance = this;
-        SceneManager.sceneLoaded += sceneLoaded;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void sceneLoaded(Scene scene, LoadSceneMode mode)
+    public class HighscoreManager : MonoBehaviour
     {
-        if(scene.buildIndex == 0)
-        {
-            if(HighestScoreEver < Highscore)
-            {
-                HighestScoreEver = Highscore;
-            }
-            GameObject obj = GameObject.Find("HighScoreValue");
-            mText = obj.GetComponent<TextMeshProUGUI>();
 
-            if(mText != null)
+        public const int KILL_ENEMY = 100;
+        public const int FIND_CORE = 1000;
+        public const int FIND_BULLET = 500;
+        public const int GET_HEALTH = 50;
+
+
+        public static HighscoreManager Instance { private set; get; }
+
+        private static int HighestScoreEver = 0;
+        private static int Highscore = 0;
+        private TextMeshProUGUI mText;
+
+        private void Awake()
+        {
+            if (Instance != null) Destroy(gameObject);
+            Instance = this;
+            SceneManager.sceneLoaded += sceneLoaded;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void sceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.buildIndex == 0)
             {
-                mText.text = Highscore.ToString();
+                if (HighestScoreEver < Highscore)
+                {
+                    HighestScoreEver = Highscore;
+                }
+                GameObject obj = GameObject.Find("HighScoreValue");
+                mText = obj.GetComponent<TextMeshProUGUI>();
+
+                if (mText != null)
+                {
+                    mText.text = Highscore.ToString();
+                }
             }
         }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+
+        }
+
+        public void AddToScore(int value)
+        {
+            Highscore += value;
+        }
+
+        public void NewGame()
+        {
+            Highscore = 0;
+        }
+
+
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-     
-    }
-
-    public void AddToScore(int value)
-    {
-        Highscore += value;
-    }
-
-    public void NewGame()
-    {
-        Highscore = 0;
-    }
-
-
 }

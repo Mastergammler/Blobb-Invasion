@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 namespace BlobbInvasion.UI
 {
-
-
     public class ItemSlot : MonoBehaviour
     {
         public ScriptableBase Item;

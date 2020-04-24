@@ -6,7 +6,10 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @PlayerControls : IInputActionCollection, IDisposable
+namespace BlobbInvasion. 
+{
+public class
+ @PlayerControls : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
     public @PlayerControls()
@@ -236,7 +239,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
-    public interface IPlayerActions
+    namespace BlobbInvasion. 
+{
+public interface
+ IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnShooting(InputAction.CallbackContext context);

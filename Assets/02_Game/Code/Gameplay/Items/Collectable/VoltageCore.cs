@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VoltageCore : CollectableBase
+namespace BlobbInvasion. 
+{
+public class
+ VoltageCore : CollectableBase
 {
     void Start()
     {

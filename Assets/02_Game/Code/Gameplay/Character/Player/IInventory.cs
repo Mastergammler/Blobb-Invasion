@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IInventory 
+namespace BlobbInvasion. 
+{
+public interface
+ IInventory 
 {
     // Called when items are added or removed from the inventory
     event EventHandler<InventoryEventArgs> OnInventoryItemChanged;
@@ -20,14 +23,20 @@ public interface IInventory
     void SetActiveItems(BulletData bullet, WeaponData weapon, CoreData core);
 }
 
-public class InventoryEventArgs : EventArgs
+namespace BlobbInvasion. 
+{
+public class
+ InventoryEventArgs : EventArgs
 {
     public bool itemRemoved = false;
     public ScriptableBase Item;
     public int amount;
 }
 
-public class ActiveItemEventArgs : EventArgs
+namespace BlobbInvasion. 
+{
+public class
+ ActiveItemEventArgs : EventArgs
 {
     public BulletData NewBullet;
     public WeaponData NewWeapon;

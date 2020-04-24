@@ -4,7 +4,10 @@ using UnityEngine;
 using BlobbInvasion.Utilities;
 
 [RequireComponent(typeof(Rigidbody2D),typeof(Collider2D))]
-public class BigBulletProjectile : BulletBase
+namespace BlobbInvasion. 
+{
+public class
+ BigBulletProjectile : BulletBase
 {
     //#################
     //##  CONSTANTS  ##

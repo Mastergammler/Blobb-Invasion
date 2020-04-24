@@ -4,7 +4,10 @@ using UnityEngine;
 using Cinemachine;
 using BlobbInvasion.Utilities;
 
-public class VoltageExplosion : MonoBehaviour, IExplosion
+namespace BlobbInvasion. 
+{
+public class
+ VoltageExplosion : MonoBehaviour, IExplosion
 {
     private const float DESTORY_DELAY = 2.5f;
     private const float IMPACT_DELAY = 0.2f;

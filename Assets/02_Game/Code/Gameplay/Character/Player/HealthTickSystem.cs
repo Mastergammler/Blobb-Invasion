@@ -1,7 +1,11 @@
 using UnityEngine;
 
+
 // Removes health based on ticks
-public class HealthTickSystem : MonoBehaviour , IHealthManager
+namespace BlobbInvasion. 
+{
+public class
+ HealthTickSystem : MonoBehaviour , IHealthManager
 {
     [SerializeField]
     private float Health = 100;

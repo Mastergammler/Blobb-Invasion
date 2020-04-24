@@ -4,7 +4,10 @@ using UnityEngine;
 using Cinemachine;
 using BlobbInvasion.Utilities;
 
-public class Explosion : MonoBehaviour, IExplosion
+namespace BlobbInvasion. 
+{
+public class
+ Explosion : MonoBehaviour, IExplosion
 {
 
     public bool AddScreenShake = true;

@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplodingBullet : CollectableBase
+namespace BlobbInvasion. 
+{
+public class
+ ExplodingBullet : CollectableBase
 {
     // Start is called before the first frame update
     void Start()

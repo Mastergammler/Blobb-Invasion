@@ -1,13 +1,17 @@
 using System;
 using UnityEngine;
 
-public interface IHpSpawner
+namespace BlobbInvasion.Environment.SpawnSystems
 {
-    event EventHandler<SpawnerEventArgs> OnItemCollected;
-    void Spawn();
-}
+    public interface IHpSpawner
+    {
+        event EventHandler<SpawnerEventArgs> OnItemCollected;
+        void Spawn();
+    }
 
-public class SpawnerEventArgs : EventArgs
-{
-    public Transform Position;
+    public class SpawnerEventArgs : EventArgs
+    {
+        public Transform Position;
+    }
+
 }

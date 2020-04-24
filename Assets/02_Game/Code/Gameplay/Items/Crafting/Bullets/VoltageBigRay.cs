@@ -3,7 +3,10 @@ using UnityEngine;
 using BlobbInvasion.Utilities;
 
 [RequireComponent(typeof(LineRenderer))]
-public class VoltageBigRay : BulletBase 
+namespace BlobbInvasion. 
+{
+public class
+ VoltageBigRay : BulletBase 
 {
     
     private const float TIME_UNTIL_DESTROY = 0.1f;

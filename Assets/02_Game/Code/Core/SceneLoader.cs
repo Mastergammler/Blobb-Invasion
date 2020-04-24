@@ -2,31 +2,34 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+namespace BlobbInvasion.Core
 {
-    //#################
-    //##  CONSTANTS  ##
-    //#################
-    public const String MAIN_MENU_SCENE = "MainMenu";
-    public const String GAME_SCENE = "MainGame";
-
-    //################
-    //##    MONO    ##
-    //################
-
-    public void LoadGame()
+    public class SceneLoader : MonoBehaviour
     {
-        HighscoreManager.Instance.NewGame();
-        SceneManager.LoadScene(GAME_SCENE,LoadSceneMode.Single);
-    }
+        //#################
+        //##  CONSTANTS  ##
+        //#################
+        public const String MAIN_MENU_SCENE = "MainMenu";
+        public const String GAME_SCENE = "MainGame";
 
-    public void LoadMenu()
-    {
-        SceneManager.LoadScene(MAIN_MENU_SCENE,LoadSceneMode.Single);
-    }
+        //################
+        //##    MONO    ##
+        //################
 
-    public void ExitGame()
-    {
-        Application.Quit();
+        public void LoadGame()
+        {
+            HighscoreManager.Instance.NewGame();
+            SceneManager.LoadScene(GAME_SCENE, LoadSceneMode.Single);
+        }
+
+        public void LoadMenu()
+        {
+            SceneManager.LoadScene(MAIN_MENU_SCENE, LoadSceneMode.Single);
+        }
+
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
     }
 }

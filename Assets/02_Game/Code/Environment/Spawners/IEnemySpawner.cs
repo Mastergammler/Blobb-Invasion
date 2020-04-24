@@ -1,9 +1,12 @@
 
 
-public delegate void EnemyDied(bool allEnemies);
 
-public interface IEnemySpawner
+namespace BlobbInvasion.Environment.SpawnSystems
 {
-    event EnemyDied OnEnemyKilled;
-    void Spawn();
+    public delegate void EnemyDied(bool allEnemies);
+    public interface IEnemySpawner
+    {
+        event EnemyDied OnEnemyKilled;
+        void Spawn();
+    }
 }

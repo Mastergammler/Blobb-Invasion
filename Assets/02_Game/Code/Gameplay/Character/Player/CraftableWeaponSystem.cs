@@ -1,7 +1,10 @@
 using UnityEngine;
 
 [RequireComponent(typeof(IInventory),typeof(AudioSource))]
-public class CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
+namespace BlobbInvasion. 
+{
+public class
+ CraftableWeaponSystem : MonoBehaviour,IWeaponSystem
 {
     public CoreData DefaultCore;
     public WeaponData DefaultWeapon;

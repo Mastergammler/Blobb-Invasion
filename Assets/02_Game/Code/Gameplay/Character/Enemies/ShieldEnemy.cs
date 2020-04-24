@@ -4,7 +4,10 @@ using UnityEngine;
 using BlobbInvasion.Utilities;
 
 [RequireComponent(typeof(IMoveable))]
-public class ShieldEnemy : MonoBehaviour, IObservable
+namespace BlobbInvasion. 
+{
+public class
+ ShieldEnemy : MonoBehaviour, IObservable
 {
     public Transform PlayerPosition;
     public int AggressionRange;

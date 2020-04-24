@@ -1,4 +1,7 @@
-public interface IBulletAnimation
+namespace BlobbInvasion. 
+{
+public interface
+ IBulletAnimation
 {
     // todo
 }

@@ -1,7 +1,10 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon Core", menuName = "Crafting/Core", order = 0)]
-public class CoreData : ScriptableBase 
+namespace BlobbInvasion. 
+{
+public class
+ CoreData : ScriptableBase 
 {
     public float BaseDmgMod;
     public float BaseFireRateMod;

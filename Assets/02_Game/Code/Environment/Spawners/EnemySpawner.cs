@@ -1,35 +1,38 @@
 using System;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour, IEnemySpawner 
+namespace BlobbInvasion.Environment.SpawnSystems
 {
-    public GameObject EnemyToSpawn;
-    public event EnemyDied OnEnemyKilled;
-    public float SpawnRadius;
-
-    private int mSpawnedAliveEnemyCount = 0;
-
-    public void Spawn()
+    public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
-        var gObj = Instantiate(EnemyToSpawn,GetSpawnPoint(),Quaternion.identity);
-        mSpawnedAliveEnemyCount++;
+        public GameObject EnemyToSpawn;
+        public event EnemyDied OnEnemyKilled;
+        public float SpawnRadius;
 
-        IObservable obs = gObj.GetComponent<IObservable>();
-        if(obs == null) Debug.LogWarning("Target Class is not a observable!");
-        else obs.RegisterCallback(WasKilled);
-    }
+        private int mSpawnedAliveEnemyCount = 0;
 
-    public void WasKilled()
-    {
-        mSpawnedAliveEnemyCount--;
-        OnEnemyKilled?.Invoke(mSpawnedAliveEnemyCount == 0);
-    } 
+        public void Spawn()
+        {
+            var gObj = Instantiate(EnemyToSpawn, GetSpawnPoint(), Quaternion.identity);
+            mSpawnedAliveEnemyCount++;
 
-    private Vector3 GetSpawnPoint()
-    {
-        Vector2 rndDirection = new Vector2(UnityEngine.Random.Range(0f,1f),UnityEngine.Random.Range(0f,1f));
-        rndDirection.Normalize();
+            IObservable obs = gObj.GetComponent<IObservable>();
+            if (obs == null) Debug.LogWarning("Target Class is not a observable!");
+            else obs.RegisterCallback(WasKilled);
+        }
 
-        return new Vector3(rndDirection.x * SpawnRadius + transform.position.x,rndDirection.y * SpawnRadius + transform.position.y);
+        public void WasKilled()
+        {
+            mSpawnedAliveEnemyCount--;
+            OnEnemyKilled?.Invoke(mSpawnedAliveEnemyCount == 0);
+        }
+
+        private Vector3 GetSpawnPoint()
+        {
+            Vector2 rndDirection = new Vector2(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+            rndDirection.Normalize();
+
+            return new Vector3(rndDirection.x * SpawnRadius + transform.position.x, rndDirection.y * SpawnRadius + transform.position.y);
+        }
     }
 }

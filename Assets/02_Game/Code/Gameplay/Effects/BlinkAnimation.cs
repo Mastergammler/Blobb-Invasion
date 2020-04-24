@@ -2,7 +2,10 @@
 using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class BlinkAnimation : MonoBehaviour,ISpriteMaterialChanger
+namespace BlobbInvasion. 
+{
+public class
+ BlinkAnimation : MonoBehaviour,ISpriteMaterialChanger
 {
 
     [SerializeField]
