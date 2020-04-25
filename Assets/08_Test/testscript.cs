@@ -16,10 +16,7 @@ namespace BlobbInvasion.Tests
         public void testscriptSimplePasses()
         {
             var type = Utils.ConvertCollectableType(CollectableType.BUL_BIG);
-
-            //wellwellwell
-
-            Assert.AreEqual(CraftingType.CORE,type);
+            Assert.AreEqual(CraftingType.BULLET,type);
         }
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
