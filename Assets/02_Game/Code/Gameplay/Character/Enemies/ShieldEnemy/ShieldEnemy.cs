@@ -6,7 +6,7 @@ using BlobbInvasion.Gameplay.Items;
 using BlobbInvasion.Core;
 
 
-namespace BlobbInvasion.Gameplay.Character.Enemies
+namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 {
     [RequireComponent(typeof(IMoveable))]
     public class ShieldEnemy : MonoBehaviour, IObservable
