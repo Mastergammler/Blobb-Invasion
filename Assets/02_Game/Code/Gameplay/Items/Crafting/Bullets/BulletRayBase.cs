@@ -7,7 +7,8 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
     public class BulletRayBase : MonoBehaviour, IBullet
     {
-
+        // no dmg to protection objects
+        public float Penetration => 0f;
         public float BulletSpeed { set; get; }
         private const float TIME_UNTIL_DESTROY = 0.05f;
         private const float TIME_UNTIL_SOUND_PLAYED = 1f;

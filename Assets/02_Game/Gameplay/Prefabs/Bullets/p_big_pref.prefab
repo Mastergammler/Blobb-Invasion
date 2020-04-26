@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efb6fe1768010e41ab577953f047a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BulletDmgAfterPenetration: 0.9
 --- !u!82 &-5152731450948323782
 AudioSource:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using BlobbInvasion.Utilities;
 using BlobbInvasion.Gameplay.Character;
+using BlobbInvasion.Gameplay.Character.Enemies;
 
 namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
 {
@@ -12,7 +13,11 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
     {
         protected const float SELF_DESTRUCT_TIME = 5f;
         protected const float TIME_TO_DESTROY_AFTER_HIT = 1.5f;
-        public float BulletSpeed { set; get; } = 8f;
+        public float BulletSpeed { private set; get; } = 8f;
+
+        [SerializeField][Range(0,1)]
+        private float BulletDmgAfterPenetration = 1f;
+        public float Penetration => BulletDmgAfterPenetration;
 
         protected float mBulletDamage;
 
@@ -31,6 +36,14 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
                 IHealthManager hpMan = other.GetComponent<IHealthManager>();
                 // todo change for real dmg value
                 hpMan.LoseHealth(mBulletDamage);
+                DestroyWithDelay();
+            }
+            else if (other.tag.Equals(Tags.PROTECTOR))
+            {
+                IProtector prot = other.GetComponent<IProtector>();
+                prot.BulletHit(mBulletDamage,this);
+                BulletSpeed *= prot.SpeedReductionMod;
+                mBulletDamage *= prot.DamageReductionMod;
                 DestroyWithDelay();
             }
         }

@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983b3919209e447438b93747b95fd2da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BulletDmgAfterPenetration: 0.65
 --- !u!58 &892230333894132312
 CircleCollider2D:
   m_ObjectHideFlags: 0
