@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using BlobbInvasion.Gameplay.Items.Crafting.Bullets;
+using BlobbInvasion.Gameplay.Effects;
 
 namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 {
@@ -15,6 +16,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         [SerializeField][Range(0,1)]
         private float SpeedReductionModifier;
 
+        private ISpriteMaterialChanger mMaterialChanger;
+
+        //################
+        //##    MONO    ##
+        //################
+
+        private void Start()
+        {
+            mMaterialChanger = GetComponent<ISpriteMaterialChanger>();
+        }
+
         //###############
         //##  METHODS  ##
         //###############
@@ -26,6 +38,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             if(bulletType == typeof(DefaultBullet) || bulletType == typeof(BigBulletProjectile))
             {
                 GetDmg(rawDmg * ReductionModifier * bullet.Penetration);
+                mMaterialChanger.ChangeMaterial();
             }
             else 
             {
@@ -54,7 +67,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         public float SpeedReductionMod => SpeedReductionModifier; 
         public void BulletHit(float damage,IBullet bullet)
         {
-            Debug.Log("Bullet hit confirmed");
             CalculateDamage(damage,bullet);
         }
     }

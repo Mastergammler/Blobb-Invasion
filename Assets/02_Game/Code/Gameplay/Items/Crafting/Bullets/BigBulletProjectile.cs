@@ -28,18 +28,11 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
             StartCoroutine(initSelfDestructionSequence());
         }
 
-
-        private new void OnTriggerEnter2D(Collider2D other)
+        protected new void DestroyWithDelay()
         {
-            if (other.tag.Equals(Tags.ENEMY))
+            if (!mIsAboutToBeDestroyed)
             {
-                IHealthManager hpMan = other.GetComponent<IHealthManager>();
-                // todo change for real dmg value
-                hpMan.LoseHealth(mBulletDamage);
-                if (!mIsAboutToBeDestroyed)
-                {
-                    StartCoroutine(DestoryOfterDelay());
-                }
+                StartCoroutine(DestoryOfterDelay());
             }
         }
 
@@ -50,11 +43,6 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
             yield return new WaitForSeconds(DESTROY_DELAY);
             DestroyWithDelay();
             yield return null;
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            //base.OnTriggerEnter2D(other);
         }
     }
 }

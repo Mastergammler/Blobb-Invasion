@@ -40,12 +40,17 @@ namespace BlobbInvasion.Gameplay.Items.Crafting.Bullets
             }
             else if (other.tag.Equals(Tags.PROTECTOR))
             {
-                IProtector prot = other.GetComponent<IProtector>();
+                               IProtector prot = other.GetComponent<IProtector>();
                 prot.BulletHit(mBulletDamage,this);
                 BulletSpeed *= prot.SpeedReductionMod;
                 mBulletDamage *= prot.DamageReductionMod;
                 DestroyWithDelay();
             }
+        }
+
+        protected void HandleProtectorHit(Collider2D other)
+        {
+ 
         }
 
         protected void DestroyWithDelay()
