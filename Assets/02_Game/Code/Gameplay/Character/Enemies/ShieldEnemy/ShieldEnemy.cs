@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Security.Cryptography;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BlobbInvasion.Utilities;
@@ -6,7 +7,7 @@ using BlobbInvasion.Gameplay.Items;
 using BlobbInvasion.Core;
 
 
-namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
+namespace BlobbInvasion.Gameplay.Character.Enemies.mShieldEnemy
 {
     [RequireComponent(typeof(IMoveable))]
     public class ShieldEnemy : MonoBehaviour, IObservable
@@ -21,6 +22,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private IMoveable mMoveHandler;
         private Callback mCallbacks;
+        private Transform mShield;
 
         //################
         //##    MONO    ##
@@ -33,11 +35,13 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             {
                 PlayerPosition = GameObject.FindGameObjectWithTag(Tags.PLAYER).transform;
             }
+            mShield = transform.GetChild(0);
         }
 
         private void Update()
         {
             checkPlayerDistance();
+            mShield.position = Vector3.zero;
         }
 
         private void OnDestroy()
@@ -79,10 +83,11 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             // move towards appearently works the other way around
             Vector2 direction = PlayerPosition.position - transform.position;
 
-            Transform shield = transform.GetChild(0);
-
-            if(direction.x > 0) shield.localScale = new Vector3(-shield.localScale.x,shield.localScale.y,shield.localScale.y);
-            else if(direction.x < 0) shield.localScale =  new Vector3(shield.localScale.x,shield.localScale.y,shield.localScale.y);
+            if (direction.x > 0 && transform.localScale.x > 0
+                || direction.x < 0 && transform.localScale.x < 0)
+            {
+                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, 1);
+            }
 
             mMoveHandler.Move(direction);
         }
