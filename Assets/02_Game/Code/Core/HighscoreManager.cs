@@ -43,7 +43,17 @@ namespace BlobbInvasion.Core
 
                 if (mText != null)
                 {
-                    mText.text = Highscore.ToString();
+                    mText.text = HighestScoreEver.ToString();
+                }
+            }
+            else if (scene.buildIndex == 1)
+            {
+                GameObject obj = GameObject.Find("HighScoreValue");
+                mText = obj.GetComponent<TextMeshProUGUI>();
+
+                if (mText != null)
+                {
+                    mText.text = "0";
                 }
             }
         }
@@ -57,6 +67,7 @@ namespace BlobbInvasion.Core
         public void AddToScore(int value)
         {
             Highscore += value;
+            mText.text = Highscore.ToString();
         }
 
         public void NewGame()
