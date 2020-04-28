@@ -41,6 +41,7 @@ namespace BlobbInvasion.Core
         public void PlayerDead()
         {
             Time.timeScale = 0;
+            HighscoreManager.Instance.LogScore();
             GetComponent<SceneLoader>().LoadMenu();
         }
     }

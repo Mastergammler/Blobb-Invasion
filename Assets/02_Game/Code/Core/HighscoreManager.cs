@@ -29,7 +29,7 @@ namespace BlobbInvasion.Core
             if (Instance != null) Destroy(gameObject);
             Instance = this;
             SceneManager.sceneLoaded += sceneLoaded;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
 
         private void sceneLoaded(Scene scene, LoadSceneMode mode)
@@ -38,15 +38,22 @@ namespace BlobbInvasion.Core
             {
                 if (HighestScoreEver < Highscore)
                 {
+                    // todo workaround find out why this happens
+                    if(Highscore > 0) Highscore -= 12000;
+
+                    Debug.Log($"New highscore: {Highscore}");
                     HighestScoreEver = Highscore;
-                    PlayerPrefs.SetInt(HIGHSCORE_KEY,HighestScoreEver);
+                    Debug.Log($"Assigned highscore to {HighestScoreEver}");
+                    int scoreToSave = HighestScoreEver;
+                    PlayerPrefs.SetInt(HIGHSCORE_KEY,scoreToSave);
                 }
                 GameObject obj = GameObject.Find("HighScoreValue");
                 mText = obj.GetComponent<TextMeshProUGUI>();
 
+                HighestScoreEver = PlayerPrefs.GetInt(HIGHSCORE_KEY,0);
                 if (mText != null)
                 {
-                    mText.text = HighestScoreEver.ToString();
+                    mText.text = "" + HighestScoreEver;
                 }
             }
             else if (scene.buildIndex == 1)
@@ -64,18 +71,23 @@ namespace BlobbInvasion.Core
         // Start is called before the first frame update
         void Start()
         {
-            HighestScoreEver = PlayerPrefs.GetInt(HIGHSCORE_KEY,0);
+
         }
 
         public void AddToScore(int value)
         {
             Highscore += value;
-            mText.text = Highscore.ToString();
+            mText.text = "" + Highscore;
         }
 
         public void NewGame()
         {
             Highscore = 0;
+        }
+
+        public void LogScore()
+        {
+            Debug.Log($"End game score was {Highscore}");
         }
 
 

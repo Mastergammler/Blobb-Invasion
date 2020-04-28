@@ -10,7 +10,7 @@ using BlobbInvasion.Core;
 namespace BlobbInvasion.Gameplay.Character.Enemies.mShieldEnemy
 {
     [RequireComponent(typeof(IMoveable))]
-    public class ShieldEnemy : MonoBehaviour, IObservable
+    public class RobotEnemyMaster : MonoBehaviour, IObservable
     {
         public Transform PlayerPosition;
         public int AggressionRange;

@@ -9,7 +9,7 @@ using BlobbInvasion.Core;
 
 namespace BlobbInvasion.Gameplay.Character.Player
 {
-    public class CharController : MonoBehaviour
+    public class PlayerMaster : MonoBehaviour
     {
         private static int HP_GAIN_VALUE = 40;
         private const float STUN_TIME = .5f;
@@ -28,6 +28,7 @@ namespace BlobbInvasion.Gameplay.Character.Player
         private bool isShooting = false;
         private bool lastShootingState = false;
         private AudioSource mAudioSource;
+        private Animator mAnimator;
 
         //-------------------
         //  Player Systems
@@ -52,6 +53,7 @@ namespace BlobbInvasion.Gameplay.Character.Player
             mInventory = GetComponent<IInventory>();
             mWeaponHandler = GetComponent<IWeaponSystem>();
             mAudioSource = GetComponent<AudioSource>();
+            mAnimator = GetComponent<Animator>();
         }
 
         void Update()
@@ -72,12 +74,6 @@ namespace BlobbInvasion.Gameplay.Character.Player
         {
             float value = context.ReadValue<float>();
             isShooting = value >= 0.9;
-
-            // example for checking
-            //if(context.phase == InputActionPhase.Started)
-            //{
-            //    Debug.Log("Started");
-            //}
         }
 
 
@@ -103,7 +99,9 @@ namespace BlobbInvasion.Gameplay.Character.Player
 
         private IEnumerator resetStun()
         {
+            mAnimator.speed = 0;
             yield return new WaitForSeconds(STUN_TIME);
+            mAnimator.speed = 1;
             isStunned = false;
             yield return null;
         }
