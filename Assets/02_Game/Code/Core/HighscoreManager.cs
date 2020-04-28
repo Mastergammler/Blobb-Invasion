@@ -15,6 +15,8 @@ namespace BlobbInvasion.Core
         public const int FIND_BULLET = 500;
         public const int GET_HEALTH = 50;
 
+        private const String HIGHSCORE_KEY = "prefs-highscore-key";
+
 
         public static HighscoreManager Instance { private set; get; }
 
@@ -37,6 +39,7 @@ namespace BlobbInvasion.Core
                 if (HighestScoreEver < Highscore)
                 {
                     HighestScoreEver = Highscore;
+                    PlayerPrefs.SetInt(HIGHSCORE_KEY,HighestScoreEver);
                 }
                 GameObject obj = GameObject.Find("HighScoreValue");
                 mText = obj.GetComponent<TextMeshProUGUI>();
@@ -61,7 +64,7 @@ namespace BlobbInvasion.Core
         // Start is called before the first frame update
         void Start()
         {
-
+            HighestScoreEver = PlayerPrefs.GetInt(HIGHSCORE_KEY,0);
         }
 
         public void AddToScore(int value)
