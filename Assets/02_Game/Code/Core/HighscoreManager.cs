@@ -17,7 +17,6 @@ namespace BlobbInvasion.Core
 
         private const String HIGHSCORE_KEY = "prefs-highscore-key";
 
-
         public static HighscoreManager Instance { private set; get; }
 
         private static int HighestScoreEver = 0;

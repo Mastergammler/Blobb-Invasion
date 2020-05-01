@@ -1,16 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BlobbInvasion.Core
 {
     public class GameManager : MonoBehaviour
     {
 
-
-        public static GameManager Instance { private set; get; }
+        //###############
+        //##  MEMBERS  ##
+        //###############
 
         private bool mGameRunning = true;
+        private Highscore mHighscore;
+
+        //################
+        //##    MONO    ##
+        //################
 
         private void Awake()
         {
@@ -21,6 +25,7 @@ namespace BlobbInvasion.Core
         void Start()
         {
             Time.timeScale = 1f;
+            mHighscore = new Highscore(false);
             MusicManager.Instance.PlayMusic(false);
         }
 
@@ -41,9 +46,16 @@ namespace BlobbInvasion.Core
         public void PlayerDead()
         {
             Time.timeScale = 0;
-            HighscoreManager.Instance.LogScore();
+            mHighscore.PersistScore();
             GetComponent<SceneLoader>().LoadMenu();
         }
+
+        //#################
+        //##  ACCESSORS  ##
+        //#################
+
+        public static GameManager Instance { private set; get; }
+        public Highscore Highscore => mHighscore;
     }
 
 }

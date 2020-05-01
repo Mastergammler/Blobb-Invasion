@@ -16,9 +16,15 @@ namespace BlobbInvasion.Core
         //##    MONO    ##
         //################
 
+        //todo workaround, until i have a real menu manager
+        private void Start()
+        {
+            if(SceneManager.GetActiveScene().buildIndex == 0)
+                new Highscore(true);
+        }
+
         public void LoadGame()
         {
-            HighscoreManager.Instance.NewGame();
             SceneManager.LoadScene(GAME_SCENE, LoadSceneMode.Single);
         }
 

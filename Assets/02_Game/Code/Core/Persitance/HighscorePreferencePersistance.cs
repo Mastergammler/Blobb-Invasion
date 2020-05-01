@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-namespace BlobbInavsion.Core.Persitance
+namespace BlobbInvasion.Core.Persitance
 {
     //S: Persists the score via the PlayerPreferences
     // Does not validate if the score is actually higher than before!
     //O: CLASS IS CLOSED
-    public class HighscorePreferencePersistance : IHighscorePersitance
+    public class HighscorePreferencePersistance : IHighscorePersistance
     {
         //#################
         //##  CONSTANTS  ##
