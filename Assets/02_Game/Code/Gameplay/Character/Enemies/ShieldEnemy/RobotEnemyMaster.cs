@@ -7,7 +7,7 @@ using BlobbInvasion.Gameplay.Items;
 using BlobbInvasion.Core;
 
 
-namespace BlobbInvasion.Gameplay.Character.Enemies.mShieldEnemy
+namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 {
     [RequireComponent(typeof(IMoveable))]
     public class RobotEnemyMaster : MonoBehaviour, IObservable, IHighscoreEvent
@@ -48,7 +48,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.mShieldEnemy
 
         private void OnDestroy()
         {
-            HighscoreManager.Instance.AddToScore(HighscoreManager.KILL_ENEMY);
             mCallbacks?.Invoke();
             ScoreEvent?.Invoke(ScoreType.KILLED_ENEMY);
         }

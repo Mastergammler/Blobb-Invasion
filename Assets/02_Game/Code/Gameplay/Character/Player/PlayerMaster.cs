@@ -127,12 +127,11 @@ namespace BlobbInvasion.Gameplay.Character.Player
                 if (type == CollectableType.HP_BOBBLE)
                 {
                     mHealthManager.GainHealth(HP_GAIN_VALUE);
-                    HighscoreManager.Instance.AddToScore(HighscoreManager.GET_HEALTH);
                     return;
                 }
 
                 mInventory.AddInventoryItem(type);
-                HighscoreManager.Instance.AddToScore(HighscoreManager.FIND_CORE);
+                //todo  HighscoreManager.Instance.AddToScore(HighscoreManager.FIND_CORE);
             }
         }
     }

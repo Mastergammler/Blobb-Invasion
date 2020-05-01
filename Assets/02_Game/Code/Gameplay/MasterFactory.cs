@@ -3,6 +3,7 @@ using BlobbInvasion.Core;
 using UnityEngine;
 using System;
 
+using BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy;
 using BlobbInvasion.Utilities.Exceptions;
 using BlobbInvasion.Gameplay.Items.Collectable;
 using BlobbInvasion.Gameplay.Items;
@@ -78,11 +79,11 @@ namespace BlobbInvasion.Gameplay
 
         private IGOFactory createConcreteFactory(FactoryType type)
         {
-            switch(type)
+            switch (type)
             {
                 //todo
-                case FactoryType.COLLECTABLE_HEALTH: return new HealthItemFactory(HealthCollectablePrefab,typeof(CollectableBase),rHighscore);
-                case FactoryType.ENEMY_SHIELD_ROBOT: return null;
+                case FactoryType.COLLECTABLE_HEALTH: return new HealthItemFactory(HealthCollectablePrefab, rHighscore);
+                case FactoryType.ENEMY_SHIELD_ROBOT: return new RobotEnemyFactory(ShiledRobotEnemyPrefab, rHighscore);
                 default: throw new MissingFieldException($"No handling defined for the tye: {type.ToString()}");
             }
         }

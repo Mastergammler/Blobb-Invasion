@@ -7,9 +7,7 @@ namespace BlobbInvasion.Gameplay.Items
 {
     public abstract class CollectableBase : MonoBehaviour, ICollectable, IHighscoreEvent
     {
-
         public AudioClip CollectionSound;
-
         public CollectableType Type { get { return mType; } }
         protected CollectableType mType;
         private CollectionCallback mCallback;
