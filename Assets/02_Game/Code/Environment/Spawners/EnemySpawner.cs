@@ -1,23 +1,42 @@
 using System;
 using UnityEngine;
 using BlobbInvasion.Gameplay.Items;
+using BlobbInvasion.Gameplay;
 
 namespace BlobbInvasion.Environment.SpawnSystems
 {
     public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
-        public GameObject EnemyToSpawn;
-        public event EnemyDied OnEnemyKilled;
         public float SpawnRadius;
+        public event EnemyDied OnEnemyKilled;
+
+        //###############
+        //##  MEMBERS  ##
+        //###############
 
         private int mSpawnedAliveEnemyCount = 0;
 
+        private IGOFactory mFactory;
+
+        //################
+        //##    MONO    ##
+        //################
+
+        private void Start()
+        {
+            mFactory = MasterFactory.Instance.GetFactory(FactoryType.ENEMY_SHIELD_ROBOT);
+        }
+
+        //#################
+        //##  INTERFACE  ##
+        //#################
+
         public void Spawn()
         {
-            var gObj = Instantiate(EnemyToSpawn, GetSpawnPoint(), Quaternion.identity);
+            GameObject spawnedObject  = mFactory.CreateGameObject(GetSpawnPoint());
             mSpawnedAliveEnemyCount++;
 
-            IObservable obs = gObj.GetComponent<IObservable>();
+            IObservable obs = spawnedObject.GetComponent<IObservable>();
             if (obs == null) Debug.LogWarning("Target Class is not a observable!");
             else obs.RegisterCallback(WasKilled);
         }

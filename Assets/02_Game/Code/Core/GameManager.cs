@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
+using BlobbInvasion.Gameplay;
+
 namespace BlobbInvasion.Core
 {
     public class GameManager : MonoBehaviour
     {
-
         //###############
         //##  MEMBERS  ##
         //###############
@@ -27,7 +28,19 @@ namespace BlobbInvasion.Core
             Time.timeScale = 1f;
             mHighscore = new Highscore(false);
             MusicManager.Instance.PlayMusic(false);
+            MasterFactory.Instance.SetHighscoreManager(mHighscore);
         }
+
+        //#################
+        //##  ACCESSORS  ##
+        //#################
+
+        public static GameManager Instance { private set; get; }
+        public Highscore Highscore => mHighscore;
+
+        //#################
+        //##  INTERFACE  ##
+        //#################
 
         public void PauseResume()
         {
@@ -49,13 +62,6 @@ namespace BlobbInvasion.Core
             mHighscore.PersistScore();
             GetComponent<SceneLoader>().LoadMenu();
         }
-
-        //#################
-        //##  ACCESSORS  ##
-        //#################
-
-        public static GameManager Instance { private set; get; }
-        public Highscore Highscore => mHighscore;
     }
-
 }
+
