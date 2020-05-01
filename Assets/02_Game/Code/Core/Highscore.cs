@@ -13,9 +13,6 @@ namespace BlobbInvasion.Core
         void saveCurrentHighscore(int highscore);
     }
 
-    // delegate for receiving score actions (such as, player collected something, enemy died etc)
-    public delegate void ScoreActionEvent(ScoreType type);
-
     // S: Responsibility is tracking the score in game, and the highscore
     // O: IN PROGRESS
     // L: Tracking current game score, saving highscore to disk, receiving highscore events

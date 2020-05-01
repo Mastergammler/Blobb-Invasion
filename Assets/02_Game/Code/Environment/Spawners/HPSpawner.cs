@@ -22,7 +22,7 @@ namespace BlobbInvasion.Environment.SpawnSystems
 
         private void Start()
         {
-            mFactory = MasterFactory.Instance.GetFactory(FactoryType.ENEMY_SHIELD_ROBOT);
+            mFactory = MasterFactory.Instance.GetFactory(FactoryType.COLLECTABLE_HEALTH);
         }
 
         //#################

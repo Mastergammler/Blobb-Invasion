@@ -10,11 +10,13 @@ using BlobbInvasion.Core;
 namespace BlobbInvasion.Gameplay.Character.Enemies.mShieldEnemy
 {
     [RequireComponent(typeof(IMoveable))]
-    public class RobotEnemyMaster : MonoBehaviour, IObservable
+    public class RobotEnemyMaster : MonoBehaviour, IObservable, IHighscoreEvent
     {
         public Transform PlayerPosition;
         public int AggressionRange;
         public float StoppingDistance;
+
+        public event ScoreActionEvent ScoreEvent;
 
         //###############
         //##  MEMBERS  ##
@@ -48,6 +50,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.mShieldEnemy
         {
             HighscoreManager.Instance.AddToScore(HighscoreManager.KILL_ENEMY);
             mCallbacks?.Invoke();
+            ScoreEvent?.Invoke(ScoreType.KILLED_ENEMY);
         }
 
         //##################

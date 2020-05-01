@@ -1,8 +1,11 @@
+using System.Collections;
 using BlobbInvasion.Core;
 using UnityEngine;
 using System;
 
 using BlobbInvasion.Utilities.Exceptions;
+using BlobbInvasion.Gameplay.Items.Collectable;
+using BlobbInvasion.Gameplay.Items;
 
 namespace BlobbInvasion.Gameplay
 {
@@ -19,19 +22,31 @@ namespace BlobbInvasion.Gameplay
     //S: Manages and creates the concrete factories for the given type
     //O: IN DEVELOPMENT
     //L: NOT EXTENDABLE
-    public sealed class MasterFactory
+    // this stays a mono behaviour now, in order to assign the prefabs
+    public sealed class MasterFactory : MonoBehaviour
     {
+        //##################
+        //##    EDITOR    ##
+        //##################
+        public GameObject HealthCollectablePrefab;
+        public GameObject ShiledRobotEnemyPrefab;
+
         //###############
         //##  MEMBERS  ##
         //###############
 
-        private Highscore mHighscoreRef;
+        private Highscore rHighscore;
         private static MasterFactory sInstance;
 
         //#####################
         //##  INSTANTIATION  ##
         //#####################
-        private MasterFactory() { }
+
+        //private MasterFactory() { }
+        private void Awake()
+        {
+            sInstance = this;
+        }
 
         //#################
         //##  INTERFACE  ##
@@ -39,7 +54,7 @@ namespace BlobbInvasion.Gameplay
 
         public void SetHighscoreManager(Highscore highscoreRef)
         {
-            mHighscoreRef = highscoreRef;
+            rHighscore = highscoreRef;
         }
 
         public IGOFactory GetFactory(FactoryType type)
@@ -54,7 +69,7 @@ namespace BlobbInvasion.Gameplay
 
         private void validateRequirements()
         {
-            if (mHighscoreRef == null)
+            if (rHighscore == null)
                 throw new ExecutionOrderException(
                     "GetFactory",
                     "SetHighscoreManager",
@@ -66,7 +81,7 @@ namespace BlobbInvasion.Gameplay
             switch(type)
             {
                 //todo
-                case FactoryType.COLLECTABLE_HEALTH: return null;
+                case FactoryType.COLLECTABLE_HEALTH: return new HealthItemFactory(HealthCollectablePrefab,typeof(CollectableBase),rHighscore);
                 case FactoryType.ENEMY_SHIELD_ROBOT: return null;
                 default: throw new MissingFieldException($"No handling defined for the tye: {type.ToString()}");
             }
@@ -75,14 +90,7 @@ namespace BlobbInvasion.Gameplay
         //#################
         //##  ACCESSORS  ##
         //#################
-        public static MasterFactory Instance
-        {
-            get
-            {
-                if (sInstance == null) sInstance = new MasterFactory();
-                return sInstance;
-            }
-        }
+        public static MasterFactory Instance => sInstance;
     }
 
     public enum FactoryType

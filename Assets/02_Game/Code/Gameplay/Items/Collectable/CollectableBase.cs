@@ -1,9 +1,11 @@
 ﻿using System.Linq.Expressions;
 using UnityEngine;
 using System.Collections;
+
+using BlobbInvasion.Core;
 namespace BlobbInvasion.Gameplay.Items
 {
-    public abstract class CollectableBase : MonoBehaviour, ICollectable
+    public abstract class CollectableBase : MonoBehaviour, ICollectable, IHighscoreEvent
     {
 
         public AudioClip CollectionSound;
@@ -11,6 +13,7 @@ namespace BlobbInvasion.Gameplay.Items
         public CollectableType Type { get { return mType; } }
         protected CollectableType mType;
         private CollectionCallback mCallback;
+        public event ScoreActionEvent ScoreEvent;
         public delegate void CollectionCallback();
         private bool mIsAlreadyCollected = false;
 
@@ -34,6 +37,8 @@ namespace BlobbInvasion.Gameplay.Items
             StartCoroutine(SelfDestruct());
             playCollectionSound();
             mCallback?.Invoke();
+            // todo adjust for all via template method
+            ScoreEvent?.Invoke(ScoreType.COLLECTED_HEALTH);
             return Type;
         }
 
