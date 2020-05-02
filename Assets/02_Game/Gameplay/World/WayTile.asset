@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daffbe3ccf0e048499b2af707e56f928, type: 3}
+  m_Name: WayTile
+  m_EditorClassIdentifier: 
+  colliderType: 0
+  LT: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  LR: {fileID: 21300000, guid: fceb1259855d6ce42ab4e7b0ce75d8dd, type: 3}
+  LB: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  TR: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  TB: {fileID: 21300000, guid: b93f319bb7847e1428109efaa14c4be1, type: 3}
+  RB: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  LTR: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  TRB: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  LRB: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  LTB: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  LTRB: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
+  L: {fileID: 21300000, guid: fceb1259855d6ce42ab4e7b0ce75d8dd, type: 3}
+  T: {fileID: 21300000, guid: b93f319bb7847e1428109efaa14c4be1, type: 3}
+  R: {fileID: 21300000, guid: fceb1259855d6ce42ab4e7b0ce75d8dd, type: 3}
+  B: {fileID: 21300000, guid: b93f319bb7847e1428109efaa14c4be1, type: 3}
+  alone: {fileID: 21300000, guid: 603bd96dfd38f164dac9cfc69e7e0c76, type: 3}
