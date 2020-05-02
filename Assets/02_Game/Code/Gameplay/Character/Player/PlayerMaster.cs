@@ -63,7 +63,7 @@ namespace BlobbInvasion.Gameplay.Character.Player
 
             mGunHinge.rotation = Quaternion.LookRotation(Vector3.forward, new Vector3(mCurMovement.x, mCurMovement.y, 0));
 
-            if (isShooting) justShoot();
+            if (isShooting &! isStunned) justShoot();
         }
 
         //*****************
@@ -86,29 +86,24 @@ namespace BlobbInvasion.Gameplay.Character.Player
 
         public void Move(InputAction.CallbackContext context)
         {
-            if (isStunned)
-            {
-                mMovementHandler.Move(Vector2.zero);
-                return;
-            }
-
             Vector2 newMovement = context.action.ReadValue<Vector2>();
             mCurMovement = newMovement;
-            mMovementHandler.Move(newMovement);
+            Vector2 movDir = isStunned ? Vector2.zero : mCurMovement;
+            mMovementHandler.Move(movDir);
         }
 
         private IEnumerator resetStun()
         {
-            mAnimator.speed = 0;
+            mAnimator.SetBool("IsStunned",isStunned);
             yield return new WaitForSeconds(STUN_TIME);
-            mAnimator.speed = 1;
             isStunned = false;
+            mAnimator.SetBool("IsStunned",isStunned);
             yield return null;
         }
         void OnTriggerEnter2D(Collider2D other)
         {
 
-            if (other.tag.Equals(Tags.ENEMY))
+            if (other.tag.Equals(Tags.ENEMY) || other.tag.Equals(Tags.PROTECTOR))
             {
                 mAudioSource.Stop();
                 mAudioSource.Play();
