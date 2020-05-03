@@ -23,6 +23,10 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private int AggressionRange;
         [SerializeField]
         private float StoppingDistance;
+        [SerializeField][Tooltip("Should be smaller than aggression range")]
+        private float AttackRange;
+        [SerializeField]
+        private float AttackRate;
         [SerializeField]
         private bool LogStateMachineChange = false;
 
@@ -67,8 +71,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 mTimeSinceLastUpdate -= STATE_MACHINE_UPDATE_TIME;
                 mStateMachine.EnableLogging(LogStateMachineChange);
             }
-
-            
         }
 
         private void OnDestroy()
@@ -98,14 +100,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             var idleState = new Idle(mMoveHandler);
             var chasingState = new Chase(mMoveHandler, Player, transform);
             var returnState = new ReturnToPost(mPostPosition,transform,mMoveHandler);
+            var bodySlam = new BodyAttack(mMoveHandler,1.5f,Player,transform);
 
             // Conditions
             Func<bool> isAggroChasing() => () => isInAggroRange() &! isInStoppingRange();
             Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
             Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance &! isInAggroRange();
             Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
+            Func<bool> inAttackRange() => () => distanceToPlayer() < AttackRange;
 
             // Transitions
+            AtPrio(bodySlam,inAttackRange());
             AtPrio(chasingState, isAggroChasing());
             At(returnState,idleState, notAtPost());
             At(idleState, chasingState, isNotChasing());

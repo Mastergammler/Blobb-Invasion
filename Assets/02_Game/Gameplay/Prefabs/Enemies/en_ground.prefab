@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 32400469
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 6132966557123487581, guid: d14aacfd41fa469468047c005085dbfa,
     type: 3}
@@ -216,7 +216,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 32400469
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: -2587674039010582284, guid: d14aacfd41fa469468047c005085dbfa,
     type: 3}
@@ -323,9 +323,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d89bf9f75c6bf4ab42ae1af75137fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPosition: {fileID: 0}
+  Player: {fileID: 0}
   AggressionRange: 5
   StoppingDistance: 1.4
+  AttackRange: 2.5
+  AttackRate: 0
+  LogStateMachineChange: 0
 --- !u!114 &8277278762233605318
 MonoBehaviour:
   m_ObjectHideFlags: 0

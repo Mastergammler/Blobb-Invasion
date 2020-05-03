@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace BlobbInvasion.Gameplay.Character
 {
+    //S: Move the game object into a direction by using a rigid body
+    //      That either happens by force or velocity
     [RequireComponent(typeof(Rigidbody2D))]
     public class MoveByPhysics : MonoBehaviour, IMoveable
     {
@@ -46,7 +48,12 @@ namespace BlobbInvasion.Gameplay.Character
         {
             direction.Normalize();
             mCurrentDirection = direction;
+        }
 
+        public void MoveFaster(Vector2 direction, float multiplicator)
+        {
+            direction.Normalize();
+            mCurrentDirection = direction * multiplicator;
         }
     }
 }
