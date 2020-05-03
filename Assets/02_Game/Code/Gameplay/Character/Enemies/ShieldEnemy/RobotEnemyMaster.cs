@@ -13,15 +13,16 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
     [RequireComponent(typeof(IMoveable))]
     public class RobotEnemyMaster : MonoBehaviour, IObservable, IHighscoreEvent
     {
-
         //##################
         //##    EDITOR    ##
         //##################
 
-        public Transform PlayerPosition;
-        public int AggressionRange;
-        public float StoppingDistance;
-
+        [SerializeField]
+        private Transform Player;
+        [SerializeField]
+        private int AggressionRange;
+        [SerializeField]
+        private float StoppingDistance;
 
         //###############
         //##  MEMBERS  ##
@@ -32,8 +33,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private Transform mShield;
         private StateMachine.StateMachine mStateMachine;
 
-        public event ScoreActionEvent ScoreEvent;
-
         //################
         //##    MONO    ##
         //################
@@ -43,17 +42,13 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             mMoveHandler = GetComponent<IMoveable>();
             mShield = transform.GetChild(0);
 
-            if (PlayerPosition == null)
-            {
-                PlayerPosition = GameObject.FindGameObjectWithTag(Tags.PLAYER).transform;
-            }
+            checkPlayerRef();
             initStates();
         }
 
         private void Update()
         {
             mStateMachine.Tick();
-            //fixme is that corret? mShield.position = Vector3.zero;
         }
 
         private void OnDestroy()
@@ -79,20 +74,43 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         {
             mStateMachine = new StateMachine.StateMachine();
 
+            // Init States
             var idleState = new Idle(mMoveHandler);
-            var chasingState = new Chase(mMoveHandler,PlayerPosition,transform);
+            var chasingState = new Chase(mMoveHandler, Player, transform);
 
-            At(idleState,chasingState,isAggro());
-            At(chasingState,idleState,isNotAggro());
+            // Init Conditions
+            Func<bool> isAggro() => () => isInAggroRange()! & isInStoppingRange();
+            Func<bool> isNotAggro() => () => !isInAggroRange() || isInStoppingRange();
 
-            Func<bool> isAggro() => () => dist() < AggressionRange && dist() > StoppingDistance;
-            Func<bool> isNotAggro() => () => dist() > AggressionRange || dist() < StoppingDistance;
+            // Init Transitions
+            At(idleState, chasingState, isAggro());
+            At(chasingState, idleState, isNotAggro());
 
-            void At(IState from, IState to, Func<bool> condition) => mStateMachine.AddTransition(from,to,condition);
-            float dist() => Vector2.Distance(PlayerPosition.position,transform.position);
-
+            // Set Init state
             mStateMachine.SetState(idleState);
         }
 
+        private void checkPlayerRef()
+        {
+            if (Player == null)
+            {
+                Player = GameObject.FindGameObjectWithTag(Tags.PLAYER).transform;
+            }
+        }
+
+        //#################
+        //##  AUXILIARY  ##
+        //#################
+
+        void At(IState from, IState to, Func<bool> condition) => mStateMachine.AddTransition(from, to, condition);
+        private bool isInAggroRange() => distanceToPlayer() < AggressionRange;
+        private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
+        private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
+
+        //#################
+        //##  ACCESSORS  ##
+        //#################
+
+        public event ScoreActionEvent ScoreEvent;
     }
 }
