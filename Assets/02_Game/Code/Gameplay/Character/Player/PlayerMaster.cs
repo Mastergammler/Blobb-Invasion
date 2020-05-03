@@ -11,7 +11,7 @@ namespace BlobbInvasion.Gameplay.Character.Player
 {
     public class PlayerMaster : MonoBehaviour
     {
-        private static int HP_GAIN_VALUE = 40;
+        private const int HP_GAIN_VALUE = 40;
         private const float STUN_TIME = .5f;
         public float MovementSpeed = 0.1f;
         public GameObject bullet;
@@ -76,7 +76,6 @@ namespace BlobbInvasion.Gameplay.Character.Player
             isShooting = value >= 0.9;
         }
 
-
         private void justShoot()
         {
             Vector2 bulletDirection = mCurMovement;
@@ -102,7 +101,6 @@ namespace BlobbInvasion.Gameplay.Character.Player
         }
         void OnTriggerEnter2D(Collider2D other)
         {
-
             if (other.tag.Equals(Tags.ENEMY) || other.tag.Equals(Tags.PROTECTOR))
             {
                 mAudioSource.Stop();
@@ -126,7 +124,7 @@ namespace BlobbInvasion.Gameplay.Character.Player
                 }
 
                 mInventory.AddInventoryItem(type);
-                //todo  HighscoreManager.Instance.AddToScore(HighscoreManager.FIND_CORE);
+                //todo  add highscore for the other collectables
             }
         }
     }

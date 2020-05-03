@@ -1,7 +1,6 @@
 using UnityEngine;
 using BlobbInvasion.Core;
 
-
 // Removes health based on ticks
 namespace BlobbInvasion.Gameplay.Character.Player
 {
@@ -42,7 +41,7 @@ namespace BlobbInvasion.Gameplay.Character.Player
         {
             if (Health <= 0)
             {
-                gameObject.active = false;
+                gameObject.SetActive(false);
                 MusicManager.Instance.StopMusic();
                 GameManager.Instance.PlayerDead();
                 Debug.Log("Player died");

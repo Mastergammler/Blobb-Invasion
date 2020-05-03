@@ -64,7 +64,6 @@ namespace BlobbInvasion.Gameplay.Character.Player
                 BulletData realBullet = mCurCore.Bullets[(int)mCurBullet.BulletType];
                 // each gun has a child object that defines outward position
                 Transform gunExitPoint = GunJoint.GetChild(0).GetChild(0);
-                // todo include multiple bullets (later)
 
                 GameObject prefab = realBullet.BulletPrefab;
                 GameObject inst = Instantiate(prefab, gunExitPoint.position, Quaternion.LookRotation(Vector3.forward, direction));
