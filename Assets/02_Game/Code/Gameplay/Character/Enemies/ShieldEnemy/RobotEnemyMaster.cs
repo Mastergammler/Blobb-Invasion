@@ -23,6 +23,14 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private int AggressionRange;
         [SerializeField]
         private float StoppingDistance;
+        [SerializeField]
+        private bool LogStateMachineChange = false;
+
+        //#################
+        //##  CONSTANTS  ##
+        //#################
+
+        private const float STATE_MACHINE_UPDATE_TIME = 0.2f;
 
         //###############
         //##  MEMBERS  ##
@@ -33,6 +41,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private Transform mShield;
         private Vector3 mPostPosition;
         private StateMachine.StateMachine mStateMachine;
+        private float mTimeSinceLastUpdate = 0;
 
         //################
         //##    MONO    ##
@@ -50,7 +59,16 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void Update()
         {
-            mStateMachine.Tick();
+            mTimeSinceLastUpdate += Time.deltaTime;
+
+            if(mTimeSinceLastUpdate > STATE_MACHINE_UPDATE_TIME)
+            {
+                mStateMachine.Tick();
+                mTimeSinceLastUpdate -= STATE_MACHINE_UPDATE_TIME;
+                mStateMachine.EnableLogging(LogStateMachineChange);
+            }
+
+            
         }
 
         private void OnDestroy()
@@ -85,12 +103,13 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             Func<bool> isAggroChasing() => () => isInAggroRange() &! isInStoppingRange();
             Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
             Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance &! isInAggroRange();
+            Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
 
             // Transitions
             AtPrio(chasingState, isAggroChasing());
             At(returnState,idleState, notAtPost());
             At(idleState, chasingState, isNotChasing());
-            At(idleState,returnState,isNotChasing());
+            At(idleState,returnState,isAtPost());
 
             // Initial state
             mStateMachine.SetState(idleState);

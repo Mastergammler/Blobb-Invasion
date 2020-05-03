@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+
 namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
 {
     //S: Manages states and their transitions
@@ -10,14 +12,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
         //##  MEMBERS  ##
         //###############
 
-        private IState mCurrentState;
+        private IState mCurState;
 
         //fixme: why does it hold a list of transitions?
-        private Dictionary<Type, List<Transition>> mTransitions = new Dictionary<Type,List<Transition>>();
-        private List<Transition> mCurrentTransitions = new List<Transition>();
-        private List<Transition> mPriorityTransitions = new List<Transition>();
+        private Dictionary<Type, List<Transition>> mTransitionsPerState = new Dictionary<Type,List<Transition>>();
+        private List<Transition> mCurPossibleTransitions = new List<Transition>();
+        private List<Transition> mOverrideTransitions = new List<Transition>();
 
         private static List<Transition> sEmptyTransitions = new List<Transition>(0);
+
+        private bool mLogging = false;
+
 
         //#################
         //##  INTERFACE  ##
@@ -29,29 +34,31 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
             var transition = GetTransition();
             if(transition != null) SetState(transition.To);
 
-            mCurrentState.Tick();
+            mCurState.Tick();
         }
 
         public void SetState(IState state)
         {
-            if(state == mCurrentState) return;
+            if(state == mCurState) return;
 
-            mCurrentState?.OnExit();
-            mCurrentState = state;
+            if(mLogging) //Debug.Log($"Changing state to: {state.GetType().ToString()}");
+
+            mCurState?.OnExit();
+            mCurState = state;
 
             //fixme questonable 
-            mTransitions.TryGetValue(mCurrentState.GetType(), out mCurrentTransitions);
-            if(mCurrentTransitions == null) mCurrentTransitions = sEmptyTransitions;
+            mTransitionsPerState.TryGetValue(mCurState.GetType(), out mCurPossibleTransitions);
+            if(mCurPossibleTransitions == null) mCurPossibleTransitions = sEmptyTransitions;
 
-            mCurrentState.OnEnter();
+            mCurState.OnEnter();
         }
 
         public void AddTransition(IState from, IState to, Func<bool> predicate)
         {
-            if(mTransitions.TryGetValue(from.GetType(), out var transitions) == false)
+            if(mTransitionsPerState.TryGetValue(from.GetType(), out var transitions) == false)
             {   
                 transitions = new List<Transition>();
-                mTransitions[from.GetType()] = transitions;
+                mTransitionsPerState[from.GetType()] = transitions;
             }
 
             transitions.Add(new Transition(to,predicate));
@@ -59,23 +66,37 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
 
         public void AddAnyTransition(IState state, Func<bool> predicate)
         {
-            mPriorityTransitions.Add(new Transition(state,predicate));
+            mOverrideTransitions.Add(new Transition(state,predicate));
+        }
+
+        public void EnableLogging(bool enable)
+        {
+            mLogging = enable;
         }
 
         //###############
         //##  METHODS  ##
         //###############
 
+        // !!! the list of possible transitions are DEPENDANT on the state were currently in
+        // That means that the current state will not stay and 'overrule' a second transition
+        // Because the state itself is not in the transitions
         private Transition GetTransition()
         {
-            foreach(var t in mPriorityTransitions)
+            foreach(var t in mOverrideTransitions)
             {
                 if(t.Condition()) return t;
             }
 
-            foreach(var t in mCurrentTransitions)
+            foreach(var t in mCurPossibleTransitions)
             {
-                if(t.Condition()) return t;
+                if(mLogging) Debug.Log($"Checking condition for state change to:{t.To.GetType().ToString()}");
+                if(t.Condition()) 
+                {
+                    if(mLogging) Debug.Log($"Switching to state: {t.To.GetType().ToString()}");
+                    return t;
+
+                }
             }
 
             //fixme shouldn't it return the current transition then?
