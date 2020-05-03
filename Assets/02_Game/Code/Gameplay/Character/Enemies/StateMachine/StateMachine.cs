@@ -15,7 +15,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
         //fixme: why does it hold a list of transitions?
         private Dictionary<Type, List<Transition>> mTransitions = new Dictionary<Type,List<Transition>>();
         private List<Transition> mCurrentTransitions = new List<Transition>();
-        private List<Transition> mAnyTransitions = new List<Transition>();
+        private List<Transition> mPriorityTransitions = new List<Transition>();
 
         private static List<Transition> sEmptyTransitions = new List<Transition>(0);
 
@@ -59,7 +59,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
 
         public void AddAnyTransition(IState state, Func<bool> predicate)
         {
-            mAnyTransitions.Add(new Transition(state,predicate));
+            mPriorityTransitions.Add(new Transition(state,predicate));
         }
 
         //###############
@@ -68,7 +68,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
 
         private Transition GetTransition()
         {
-            foreach(var t in mAnyTransitions)
+            foreach(var t in mPriorityTransitions)
             {
                 if(t.Condition()) return t;
             }

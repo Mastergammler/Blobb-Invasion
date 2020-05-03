@@ -31,6 +31,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private IMoveable mMoveHandler;
         private Callback mCallbacks;
         private Transform mShield;
+        private Vector3 mPostPosition;
         private StateMachine.StateMachine mStateMachine;
 
         //################
@@ -41,9 +42,10 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         {
             mMoveHandler = GetComponent<IMoveable>();
             mShield = transform.GetChild(0);
+            mPostPosition = new Vector3(transform.position.x,transform.position.y,0);
 
             checkPlayerRef();
-            initStates();
+            initBehaviour();
         }
 
         private void Update()
@@ -70,23 +72,27 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //##  METHODS  ##
         //###############
 
-        private void initStates()
+        private void initBehaviour()
         {
             mStateMachine = new StateMachine.StateMachine();
 
-            // Init States
+            // States
             var idleState = new Idle(mMoveHandler);
             var chasingState = new Chase(mMoveHandler, Player, transform);
+            var returnState = new ReturnToPost(mPostPosition,transform,mMoveHandler);
 
-            // Init Conditions
-            Func<bool> isAggro() => () => isInAggroRange()! & isInStoppingRange();
-            Func<bool> isNotAggro() => () => !isInAggroRange() || isInStoppingRange();
+            // Conditions
+            Func<bool> isAggroChasing() => () => isInAggroRange() &! isInStoppingRange();
+            Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
+            Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance &! isInAggroRange();
 
-            // Init Transitions
-            At(idleState, chasingState, isAggro());
-            At(chasingState, idleState, isNotAggro());
+            // Transitions
+            AtPrio(chasingState, isAggroChasing());
+            At(returnState,idleState, notAtPost());
+            At(idleState, chasingState, isNotChasing());
+            At(idleState,returnState,isNotChasing());
 
-            // Set Init state
+            // Initial state
             mStateMachine.SetState(idleState);
         }
 
@@ -102,10 +108,12 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //##  AUXILIARY  ##
         //#################
 
-        void At(IState from, IState to, Func<bool> condition) => mStateMachine.AddTransition(from, to, condition);
+        void At(IState to, IState from, Func<bool> condition) => mStateMachine.AddTransition(from, to, condition);
+        void AtPrio(IState to, Func<bool> condition) => mStateMachine.AddAnyTransition(to,condition);
         private bool isInAggroRange() => distanceToPlayer() < AggressionRange;
         private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
         private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
+        private float distanceToPost() => Vector2.Distance(mPostPosition,transform.position);
 
         //#################
         //##  ACCESSORS  ##
