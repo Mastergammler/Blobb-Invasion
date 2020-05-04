@@ -52,6 +52,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private float mTimeSinceLastUpdate = 0;
 
         private bool mCanAttack = true;
+        private Coroutine mAttackResetCoroutine;
 
         public delegate void OnShieldDestroyed();
         private bool mHasShield = true;
@@ -105,8 +106,21 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void onPlayerCollision()
         {
+                if(mCanAttack == false) return;
+                Debug.Log("Collided with player");
                 mCanAttack = false;
+                //fixme refactor this - do i need sub state machine?
+                StartCoroutine(onCollision());
+                StopCoroutine(resetAttack());
                 StartCoroutine(resetAttack());
+        }
+
+        //fixme find good solution for this
+        private IEnumerator onCollision()
+        {
+                yield return new WaitForSeconds(0.05f);
+                mStateMachine.SetState(new Idle(mMoveHandler));
+                yield return null;
         }
 
         //##################
@@ -152,15 +166,19 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void attackWasExecuted()
         {
+            //fixme refactor this
             if(mCanAttack == false) return;
+            StopCoroutine(resetAttack());
             StartCoroutine(resetAttack());
         }
 
+        //fixme find solution for this
         private IEnumerator resetAttack()
         {
             yield return new WaitForSeconds(1f);
             mCanAttack = false;
             yield return new WaitForSeconds(5f);
+            Debug.Log("Can attack set to true");
             mCanAttack = true;
             yield return null;
         }
