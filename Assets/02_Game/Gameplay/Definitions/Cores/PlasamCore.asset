@@ -16,8 +16,8 @@ MonoBehaviour:
   Tooltip: High Energy Power Source
   Art: {fileID: 21300000, guid: 08a7d65399c09f44eb9718cfdb13d77b, type: 3}
   Type: 1
-  BaseDmgMod: 2
-  BaseFireRateMod: 1.8
+  BaseDmgMod: 1.8
+  BaseFireRateMod: 1.5
   ColorDark: {r: 0, g: 0.4812449, b: 0.49056602, a: 0}
   ColorBright: {r: 0.61877, g: 0.957133, b: 0.9716981, a: 0}
   Bullets:

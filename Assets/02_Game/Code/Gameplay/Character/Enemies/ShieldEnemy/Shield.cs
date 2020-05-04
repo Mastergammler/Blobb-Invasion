@@ -2,9 +2,13 @@ using System;
 using UnityEngine;
 using BlobbInvasion.Gameplay.Items.Crafting.Bullets;
 using BlobbInvasion.Gameplay.Effects;
+using BlobbInvasion.Utilities;
 
 namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 {
+
+    public delegate void OnPlayerCollision();
+
     [RequireComponent(typeof(Collider2D))]
     public class Shield : MonoBehaviour, IProtector
     {
@@ -17,6 +21,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private float SpeedReductionModifier;
 
         private ISpriteMaterialChanger mMaterialChanger;
+        private RobotEnemyMaster.OnShieldDestroyed mShieldDestroyedCallback;
 
         //################
         //##    MONO    ##
@@ -57,10 +62,30 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             Destroy(gameObject);
         }
 
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if(other.tag.Equals(Tags.PLAYER))
+            {
+                CollisionWithPlayer?.Invoke();
+            }
+        }
+
+        public void ShieldDestroyedCallback(RobotEnemyMaster.OnShieldDestroyed action)
+        {
+            mShieldDestroyedCallback = action;
+        }
+
+        private void OnDestroy()
+        {
+            mShieldDestroyedCallback?.Invoke();
+        }
+
 
         //*******************
         //**  I PROTECTOR  **
         //*******************
+
+        public event OnPlayerCollision CollisionWithPlayer;
 
         public float DamageReductionMod => ReductionModifier;
         public float Hitpoints => ShieldHealth;

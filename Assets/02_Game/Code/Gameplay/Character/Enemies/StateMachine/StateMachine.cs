@@ -41,7 +41,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
         {
             if(state == mCurState) return;
 
-            if(mLogging) //Debug.Log($"Changing state to: {state.GetType().ToString()}");
+            if(mLogging) Debug.Log($"Changing state to: {state.GetType().ToString()}");
 
             mCurState?.OnExit();
             mCurState = state;

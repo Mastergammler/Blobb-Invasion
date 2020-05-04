@@ -1,4 +1,5 @@
 using UnityEngine;
+using BlobbInvasion.Gameplay.Effects;
 
 namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
 {
@@ -7,19 +8,27 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
     //      The position is not adjusted during the charge
     public class BodyAttack : IState
     {
-        private IMoveable mMoveHandler;
-        private float mSpeedMult;
         private bool mFirstAttack;
+        private float mSpeedMult;
 
         private Transform mPlayerPos;
         private Transform mOwnPos;
+        private IMoveable mMoveHandler;
+        private IColorChange mColorChanger;
 
-        public BodyAttack(IMoveable moveable, float speedMultiplicator,Transform playerPos,Transform ownPos)
+        private event AttackExecutedCallback mAttackEvent;
+
+        public delegate void AttackExecutedCallback();
+        public BodyAttack(IMoveable moveable, IColorChange colorChanger,
+                float speedMultiplicator,Transform playerPos,Transform ownPos,
+                AttackExecutedCallback cb)
         {
             mMoveHandler = moveable;
             mSpeedMult = speedMultiplicator;
             mPlayerPos = playerPos;
             mOwnPos = ownPos;
+            mColorChanger = colorChanger;
+            mAttackEvent += cb;
         }
 
         //#################
@@ -38,12 +47,15 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
                 Vector2 direction = mPlayerPos.position - mOwnPos.position;
                 mMoveHandler.MoveFaster(direction, mSpeedMult);
                 mFirstAttack = false;
+                mColorChanger.ChangeColor();
+                mAttackEvent?.Invoke();
             }
         }
 
         public void OnExit()
         {
             mMoveHandler.Move(Vector2.zero);
+            mColorChanger.ChangeBack();
         }
     }
 }

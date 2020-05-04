@@ -1,10 +1,12 @@
-﻿using System;
+﻿using System.Collections;
+using System;
 using UnityEngine;
 using BlobbInvasion.Utilities;
 using BlobbInvasion.Gameplay.Items;
 using BlobbInvasion.Core;
 using BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States;
 using BlobbInvasion.Gameplay.Character.Enemies.StateMachine;
+using BlobbInvasion.Gameplay.Effects;
 
 namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 {
@@ -41,11 +43,22 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //###############
 
         private IMoveable mMoveHandler;
+        private IColorChange mColorChanger;
+
         private Callback mCallbacks;
         private Transform mShield;
         private Vector3 mPostPosition;
         private StateMachine.StateMachine mStateMachine;
         private float mTimeSinceLastUpdate = 0;
+
+        private bool mCanAttack = true;
+
+        public delegate void OnShieldDestroyed();
+        private bool mHasShield = true;
+        private void ShieldDestroyed()
+        {
+            mHasShield = false;
+        }
 
         //################
         //##    MONO    ##
@@ -54,8 +67,11 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private void Start()
         {
             mMoveHandler = GetComponent<IMoveable>();
+            mColorChanger = GetComponent<IColorChange>();
             mShield = transform.GetChild(0);
             mPostPosition = new Vector3(transform.position.x,transform.position.y,0);
+            mShield.GetComponent<Shield>().CollisionWithPlayer += onPlayerCollision;
+            mShield.GetComponent<Shield>().ShieldDestroyedCallback(ShieldDestroyed);
 
             checkPlayerRef();
             initBehaviour();
@@ -79,6 +95,20 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             ScoreEvent?.Invoke(ScoreType.KILLED_ENEMY);
         }
 
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if(other.tag.Equals(Tags.PLAYER))
+            {
+                onPlayerCollision();
+            }
+        }
+
+        private void onPlayerCollision()
+        {
+                mCanAttack = false;
+                StartCoroutine(resetAttack());
+        }
+
         //##################
         //##  OBSERVABLE  ##
         //##################
@@ -100,17 +130,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             var idleState = new Idle(mMoveHandler);
             var chasingState = new Chase(mMoveHandler, Player, transform);
             var returnState = new ReturnToPost(mPostPosition,transform,mMoveHandler);
-            var bodySlam = new BodyAttack(mMoveHandler,1.5f,Player,transform);
+            var bodySlam = new BodyAttack(mMoveHandler,mColorChanger,1.5f,Player,transform,attackWasExecuted);
 
             // Conditions
             Func<bool> isAggroChasing() => () => isInAggroRange() &! isInStoppingRange();
             Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
             Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance &! isInAggroRange();
             Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
-            Func<bool> inAttackRange() => () => distanceToPlayer() < AttackRange;
+            Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
 
             // Transitions
-            AtPrio(bodySlam,inAttackRange());
+            AtPrio(bodySlam,canAttack());
             AtPrio(chasingState, isAggroChasing());
             At(returnState,idleState, notAtPost());
             At(idleState, chasingState, isNotChasing());
@@ -118,6 +148,21 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
             // Initial state
             mStateMachine.SetState(idleState);
+        }
+
+        private void attackWasExecuted()
+        {
+            if(mCanAttack == false) return;
+            StartCoroutine(resetAttack());
+        }
+
+        private IEnumerator resetAttack()
+        {
+            yield return new WaitForSeconds(1f);
+            mCanAttack = false;
+            yield return new WaitForSeconds(5f);
+            mCanAttack = true;
+            yield return null;
         }
 
         private void checkPlayerRef()
