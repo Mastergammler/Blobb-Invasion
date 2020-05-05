@@ -25,7 +25,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private int AggressionRange;
         [SerializeField]
         private float StoppingDistance;
-        [SerializeField][Tooltip("Should be smaller than aggression range")]
+        [SerializeField]
+        [Tooltip("Should be smaller than aggression range")]
         private float AttackRange;
         [SerializeField]
         private float AttackRate;
@@ -52,14 +53,9 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private float mTimeSinceLastUpdate = 0;
 
         private bool mCanAttack = true;
-        private Coroutine mAttackResetCoroutine;
-
-        public delegate void OnShieldDestroyed();
         private bool mHasShield = true;
-        private void ShieldDestroyed()
-        {
-            mHasShield = false;
-        }
+
+        private IAttackResetState mAttackState;
 
         //################
         //##    MONO    ##
@@ -69,10 +65,11 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         {
             mMoveHandler = GetComponent<IMoveable>();
             mColorChanger = GetComponent<IColorChange>();
+            mPostPosition = new Vector3(transform.position.x, transform.position.y, 0);
             mShield = transform.GetChild(0);
-            mPostPosition = new Vector3(transform.position.x,transform.position.y,0);
-            mShield.GetComponent<Shield>().CollisionWithPlayer += onPlayerCollision;
-            mShield.GetComponent<Shield>().ShieldDestroyedCallback(ShieldDestroyed);
+            mShield.GetComponent<Shield>().OnPlayerCollision += onPlayerCollision;
+            mShield.GetComponent<Shield>().OnShieldDestroyed += () => mHasShield = false;
+            mAttackState = new AttackPossible(this);
 
             checkPlayerRef();
             initBehaviour();
@@ -82,7 +79,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         {
             mTimeSinceLastUpdate += Time.deltaTime;
 
-            if(mTimeSinceLastUpdate > STATE_MACHINE_UPDATE_TIME)
+            if (mTimeSinceLastUpdate > STATE_MACHINE_UPDATE_TIME)
             {
                 mStateMachine.Tick();
                 mTimeSinceLastUpdate -= STATE_MACHINE_UPDATE_TIME;
@@ -92,13 +89,13 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void OnDestroy()
         {
-            mCallbacks?.Invoke();
+            OnObservableAction?.Invoke();
             ScoreEvent?.Invoke(ScoreType.KILLED_ENEMY);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if(other.tag.Equals(Tags.PLAYER))
+            if (other.tag.Equals(Tags.PLAYER))
             {
                 onPlayerCollision();
             }
@@ -106,30 +103,15 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void onPlayerCollision()
         {
-                if(mCanAttack == false) return;
-                Debug.Log("Collided with player");
-                mCanAttack = false;
-                //fixme refactor this - do i need sub state machine?
-                StartCoroutine(onCollision());
-                StopCoroutine(resetAttack());
-                StartCoroutine(resetAttack());
+            mAttackState.ResetAttack();
+            StartCoroutine(stopPlayerNow());
         }
 
-        //fixme find good solution for this
-        private IEnumerator onCollision()
+        private IEnumerator stopPlayerNow()
         {
-                yield return new WaitForSeconds(0.05f);
-                mStateMachine.SetState(new Idle(mMoveHandler));
-                yield return null;
-        }
-
-        //##################
-        //##  OBSERVABLE  ##
-        //##################
-
-        public void RegisterCallback(Callback callback)
-        {
-            mCallbacks += callback;
+            yield return new WaitForSeconds(0.05f);
+            mStateMachine.SetState(new Idle(mMoveHandler));
+            yield return null;
         }
 
         //###############
@@ -143,44 +125,28 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             // States
             var idleState = new Idle(mMoveHandler);
             var chasingState = new Chase(mMoveHandler, Player, transform);
-            var returnState = new ReturnToPost(mPostPosition,transform,mMoveHandler);
-            var bodySlam = new BodyAttack(mMoveHandler,mColorChanger,1.5f,Player,transform,attackWasExecuted);
+            var returnState = new ReturnToPost(mPostPosition, transform, mMoveHandler);
+            var bodySlam = new BodyAttack(mMoveHandler, mColorChanger, 1.5f, Player, transform);
 
             // Conditions
-            Func<bool> isAggroChasing() => () => isInAggroRange() &! isInStoppingRange();
+            Func<bool> isAggroChasing() => () => isInAggroRange() & !isInStoppingRange();
             Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
-            Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance &! isInAggroRange();
+            Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance & !isInAggroRange();
             Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
             Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
 
             // Transitions
-            AtPrio(bodySlam,canAttack());
+            AtPrio(bodySlam, canAttack());
             AtPrio(chasingState, isAggroChasing());
-            At(returnState,idleState, notAtPost());
+            At(returnState, idleState, notAtPost());
             At(idleState, chasingState, isNotChasing());
-            At(idleState,returnState,isAtPost());
+            At(idleState, returnState, isAtPost());
+
+            // Callbacks
+            bodySlam.OnAttackStarted += () => mAttackState.ResetAttack();
 
             // Initial state
             mStateMachine.SetState(idleState);
-        }
-
-        private void attackWasExecuted()
-        {
-            //fixme refactor this
-            if(mCanAttack == false) return;
-            StopCoroutine(resetAttack());
-            StartCoroutine(resetAttack());
-        }
-
-        //fixme find solution for this
-        private IEnumerator resetAttack()
-        {
-            yield return new WaitForSeconds(1f);
-            mCanAttack = false;
-            yield return new WaitForSeconds(5f);
-            Debug.Log("Can attack set to true");
-            mCanAttack = true;
-            yield return null;
         }
 
         private void checkPlayerRef()
@@ -196,16 +162,68 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //#################
 
         void At(IState to, IState from, Func<bool> condition) => mStateMachine.AddTransition(from, to, condition);
-        void AtPrio(IState to, Func<bool> condition) => mStateMachine.AddAnyTransition(to,condition);
+        void AtPrio(IState to, Func<bool> condition) => mStateMachine.AddAnyTransition(to, condition);
         private bool isInAggroRange() => distanceToPlayer() < AggressionRange;
         private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
         private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
-        private float distanceToPost() => Vector2.Distance(mPostPosition,transform.position);
+        private float distanceToPost() => Vector2.Distance(mPostPosition, transform.position);
+
+        //##################
+        //##    STATE     ##
+        //##################
+
+        interface IAttackResetState
+        {
+            void ResetAttack();
+        }
+
+        class AttackPossible : IAttackResetState
+        {
+            private RobotEnemyMaster mEnemy;
+
+            public AttackPossible(RobotEnemyMaster enemy)
+            {
+                mEnemy = enemy;
+                mEnemy.mCanAttack = true;
+            }
+
+            public void ResetAttack()
+            {
+                mEnemy.mAttackState = new ResetStartedState(mEnemy);
+            }
+        }
+
+        class ResetStartedState : IAttackResetState
+        {
+            private RobotEnemyMaster mEnemy;
+            public ResetStartedState(RobotEnemyMaster enemy)
+            {
+                mEnemy = enemy;
+                mEnemy.StartCoroutine(mEnemy.resetAttack());
+            }
+            public void ResetAttack()
+            {
+                // attack already in process of resetting, nothing to do
+            }
+        }
+
+        private IEnumerator resetAttack()
+        {
+            yield return new WaitForSeconds(1f);
+            mCanAttack = false;
+            yield return new WaitForSeconds(5f);
+            mAttackState = new AttackPossible(this);
+            yield return null;
+        }
+
+
+
 
         //#################
         //##  ACCESSORS  ##
         //#################
 
         public event ScoreActionEvent ScoreEvent;
+        public event Action OnObservableAction;
     }
 }

@@ -38,7 +38,7 @@ namespace BlobbInvasion.Environment.SpawnSystems
 
             IObservable obs = spawnedObject.GetComponent<IObservable>();
             if (obs == null) Debug.LogWarning("Target Class is not a observable!");
-            else obs.RegisterCallback(WasKilled);
+            else obs.OnObservableAction += WasKilled;
         }
 
         public void WasKilled()
