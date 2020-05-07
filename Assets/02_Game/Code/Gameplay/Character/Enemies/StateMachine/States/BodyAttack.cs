@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using System;
 using BlobbInvasion.Gameplay.Effects;
@@ -16,6 +18,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
         private Transform mOwnPos;
         private IMoveable mMoveHandler;
         private IColorChange mColorChanger;
+
+        private const int MAX_ATTACK_TIME_MILLIS = 1000;
 
         public BodyAttack(IMoveable moveable, IColorChange colorChanger, float speedMultiplicator,Transform playerPos,Transform ownPos)
         {
@@ -43,9 +47,13 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
                 Vector2 direction = mPlayerPos.position - mOwnPos.position;
                 mMoveHandler.MoveFaster(direction, mSpeedMult);
                 mColorChanger.ChangeColor();
+
                 OnAttackStarted?.Invoke();
+                Task.Delay(MAX_ATTACK_TIME_MILLIS).ContinueWith(t => OnExit());
             }
         }
+
+
 
         public void OnExit()
         {

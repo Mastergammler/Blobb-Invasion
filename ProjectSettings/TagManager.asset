@@ -8,6 +8,7 @@ TagManager:
   - EventSystem
   - Enemy
   - Protector
+  - Collectable
   layers:
   - Default
   - TransparentFX

@@ -38,6 +38,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //#################
 
         private const float STATE_MACHINE_UPDATE_TIME = 0.2f;
+ 
 
         //###############
         //##  MEMBERS  ##
@@ -56,6 +57,10 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private bool mHasShield = true;
 
         private IAttackResetState mAttackState;
+        private Transform mCurrentObjective;
+        private CircleCollider2D mAlertCollider;
+
+        private ObjectiveChanged UpdateObjectiveInState;
 
         //################
         //##    MONO    ##
@@ -69,7 +74,9 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             mShield = transform.GetChild(0);
             mShield.GetComponent<Shield>().OnPlayerCollision += onPlayerCollision;
             mShield.GetComponent<Shield>().OnShieldDestroyed += () => mHasShield = false;
+            mAlertCollider = GetComponent<CircleCollider2D>();
             mAttackState = new AttackPossible(this);
+            
 
             checkPlayerRef();
             initBehaviour();
@@ -114,6 +121,29 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return null;
         }
 
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if(other.tag.Equals(Tags.COLLECTABLE))
+            {
+                mCurrentObjective = other.transform;
+                UpdateObjectiveInState(mCurrentObjective);
+                //Debug.Log(transform.position + ": Found objective: " + other.transform.position);
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            UnityEditor.Handles.color = Color.yellow;
+            UnityEditor.Handles.DrawWireDisc(transform.position,new Vector3(0,0,1),AggressionRange);
+            UnityEditor.Handles.color = new Color(1,0,0,0.2f);
+            UnityEditor.Handles.DrawSolidDisc(transform.position,new Vector3(0,0,1),AttackRange);
+
+            CircleCollider2D cc = GetComponent<CircleCollider2D>();
+            UnityEditor.Handles.color = Color.green;
+            UnityEditor.Handles.DrawWireDisc(transform.position,new Vector3(0,0,1),cc.radius);
+        }
+
         //###############
         //##  METHODS  ##
         //###############
@@ -127,6 +157,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             var chasingState = new Chase(mMoveHandler, Player, transform);
             var returnState = new ReturnToPost(mPostPosition, transform, mMoveHandler);
             var bodySlam = new BodyAttack(mMoveHandler, mColorChanger, 1.5f, Player, transform);
+            //fixme object null right here and doesn't get updated
+            var protectionState = new ProtectObjective(Player,mMoveHandler);
 
             // Conditions
             Func<bool> isAggroChasing() => () => isInAggroRange() & !isInStoppingRange();
@@ -134,6 +166,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance & !isInAggroRange();
             Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
             Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
+            Func<bool> inAlertRange() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
 
             // Transitions
             AtPrio(bodySlam, canAttack());
@@ -141,9 +174,20 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             At(returnState, idleState, notAtPost());
             At(idleState, chasingState, isNotChasing());
             At(idleState, returnState, isAtPost());
+            At(chasingState,idleState,isAggroChasing());
+            At(chasingState,returnState,isAggroChasing());
+            At(protectionState,idleState,inAlertRange());
+            At(protectionState,returnState,inAlertRange());
+
+
+            //At(bodySlam,chasingState,canAttack());
+            //At(bodySlam,idleState,canAttack());
+            //At(chasingState,bodySlam,() => !mCanAttack && isInAggroRange());
+            //At(idleState,bodySlam,() => !mCanAttack && isInStoppingRange());
 
             // Callbacks
             bodySlam.OnAttackStarted += () => mAttackState.ResetAttack();
+            UpdateObjectiveInState = protectionState.ObjUpdateDel;
 
             // Initial state
             mStateMachine.SetState(idleState);
@@ -212,6 +256,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return new WaitForSeconds(1f);
             mCanAttack = false;
             yield return new WaitForSeconds(5f);
+            Debug.Log("State is set to attack possible");
             mAttackState = new AttackPossible(this);
             yield return null;
         }

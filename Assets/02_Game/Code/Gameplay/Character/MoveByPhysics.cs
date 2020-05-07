@@ -55,5 +55,12 @@ namespace BlobbInvasion.Gameplay.Character
             direction.Normalize();
             mCurrentDirection = direction * multiplicator;
         }
+
+        public void MoveTo(Vector2 position)
+        {
+            Vector2 direction = position - (Vector2)transform.position;
+            direction.Normalize();
+            mCurrentDirection = direction;
+        }
     }
 }

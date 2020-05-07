@@ -11,5 +11,7 @@ namespace BlobbInvasion.Gameplay.Character
         
         //Same as move just will increase the speed by the multiplicator
         void MoveFaster(Vector2 direction,float speedMultiplicator);
+
+        void MoveTo(Vector2 position);
     }
 }

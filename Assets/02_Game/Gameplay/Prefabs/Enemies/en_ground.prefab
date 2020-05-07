@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 8277278762233605318}
   - component: {fileID: 456193053379053132}
   - component: {fileID: 6879672366914152459}
+  - component: {fileID: -3390494857766596010}
   m_Layer: 0
   m_Name: en_ground
   m_TagString: Enemy
@@ -325,9 +326,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
-  AggressionRange: 7
+  AggressionRange: 3
   StoppingDistance: 1.4
-  AttackRange: 2.8
+  AttackRange: 2
   AttackRate: 0
   LogStateMachineChange: 0
 --- !u!114 &8277278762233605318
@@ -372,3 +373,19 @@ MonoBehaviour:
   AutoChange: 0
   ChangeBackTime: 0.2
   ColorChange: {r: 1, g: 0, b: 0, a: 1}
+--- !u!58 &-3390494857766596010
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710265382859783363}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 7

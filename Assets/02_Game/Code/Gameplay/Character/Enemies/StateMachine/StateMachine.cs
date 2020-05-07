@@ -21,7 +21,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine
 
         private static List<Transition> sEmptyTransitions = new List<Transition>(0);
 
-        private bool mLogging = false;
+        private bool mLogging = true;
 
 
         //#################
