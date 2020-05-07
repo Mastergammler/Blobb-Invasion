@@ -59,6 +59,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private IAttackResetState mAttackState;
         private Transform mCurrentObjective;
         private CircleCollider2D mAlertCollider;
+        private Animator mAnimator;
 
         private ObjectiveChanged UpdateObjectiveInState;
 
@@ -75,8 +76,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             mShield.GetComponent<Shield>().OnPlayerCollision += onPlayerCollision;
             mShield.GetComponent<Shield>().OnShieldDestroyed += () => mHasShield = false;
             mAlertCollider = GetComponent<CircleCollider2D>();
-            mAttackState = new AttackPossible(this);
-            
+            mAttackState = new AttackPossible(this);     
+            mAnimator = GetComponent<Animator>();
 
             checkPlayerRef();
             initBehaviour();
@@ -117,7 +118,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private IEnumerator stopPlayerNow()
         {
             yield return new WaitForSeconds(0.05f);
-            mStateMachine.SetState(new Idle(mMoveHandler));
+            mStateMachine.SetState(new Idle(mMoveHandler,mAnimator));
             yield return null;
         }
 
@@ -153,7 +154,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             mStateMachine = new StateMachine.StateMachine();
 
             // States
-            var idleState = new Idle(mMoveHandler);
+            var idleState = new Idle(mMoveHandler,mAnimator);
             var chasingState = new Chase(mMoveHandler, Player, transform);
             var returnState = new ReturnToPost(mPostPosition, transform, mMoveHandler);
             var bodySlam = new BodyAttack(mMoveHandler, mColorChanger, 1.5f, Player, transform);
@@ -167,6 +168,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
             Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
             Func<bool> inAlertRange() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
+            Func<bool> isNotInAlertRange() => () => distanceToPlayer() > mAlertCollider.radius;
 
             // Transitions
             AtPrio(bodySlam, canAttack());
@@ -178,6 +180,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             At(chasingState,returnState,isAggroChasing());
             At(protectionState,idleState,inAlertRange());
             At(protectionState,returnState,inAlertRange());
+            At(idleState,protectionState,isNotInAlertRange());
 
 
             //At(bodySlam,chasingState,canAttack());

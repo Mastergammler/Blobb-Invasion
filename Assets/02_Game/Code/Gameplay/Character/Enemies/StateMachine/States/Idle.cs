@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
 {
@@ -7,14 +8,18 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
     public class Idle : IState
     {
         private IMoveable mMoveHandler;
+        private Animator mAnimator;
+
+        public const String ANIMATOR_PARAM = "IsActive";
 
         //#####################
         //##  INSTANTIATION  ##
         //#####################
 
-        public Idle(IMoveable movable)
+        public Idle(IMoveable movable, Animator animator)
         {
             mMoveHandler = movable;
+            mAnimator = animator;
         }
 
         //#################
@@ -24,6 +29,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
         public void OnEnter()
         {
             mMoveHandler.Move(Vector2.zero);
+            mAnimator.SetBool(ANIMATOR_PARAM,false);
         }
 
         public void Tick()
@@ -33,7 +39,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States
 
         public void OnExit()
         {
-            // do nothing
+            mAnimator.SetBool(ANIMATOR_PARAM,true);
         }
 
     }
