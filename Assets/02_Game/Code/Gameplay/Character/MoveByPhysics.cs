@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,8 +18,12 @@ namespace BlobbInvasion.Gameplay.Character
         [SerializeField]
         private float MaxSpeed;
 
+        public const float POINT_STOPPING_DISTANCE = 0.1f;
+
         private Rigidbody2D mPhysicsBody;
         private Vector2 mCurrentDirection;
+        private Vector2 mCurrentTarget;
+        private bool mMoveToTarget = false;
 
         void Start()
         {
@@ -29,6 +34,8 @@ namespace BlobbInvasion.Gameplay.Character
         {
             if (MoveByForce)
             {
+                if(mMoveToTarget) throw new NotSupportedException("Moving to target currently only supported for move by velocity");
+
                 mPhysicsBody.AddForce(mCurrentDirection * MovementSpeed);
 
                 // define max speed
@@ -40,7 +47,21 @@ namespace BlobbInvasion.Gameplay.Character
             }
             else
             {
-                mPhysicsBody.velocity = mCurrentDirection * MovementSpeed;
+
+                bool reachedTarget = false;
+                if(mMoveToTarget)
+                {
+                    float distanceToTarget = Vector2.Distance(transform.position,mCurrentTarget);
+                    if(distanceToTarget <= POINT_STOPPING_DISTANCE)
+                    {
+                        mPhysicsBody.velocity = Vector2.zero;
+                        reachedTarget = true;
+                    }
+
+                }
+     
+                if(!reachedTarget)
+                    mPhysicsBody.velocity = mCurrentDirection * MovementSpeed;
             }
         }
 
@@ -48,12 +69,14 @@ namespace BlobbInvasion.Gameplay.Character
         {
             direction.Normalize();
             mCurrentDirection = direction;
+            mMoveToTarget = false;
         }
 
         public void MoveFaster(Vector2 direction, float multiplicator)
         {
             direction.Normalize();
             mCurrentDirection = direction * multiplicator;
+            mMoveToTarget = false;
         }
 
         public void MoveTo(Vector2 position)
@@ -61,6 +84,8 @@ namespace BlobbInvasion.Gameplay.Character
             Vector2 direction = position - (Vector2)transform.position;
             direction.Normalize();
             mCurrentDirection = direction;
+            mCurrentTarget = position;
+            mMoveToTarget = true;
         }
     }
 }
