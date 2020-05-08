@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.ComponentModel;
+using System.Collections;
 using System;
 using UnityEngine;
 using BlobbInvasion.Utilities;
@@ -13,7 +14,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
     // S : Master controller for the robot enemie
     //      Manages and pulls all components it needs
     [RequireComponent(typeof(IMoveable))]
-    public class RobotEnemyMaster : MonoBehaviour, IObservable, IHighscoreEvent
+    public partial class RobotEnemyMaster : MonoBehaviour, IObservable, IHighscoreEvent
     {
         //##################
         //##    EDITOR    ##
@@ -50,7 +51,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private Callback mCallbacks;
         private Transform mShield;
         private Vector3 mPostPosition;
-        private StateMachine.StateMachine mStateMachine;
+        private StateMachine.StateMachine mStateMachineOld;
+        private RobotStateMachine mStateMachine;
         private float mTimeSinceLastUpdate = 0;
 
         private bool mCanAttack = true;
@@ -81,17 +83,19 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
             checkPlayerRef();
             initBehaviour();
+            mStateMachine = new RobotStateMachine(this);
+            mStateMachine.Initialize();
         }
 
         private void Update()
         {
             mTimeSinceLastUpdate += Time.deltaTime;
+                mStateMachine.Tick();
 
             if (mTimeSinceLastUpdate > STATE_MACHINE_UPDATE_TIME)
             {
-                mStateMachine.Tick();
                 mTimeSinceLastUpdate -= STATE_MACHINE_UPDATE_TIME;
-                mStateMachine.EnableLogging(LogStateMachineChange);
+                //fixme mStateMachine.EnableLogging(LogStateMachineChange);
             }
         }
 
@@ -118,7 +122,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private IEnumerator stopPlayerNow()
         {
             yield return new WaitForSeconds(0.05f);
-            mStateMachine.SetState(new Idle(mMoveHandler,mAnimator));
+            //fixme mStateMachine.SetState(new Idle(mMoveHandler,mAnimator));
             yield return null;
         }
 
@@ -149,9 +153,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //##  METHODS  ##
         //###############
 
+        private Func<bool> isAtPostIdle() => () => distanceToPost() <= StoppingDistance;
+            Func<bool> isAggroChasing() => () => isInAggroRange() & !isInStoppingRange();
+            Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
+            Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance & !isInAggroRange();
+            Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
+            Func<bool> inAlertRange() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
+            Func<bool> isNotInAlertRange() => () => distanceToPlayer() > mAlertCollider.radius;
+
         private void initBehaviour()
         {
-            mStateMachine = new StateMachine.StateMachine();
+            //mStateMachine = new StateMachine.StateMachine();
 
             // States
             var idleState = new Idle(mMoveHandler,mAnimator);
@@ -161,26 +173,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             //fixme object null right here and doesn't get updated
             var protectionState = new ProtectObjective(Player,mMoveHandler);
 
-            // Conditions
-            Func<bool> isAggroChasing() => () => isInAggroRange() & !isInStoppingRange();
-            Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
-            Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance & !isInAggroRange();
-            Func<bool> isAtPost() => () => distanceToPost() <= StoppingDistance;
-            Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
-            Func<bool> inAlertRange() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
-            Func<bool> isNotInAlertRange() => () => distanceToPlayer() > mAlertCollider.radius;
-
             // Transitions
-            AtPrio(bodySlam, canAttack());
+            /*AtPrio(bodySlam, canAttack());
             AtPrio(chasingState, isAggroChasing());
             At(returnState, idleState, notAtPost());
             At(idleState, chasingState, isNotChasing());
-            At(idleState, returnState, isAtPost());
+            //At(idleState, returnState, isAtPost());
             At(chasingState,idleState,isAggroChasing());
             At(chasingState,returnState,isAggroChasing());
             At(protectionState,idleState,inAlertRange());
             At(protectionState,returnState,inAlertRange());
-            At(idleState,protectionState,isNotInAlertRange());
+            At(idleState,protectionState,isNotInAlertRange());*/
 
 
             //At(bodySlam,chasingState,canAttack());
@@ -193,7 +196,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             UpdateObjectiveInState = protectionState.ObjUpdateDel;
 
             // Initial state
-            mStateMachine.SetState(idleState);
+            //mStateMachine.SetState(idleState);
         }
 
         private void checkPlayerRef()
@@ -208,8 +211,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //##  AUXILIARY  ##
         //#################
 
-        void At(IState to, IState from, Func<bool> condition) => mStateMachine.AddTransition(from, to, condition);
-        void AtPrio(IState to, Func<bool> condition) => mStateMachine.AddAnyTransition(to, condition);
+        //void At(IState to, IState from, Func<bool> condition) => mStateMachine.AddTransition(from, to, condition);
+        //void AtPrio(IState to, Func<bool> condition) => mStateMachine.AddAnyTransition(to, condition);
         private bool isInAggroRange() => distanceToPlayer() < AggressionRange;
         private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
         private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
