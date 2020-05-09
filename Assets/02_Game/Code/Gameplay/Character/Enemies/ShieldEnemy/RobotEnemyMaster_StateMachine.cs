@@ -8,26 +8,84 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
     public partial class RobotEnemyMaster
     {
 
+        public delegate void RobotActionDefinition(RobotAction action, Func<bool> condition);
+        public delegate void RobotAction(Action cb);
+
+        interface IRobotAction
+        {
+            event Action OnActionFinished;
+            Func<bool> Condition { get; }
+            void Execute();
+        }
+
+        abstract class RobotState : IRobotState
+        {
+            public abstract void Tick();
+
+            protected bool checkIf(Func<bool> condition)
+            {
+                return condition();
+            }
+
+            protected bool checkIf(Func<bool>[] conditions)
+            {
+                bool result = true;
+
+                foreach (Func<bool> c in conditions)
+                {
+                    result = result && c();
+                }
+
+                return result;
+            }
+        }
+
+        class ShowIdleAnim : IRobotAction
+        {
+
+            private RobotAction mAction;
+            public ShowIdleAnim(RobotAction action, Func<bool> condition)
+            {
+                mAction = action;
+                Condition = condition;
+            }
+
+            public Func<bool> Condition { private set; get; }
+
+            public event Action OnActionFinished;
+            public void ActionFinished()
+            {
+                OnActionFinished?.Invoke();
+            }
+
+            public void Execute()
+            {
+                mAction(OnActionFinished);
+            }
+        }
+
         interface IRobotState
         {
             void Tick();
         }
 
-        public const String ANIMATOR_BOOL = "IsActive";
-
         class RobotStateMachine
         {
+
+
             private IRobotState mCurentState;
             private RobotEnemyMaster mParent;
+
 
             public RobotStateMachine(RobotEnemyMaster parent)
             {
                 mParent = parent;
+
             }
 
             public void Initialize()
             {
-                mCurentState = new IdleState(mParent,this);
+                mCurentState = new IdleState(mParent, this);
             }
 
             public void Tick()
@@ -40,57 +98,123 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
             // how to change state then?
 
-            private class IdleState : IRobotState
+            private class IdleState : RobotState
             {
                 private RobotEnemyMaster mParent;
                 private RobotStateMachine mStateMachine;
+                private IRobotAction mAction;
+                private bool mBlockedByAction = false;
                 public IdleState(RobotEnemyMaster parent, RobotStateMachine stateMachine)
                 {
                     mParent = parent;
                     mStateMachine = stateMachine;
                     mParent.mMoveHandler.Move(Vector2.zero);
-                    mParent.mAnimator.SetBool(ANIMATOR_BOOL, false);
+                    mAction = new ShowIdleAnim(mParent.PlayIdleAnim, mParent.idleAnim());
+                    mAction.OnActionFinished += () => mBlockedByAction = false;
+                    Debug.Log("Idle State");
                 }
 
-                public void Tick()
+                public override void Tick()
                 {
-                    //todo idle counter, and only then set to inactive
-                    // nothing to do
-                    checkForState(mParent.inAlertRange());
-                }
-
-                private void checkForState(Func<bool> condition)
-                {
-                    if(condition())
+                    if (checkIf(mParent.isAlert()))
                     {
-                        mStateMachine.mCurentState = new ProtectionState(mParent,mStateMachine);
+                        mStateMachine.mCurentState = new ProtectionState(mParent, mStateMachine);
+                    }
+                    else
+                    {
+                        if (!mBlockedByAction)
+                        {
+                            executeAction(mAction.Condition);
+                            mParent.mMoveHandler.Move(Vector2.zero);
+                        }
+                    }
+                }
+
+                private void executeAction(Func<bool> condition)
+                {
+                    if (condition())
+                    {
+                        mBlockedByAction = true;
+                        mAction.Execute();
                     }
                 }
             }
 
-            private class ProtectionState : IRobotState
+            private class ChasingState : RobotState
             {
                 private RobotEnemyMaster mParent;
                 private RobotStateMachine mStateMachine;
 
-                private const float DISTANCE_TO_OBJ = 2f;
+                public ChasingState(RobotEnemyMaster parent, RobotStateMachine stateMachine)
+                {
+                    mParent = parent;
+                    mStateMachine = stateMachine;
+                    Debug.Log("Chasing State");
+                }
+
+                public override void Tick()
+                {
+                    checkCondition(mParent.notAlert());
+                    if (checkCondition(mParent.notAlert()))
+                        mStateMachine.mCurentState = new ProtectionState(mParent, mStateMachine);
+                    else
+                        moveTowardsPlayer();
+                }
+
+                private bool checkCondition(Func<bool> condition)
+                {
+                    return condition();
+                }
+
+                private void moveTowardsPlayer()
+                {
+                    // move towards appearently works the other way around
+                    Vector2 direction = mParent.Player.position - mParent.transform.position;
+
+                    if (direction.x > 0 && mParent.transform.localScale.x > 0
+                        || direction.x < 0 && mParent.transform.localScale.x < 0)
+                    {
+                        mParent.transform.localScale = new Vector3(-mParent.transform.localScale.x, mParent.transform.localScale.y, 1);
+                    }
+
+                    mParent.mMoveHandler.Move(direction);
+                }
+
+            }
+
+            private class ProtectionState : RobotState
+            {
+                private RobotEnemyMaster mParent;
+                private RobotStateMachine mStateMachine;
+
                 public ProtectionState(RobotEnemyMaster parent, RobotStateMachine stateMachine)
                 {
                     mParent = parent;
                     mStateMachine = stateMachine;
-                    mParent.mAnimator.SetBool(ANIMATOR_BOOL,true);
+                    mParent.mAnimator.SetBool(ANIMATOR_BOOL, true);
+                    Debug.Log("Protection State");
                 }
 
-                public void Tick()
+                public override void Tick()
                 {
-                    checkCondition(mParent.isNotInAlertRange());
-                    if(mParent.mCurrentObjective != null)
+                    //fixme idle condition has to be different
+                    checkCondition(new Func<bool>[]
+                        { mParent.isAtCurrentObjective(),mParent.notAlert()}
+                        , mParent.isAggro());
+
+                    if (mParent.mCurrentObjective != null)
                         mParent.mMoveHandler.MoveTo(TargetPosition());
                 }
 
-                private void checkCondition(Func<bool> condition)
+                private void checkCondition(Func<bool>[] idleConditions, Func<bool> chaseCondition)
                 {
-                    if(condition()) mStateMachine.mCurentState = new IdleState(mParent,mStateMachine);
+
+                    if (idleConditions[0]() && idleConditions[1]())
+                    {
+                        Debug.Log($"Going idle: Distance to obj: {mParent.distanceToCurObj()}");
+                        mStateMachine.mCurentState = new IdleState(mParent, mStateMachine);
+                    }
+                    if (chaseCondition()) mStateMachine.mCurentState = new ChasingState(mParent, mStateMachine);
                 }
 
                 private Vector2 TargetPosition()

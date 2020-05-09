@@ -39,7 +39,9 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //#################
 
         private const float STATE_MACHINE_UPDATE_TIME = 0.2f;
- 
+        private const float DISTANCE_TO_OBJ = 2f;
+        private const float IDLE_ANIM_DELAY_TIME = 10f;
+        private const String ANIMATOR_BOOL = "IsActive";
 
         //###############
         //##  MEMBERS  ##
@@ -78,7 +80,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             mShield.GetComponent<Shield>().OnPlayerCollision += onPlayerCollision;
             mShield.GetComponent<Shield>().OnShieldDestroyed += () => mHasShield = false;
             mAlertCollider = GetComponent<CircleCollider2D>();
-            mAttackState = new AttackPossible(this);     
+            mAttackState = new AttackPossible(this);
             mAnimator = GetComponent<Animator>();
 
             checkPlayerRef();
@@ -90,7 +92,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private void Update()
         {
             mTimeSinceLastUpdate += Time.deltaTime;
-                mStateMachine.Tick();
+            mStateMachine.Tick();
 
             if (mTimeSinceLastUpdate > STATE_MACHINE_UPDATE_TIME)
             {
@@ -126,10 +128,9 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return null;
         }
 
-
         private void OnTriggerStay2D(Collider2D other)
         {
-            if(other.tag.Equals(Tags.COLLECTABLE))
+            if (other.tag.Equals(Tags.COLLECTABLE))
             {
                 mCurrentObjective = other.transform;
                 UpdateObjectiveInState(mCurrentObjective);
@@ -140,38 +141,62 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private void OnDrawGizmos()
         {
             UnityEditor.Handles.color = Color.yellow;
-            UnityEditor.Handles.DrawWireDisc(transform.position,new Vector3(0,0,1),AggressionRange);
-            UnityEditor.Handles.color = new Color(1,0,0,0.2f);
-            UnityEditor.Handles.DrawSolidDisc(transform.position,new Vector3(0,0,1),AttackRange);
+            UnityEditor.Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), AggressionRange);
+            UnityEditor.Handles.color = new Color(1, 0, 0, 0.2f);
+            UnityEditor.Handles.DrawSolidDisc(transform.position, new Vector3(0, 0, 1), AttackRange);
 
             CircleCollider2D cc = GetComponent<CircleCollider2D>();
             UnityEditor.Handles.color = Color.green;
-            UnityEditor.Handles.DrawWireDisc(transform.position,new Vector3(0,0,1),cc.radius);
+            UnityEditor.Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), cc.radius);
         }
+
+        public delegate void EnemyAction();
+
+        private void PlayIdleAnim(Action handler)
+        {
+            StartCoroutine(idleAnimWithDelay(handler));
+        } 
+
+        private IEnumerator idleAnimWithDelay(Action handler)
+        {
+            yield return new WaitForSeconds(IDLE_ANIM_DELAY_TIME);
+            mAnimator.SetBool(ANIMATOR_BOOL,false);
+            handler?.Invoke();
+            yield return null;
+        } 
 
         //###############
         //##  METHODS  ##
         //###############
 
-        private Func<bool> isAtPostIdle() => () => distanceToPost() <= StoppingDistance;
-            Func<bool> isAggroChasing() => () => isInAggroRange() & !isInStoppingRange();
-            Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
-            Func<bool> notAtPost() => () => distanceToPost() > StoppingDistance & !isInAggroRange();
-            Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
-            Func<bool> inAlertRange() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
-            Func<bool> isNotInAlertRange() => () => distanceToPlayer() > mAlertCollider.radius;
+        // FIXME: case for no objective found
+        private Func<bool> isAlert() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
+        private Func<bool> notAlert() => () => distanceToPlayer() > mAlertCollider.radius;
+        private Func<bool> atPost() => () => distanceToPost() <= StoppingDistance;
+        private Func<bool> awayFromPost() => () => distanceToPost() > StoppingDistance;
+        private Func<bool> isAggro() => () => isInAggroRange() & !isInStoppingRange();
+        private Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
+        private Func<bool> idleAnim() => () => mAnimator.GetBool(ANIMATOR_BOOL);
+
+        //------------------
+        // Old Condititons
+        //------------------
+
+        private Func<bool> isNotChasing() => () => !isInAggroRange() || isInStoppingRange();
+        private Func<bool> isAtCurrentObjective() => () => distanceToCurObj() <= DISTANCE_TO_OBJ;
+
 
         private void initBehaviour()
         {
             //mStateMachine = new StateMachine.StateMachine();
 
             // States
-            var idleState = new Idle(mMoveHandler,mAnimator);
+            var idleState = new Idle(mMoveHandler, mAnimator);
             var chasingState = new Chase(mMoveHandler, Player, transform);
             var returnState = new ReturnToPost(mPostPosition, transform, mMoveHandler);
             var bodySlam = new BodyAttack(mMoveHandler, mColorChanger, 1.5f, Player, transform);
             //fixme object null right here and doesn't get updated
-            var protectionState = new ProtectObjective(Player,mMoveHandler);
+            var protectionState = new ProtectObjective(Player, mMoveHandler);
 
             // Transitions
             /*AtPrio(bodySlam, canAttack());
@@ -217,6 +242,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
         private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
         private float distanceToPost() => Vector2.Distance(mPostPosition, transform.position);
+        private float distanceToCurObj() => Vector2.Distance(mCurrentObjective.position,transform.position);
 
         //##################
         //##    STATE     ##
@@ -262,7 +288,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return new WaitForSeconds(1f);
             mCanAttack = false;
             yield return new WaitForSeconds(5f);
-            Debug.Log("State is set to attack possible");
             mAttackState = new AttackPossible(this);
             yield return null;
         }
