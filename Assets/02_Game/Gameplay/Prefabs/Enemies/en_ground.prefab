@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4958199965339738469
 Transform:
   m_ObjectHideFlags: 0
@@ -150,13 +150,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2137999915790129748}
   - component: {fileID: 4718805505964669397}
+  - component: {fileID: 8729855782237348477}
   m_Layer: 0
   m_Name: Detector
   m_TagString: Detector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2137999915790129748
 Transform:
   m_ObjectHideFlags: 0
@@ -187,6 +188,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 7
+--- !u!114 &8729855782237348477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738154469766516450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5830faaf829dd95468fd03c1a47817ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8710265382859783363
 GameObject:
   m_ObjectHideFlags: 0

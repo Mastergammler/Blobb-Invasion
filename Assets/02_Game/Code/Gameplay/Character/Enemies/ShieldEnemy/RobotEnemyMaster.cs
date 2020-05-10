@@ -8,6 +8,7 @@ using BlobbInvasion.Core;
 using BlobbInvasion.Gameplay.Character.Enemies.StateMachine.States;
 using BlobbInvasion.Gameplay.Character.Enemies.StateMachine;
 using BlobbInvasion.Gameplay.Effects;
+using BlobbInvasion.Code.Gameplay.Character;
 
 namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 {
@@ -51,6 +52,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private IMoveable mMoveHandler;
         private IColorChange mColorChanger;
+        private IDetector mDetector;
 
         private Callback mCallbacks;
         private Transform mShield;
@@ -78,10 +80,19 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             mMoveHandler = GetComponent<IMoveable>();
             mColorChanger = GetComponent<IColorChange>();
             mPostPosition = new Vector3(transform.position.x, transform.position.y, 0);
+
+            // setting childs active to prevent collider ignored by physics bug
+            //FIXME: still doesn't work
+            transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(true);
+
             mShield = transform.GetChild(0);
             mShield.GetComponent<Shield>().OnPlayerCollision += onPlayerCollision;
             mShield.GetComponent<Shield>().OnShieldDestroyed += () => mHasShield = false;
-            mAlertCollider = GetComponent<CircleCollider2D>();
+            mAlertCollider = GetComponentInChildren<CircleCollider2D>();
+            mDetector = GetComponentInChildren<IDetector>();
+            mDetector.SetTagsFilter(Tags.COLLECTABLE);
+            mDetector.OnItemDetected += CollectableUpdate;
             mAttackState = new AttackPossible(this);
             mAnimator = GetComponent<Animator>();
 
@@ -111,7 +122,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            //FIXME: this doesn't work, because it gets triggered as soon as enemy is in range ...
             if (other.tag.Equals(Tags.PLAYER))
             {
                 onPlayerCollision();
@@ -131,15 +141,41 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return null;
         }
 
-        private void OnTriggerStay2D(Collider2D other)
+        private void CollectableUpdate(Collision2D itemCollision)
         {
-            if (other.tag.Equals(Tags.COLLECTABLE))
-            {
-                mCurrentObjective = other.transform;
-                UpdateObjectiveInState(mCurrentObjective);
-                //Debug.Log(transform.position + ": Found objective: " + other.transform.position);
-            }
+            mCurrentObjective = itemCollision.transform;
+            Debug.Log("Current objective set to : " + itemCollision.transform.name);
+            UpdateObjectiveInState(mCurrentObjective);
         }
+
+        private void RunAsCoroutine(Action action, float waitTime)
+        {
+            StartCoroutine(GenericCoroutine(action, waitTime));
+        }
+
+        private IEnumerator GenericCoroutine(Action action, float waitTime)
+        {
+            yield return new WaitForSeconds(waitTime);
+            action();
+            yield return null;
+        }
+
+        private void PlayIdleAnim(Action handler)
+        {
+            StartCoroutine(idleAnimWithDelay(handler));
+        }
+
+        private IEnumerator idleAnimWithDelay(Action handler)
+        {
+            yield return new WaitForSeconds(IDLE_ANIM_DELAY_TIME);
+            mAnimator.SetBool(ANIMATOR_BOOL, false);
+            handler?.Invoke();
+            yield return null;
+        }
+
+        //-------------
+        //    Debug
+        //-------------
 
         private void OnDrawGizmos()
         {
@@ -148,25 +184,13 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             UnityEditor.Handles.color = new Color(1, 0, 0, 0.2f);
             UnityEditor.Handles.DrawSolidDisc(transform.position, new Vector3(0, 0, 1), AttackRange);
 
-            CircleCollider2D cc = GetComponent<CircleCollider2D>();
-            UnityEditor.Handles.color = Color.green;
-            UnityEditor.Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), cc.radius);
+            CircleCollider2D cc = GetComponentInChildren<CircleCollider2D>();
+            if(cc != null)
+            {
+                UnityEditor.Handles.color = Color.green;
+                UnityEditor.Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), cc.radius);
+            }
         }
-
-        public delegate void EnemyAction();
-
-        private void PlayIdleAnim(Action handler)
-        {
-            StartCoroutine(idleAnimWithDelay(handler));
-        } 
-
-        private IEnumerator idleAnimWithDelay(Action handler)
-        {
-            yield return new WaitForSeconds(IDLE_ANIM_DELAY_TIME);
-            mAnimator.SetBool(ANIMATOR_BOOL,false);
-            handler?.Invoke();
-            yield return null;
-        } 
 
         //###############
         //##  METHODS  ##
@@ -245,7 +269,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
         private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
         private float distanceToPost() => Vector2.Distance(mPostPosition, transform.position);
-        private float distanceToCurObj() => Vector2.Distance(mCurrentObjective.position,transform.position);
+        private float distanceToCurObj() => Vector2.Distance(mCurrentObjective.position, transform.position);
 
         //##################
         //##    STATE     ##
