@@ -148,39 +148,46 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 private RobotStateMachine mStateMachine;
                 private IRobotAction mAction;
                 private bool mBlockedByAction = false;
+                private Coroutine mCurCoroutine;
                 public IdleState(RobotEnemyMaster parent, RobotStateMachine stateMachine)
                 {
                     mParent = parent;
                     mStateMachine = stateMachine;
                     mParent.mMoveHandler.Move(Vector2.zero);
-                    mAction = new DefaultRobotAction(mParent.PlayIdleAnim, mParent.idleAnim());
+                    mAction = new DefaultRobotAction(resetIdleAnimAction, mParent.idleAnim());
                     mAction.OnActionFinished += () => mBlockedByAction = false;
                     Debug.Log("Idle State");
+                }
+
+                private void resetIdleAnimAction(Action cb)
+                {
+                    mBlockedByAction = true;
+                   mCurCoroutine = mParent.StartCoroutine(idleAnimWithDelay(cb));
+                }
+
+                private IEnumerator idleAnimWithDelay(Action handler)
+                {
+                    yield return new WaitForSeconds(IDLE_ANIM_DELAY_TIME);
+                    mParent.mAnimator.SetBool(ANIMATOR_BOOL, false);
+                    handler?.Invoke();
+                    yield return null;
                 }
 
                 public override void Tick()
                 {
                     if (checkIf(mParent.isAlert()))
                     {
+                        if(mCurCoroutine != null)
+                        {
+                            mParent.StopCoroutine(mCurCoroutine);
+                            mCurCoroutine = null;
+                        }
                         mStateMachine.mCurentState = new ProtectionState(mParent, mStateMachine);
                     }
-                    else
-                    {
-                        if (!mBlockedByAction)
-                        {
-                            executeAction(mAction.Condition);
-                            mParent.mMoveHandler.Move(Vector2.zero);
-                        }
-                    }
-                }
-
-                private void executeAction(Func<bool> condition)
-                {
-                    if (condition())
-                    {
-                        mBlockedByAction = true;
+                    else if (checkIf(mAction.Condition) & !mBlockedByAction)
                         mAction.Execute();
-                    }
+                    else if (!mBlockedByAction)
+                        mParent.mMoveHandler.Move(Vector2.zero);
                 }
             }
 
@@ -210,7 +217,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
                 private void StopAttackNow()
                 {
-                    if(mCurCoroutine == null) return;
+                    if (mCurCoroutine == null) return;
                     mParent.StopCoroutine(mCurCoroutine);
                     mCurCoroutine = null;
                     mParent.mColorChanger.ChangeBack();
@@ -223,9 +230,9 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 {
                     if (checkIf(mParent.notAlert()))
                         mStateMachine.mCurentState = new ProtectionState(mParent, mStateMachine);
-                    else if (checkIf(mRobotAction.Condition) &! mBlockedByAction)
+                    else if (checkIf(mRobotAction.Condition) & !mBlockedByAction)
                         mRobotAction.Execute();
-                    else if(!mBlockedByAction)
+                    else if (!mBlockedByAction)
                         moveTowardsPlayer();
                 }
 
@@ -253,7 +260,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                         mParent.mMoveHandler.Move(Vector2.zero);
                         cb.Invoke();
                     }
-                    catch(Exception ex) 
+                    catch (Exception ex)
                     {
                         Debug.LogError(ex.Message);
                     }
