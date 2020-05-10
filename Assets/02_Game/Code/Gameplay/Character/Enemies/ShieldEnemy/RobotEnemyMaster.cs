@@ -206,6 +206,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private Func<bool> canAttack() => () => distanceToPlayer() < AttackRange && mCanAttack && mHasShield;
         private Func<bool> idleAnim() => () => mAnimator.GetBool(ANIMATOR_BOOL);
         private Func<bool> stopOnPlayer() => () => distanceToPlayer() <= StoppingDistance;
+        private Func<bool> noObjectiveAggro() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective == null;
 
         //------------------
         // Old Condititons

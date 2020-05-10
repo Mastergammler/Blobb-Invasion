@@ -296,24 +296,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
                 public override void Tick()
                 {
-                    //fixme idle condition has to be different
-                    checkCondition(new Func<bool>[]
-                        { mParent.isAtCurrentObjective(),mParent.notAlert()}
-                        , mParent.isAggro());
+                    if(checkIf(mParent.isAggro())||checkIf(mParent.noObjectiveAggro()))
+                    {
+                        mStateMachine.mCurentState = new ChasingState(mParent,mStateMachine);
+                    }
+                    else if(checkIf(mParent.isAtCurrentObjective(),mParent.notAlert()))
+                    {
+                        mStateMachine.mCurentState = new IdleState(mParent, mStateMachine);
+                    }
 
                     if (mParent.mCurrentObjective != null)
                         mParent.mMoveHandler.MoveTo(TargetPosition());
-                }
-
-                private void checkCondition(Func<bool>[] idleConditions, Func<bool> chaseCondition)
-                {
-
-                    if (idleConditions[0]() && idleConditions[1]())
-                    {
-                        Debug.Log($"Going idle: Distance to obj: {mParent.distanceToCurObj()}");
-                        mStateMachine.mCurentState = new IdleState(mParent, mStateMachine);
-                    }
-                    if (chaseCondition()) mStateMachine.mCurentState = new ChasingState(mParent, mStateMachine);
                 }
 
                 private Vector2 TargetPosition()
