@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using System;
@@ -191,42 +193,70 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 private RobotEnemyMaster mParent;
                 private RobotStateMachine mStateMachine;
                 private IRobotAction mRobotAction;
+                private Task mCurrentTask;
                 private bool mBlockedByAction = false;
+                private CancellationTokenSource mSource;
+                private Coroutine mCurCoroutine;
 
                 public ChasingState(RobotEnemyMaster parent, RobotStateMachine stateMachine)
                 {
                     mParent = parent;
                     mStateMachine = stateMachine;
                     mRobotAction = new DefaultRobotAction(enemyAttackAction, mParent.canAttack());
+                    mParent.OnCollisionWithPlayer += StopAttackNow;
                     mRobotAction.OnActionFinished += () => mBlockedByAction = false;
                     Debug.Log("Chasing State");
+                }
+
+                private void StopAttackNow()
+                {
+                    if(mCurCoroutine == null) return;
+                    mParent.StopCoroutine(mCurCoroutine);
+                    mCurCoroutine = null;
+                    mParent.mColorChanger.ChangeBack();
+                    mParent.mMoveHandler.Move(Vector2.zero);
+                    mBlockedByAction = false;
+                    Debug.Log("Action cancelled");
                 }
 
                 public override void Tick()
                 {
                     if (checkIf(mParent.notAlert()))
                         mStateMachine.mCurentState = new ProtectionState(mParent, mStateMachine);
-                    else if (checkIf(mRobotAction.Condition))
+                    else if (checkIf(mRobotAction.Condition) &! mBlockedByAction)
                         mRobotAction.Execute();
-                    else
+                    else if(!mBlockedByAction)
                         moveTowardsPlayer();
                 }
 
                 private void enemyAttackAction(Action cb)
                 {
+                    Debug.Log("Attack invoked");
+                    mBlockedByAction = true;
+
                     Vector2 direction = mParent.Player.position - mParent.transform.position;
                     mParent.mMoveHandler.MoveFaster(direction, ATTACK_MOVE_SPEED_MULT);
                     mParent.mColorChanger.ChangeColor();
                     mParent.mAttackState.ResetAttack();
-                    
-                    Task.Delay(MAX_ATTACK_TIME_MILLIS).ContinueWith(t => AttackFinisnhed(cb));
+
+                    Debug.Log("Reset scheduled");
+                    mCurCoroutine = mParent.StartCoroutine(AttackFinisnhed(cb));
                 }
 
-                private void AttackFinisnhed(Action cb)
+                private IEnumerator AttackFinisnhed(Action cb)
                 {
-                    mParent.mColorChanger.ChangeBack();
-                    mParent.mMoveHandler.Move(Vector2.zero);
-                    cb.Invoke();
+                    yield return new WaitForSeconds(MAX_ATTACK_TIME);
+                    Debug.Log("Action finished");
+                    try
+                    {
+                        mParent.mColorChanger.ChangeBack();
+                        mParent.mMoveHandler.Move(Vector2.zero);
+                        cb.Invoke();
+                    }
+                    catch(Exception ex) 
+                    {
+                        Debug.LogError(ex.Message);
+                    }
                 }
 
                 private void moveTowardsPlayer()

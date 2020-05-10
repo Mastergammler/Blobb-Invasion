@@ -44,7 +44,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private const float IDLE_ANIM_DELAY_TIME = 10f;
         private const String ANIMATOR_BOOL = "IsActive";
         private const float ATTACK_MOVE_SPEED_MULT = 1.5f;
-        private const int MAX_ATTACK_TIME_MILLIS = 1000;
+        private const float MAX_ATTACK_TIME = 1f;
 
         //###############
         //##  MEMBERS  ##
@@ -128,16 +128,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             }
         }
 
+        private event Action OnCollisionWithPlayer;
         private void onPlayerCollision()
         {
-            mAttackState.ResetAttack();
+            mAttackState.ResetAttack();    
             StartCoroutine(stopPlayerNow());
         }
 
         private IEnumerator stopPlayerNow()
         {
             yield return new WaitForSeconds(0.05f);
-            //fixme mStateMachine.SetState(new Idle(mMoveHandler,mAnimator));
+            OnCollisionWithPlayer?.Invoke();
             yield return null;
         }
 
@@ -312,10 +313,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private IEnumerator resetAttack()
         {
-            yield return new WaitForSeconds(1f);
             mCanAttack = false;
             yield return new WaitForSeconds(5f);
-            mColorChanger.ChangeBack();
             mAttackState = new AttackPossible(this);
             yield return null;
         }
