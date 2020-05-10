@@ -261,6 +261,12 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 {
                     if (mBlockedByAction) return;
 
+                    if(checkIf(mParent.stopOnPlayer()))
+                    {
+                        mParent.mMoveHandler.Move(Vector2.zero);
+                        return;
+                    }
+
                     // move towards appearently works the other way around
                     Vector2 direction = mParent.Player.position - mParent.transform.position;
 
