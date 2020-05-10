@@ -141,10 +141,10 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return null;
         }
 
-        private void CollectableUpdate(Collision2D itemCollision)
+        private void CollectableUpdate(Collider2D collider)
         {
-            mCurrentObjective = itemCollision.transform;
-            Debug.Log("Current objective set to : " + itemCollision.transform.name);
+            mCurrentObjective = collider.transform;
+            Debug.Log("Current objective set to : " + collider.transform.name);
             UpdateObjectiveInState(mCurrentObjective);
         }
 
