@@ -198,7 +198,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         //###############
 
         // FIXME: case for no objective found
-        private Func<bool> isAlert() => () => distanceToPlayer() < mAlertCollider.radius && mCurrentObjective != null;
+        private Func<bool> isAlert() => () => distanceToPlayer() < mAlertCollider.radius;
         private Func<bool> notAlert() => () => distanceToPlayer() > mAlertCollider.radius;
         private Func<bool> atPost() => () => distanceToPost() <= StoppingDistance;
         private Func<bool> awayFromPost() => () => distanceToPost() > StoppingDistance;
@@ -270,7 +270,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private bool isInStoppingRange() => distanceToPlayer() < StoppingDistance;
         private float distanceToPlayer() => Vector2.Distance(Player.position, transform.position);
         private float distanceToPost() => Vector2.Distance(mPostPosition, transform.position);
-        private float distanceToCurObj() => Vector2.Distance(mCurrentObjective.position, transform.position);
+        private float distanceToCurObj() => mCurrentObjective != null ? Vector2.Distance(mCurrentObjective.position, transform.position) : 0;
 
         //##################
         //##    STATE     ##

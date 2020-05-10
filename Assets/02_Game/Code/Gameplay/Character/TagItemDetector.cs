@@ -23,6 +23,7 @@ namespace BlobbInvasion.Gameplay.Character
 
             if(mTags == null || checkIfTagMatches(other.transform.tag))
             {
+                Debug.Log("Detected new item: " + other.name);
                 OnItemDetected?.Invoke(other);
             }
         }

@@ -126,7 +126,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                     return condition();
                 }
 
-                protected bool checkIf(Func<bool>[] conditions)
+                protected bool checkIf(params Func<bool>[] conditions)
                 {
                     bool result = true;
 
@@ -162,7 +162,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 private void resetIdleAnimAction(Action cb)
                 {
                     mBlockedByAction = true;
-                   mCurCoroutine = mParent.StartCoroutine(idleAnimWithDelay(cb));
+                    mCurCoroutine = mParent.StartCoroutine(idleAnimWithDelay(cb));
                 }
 
                 private IEnumerator idleAnimWithDelay(Action handler)
@@ -177,7 +177,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 {
                     if (checkIf(mParent.isAlert()))
                     {
-                        if(mCurCoroutine != null)
+                        if (mCurCoroutine != null)
                         {
                             mParent.StopCoroutine(mCurCoroutine);
                             mCurCoroutine = null;
@@ -186,7 +186,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                     }
                     else if (checkIf(mAction.Condition) & !mBlockedByAction)
                         mAction.Execute();
-                    else if (!mBlockedByAction)
+                    else
                         mParent.mMoveHandler.Move(Vector2.zero);
                 }
             }
@@ -223,7 +223,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                     mParent.mColorChanger.ChangeBack();
                     mParent.mMoveHandler.Move(Vector2.zero);
                     mBlockedByAction = false;
-                    Debug.Log("Action cancelled");
                 }
 
                 public override void Tick()
@@ -238,7 +237,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
                 private void enemyAttackAction(Action cb)
                 {
-                    Debug.Log("Attack invoked");
                     mBlockedByAction = true;
 
                     Vector2 direction = mParent.Player.position - mParent.transform.position;
@@ -246,24 +244,17 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                     mParent.mColorChanger.ChangeColor();
                     mParent.mAttackState.ResetAttack();
 
-                    Debug.Log("Reset scheduled");
                     mCurCoroutine = mParent.StartCoroutine(AttackFinisnhed(cb));
                 }
 
                 private IEnumerator AttackFinisnhed(Action cb)
                 {
                     yield return new WaitForSeconds(MAX_ATTACK_TIME);
-                    Debug.Log("Action finished");
-                    try
-                    {
-                        mParent.mColorChanger.ChangeBack();
-                        mParent.mMoveHandler.Move(Vector2.zero);
-                        cb.Invoke();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError(ex.Message);
-                    }
+
+                    mParent.mColorChanger.ChangeBack();
+                    mParent.mMoveHandler.Move(Vector2.zero);
+                    cb.Invoke();
+
                 }
 
                 private void moveTowardsPlayer()
