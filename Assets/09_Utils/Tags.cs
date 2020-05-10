@@ -8,6 +8,7 @@ namespace BlobbInvasion.Utilities
         public const string MAIN_CAMERA = "MainCamera";
         public const string COLLECTABLE = "Collectable";
         public const string DETECTOR = "Detector";
+        public const string BULLET = "Bullet";
     }
 }
 

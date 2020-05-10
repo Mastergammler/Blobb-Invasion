@@ -68,7 +68,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 32400469
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: fb5feb19c6170584b836ab9027805ce6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6801413801677355226}
   m_Layer: 0
   m_Name: bullet_explode
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -272,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13fdb0f935bf59e469f07abb2c6d230d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BulletDmgAfterPenetration: 1
   Explosion: {fileID: 791646587645269816, guid: eef2dea5d3c0dff4f9b79d9d3ece058e,
     type: 3}
   TimeUntilExplosion: 1

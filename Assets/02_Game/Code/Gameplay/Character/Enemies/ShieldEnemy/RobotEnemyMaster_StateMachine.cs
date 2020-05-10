@@ -278,7 +278,6 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
                     mParent.mMoveHandler.Move(direction);
                 }
-
             }
 
             private class ProtectionState : RobotState

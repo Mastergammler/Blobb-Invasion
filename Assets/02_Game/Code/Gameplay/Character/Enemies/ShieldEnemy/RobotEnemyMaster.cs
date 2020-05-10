@@ -126,6 +126,10 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             {
                 onPlayerCollision();
             }
+            else if(other.tag.Equals(Tags.BULLET))
+            {
+                mAnimator.SetBool(ANIMATOR_BOOL,true);
+            }
         }
 
         private event Action OnCollisionWithPlayer;
