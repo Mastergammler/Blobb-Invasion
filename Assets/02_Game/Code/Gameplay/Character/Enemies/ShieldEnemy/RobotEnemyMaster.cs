@@ -43,7 +43,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private const float DISTANCE_TO_OBJ = 2f;
         private const float IDLE_ANIM_DELAY_TIME = 10f;
         private const String ANIMATOR_BOOL = "IsActive";
-        private const float ATTACK_MOVE_SPEED_MULT = 1.5f;
+        private const float ATTACK_MOVE_SPEED_MULT = 1.75f;
         private const float MAX_ATTACK_TIME = 1f;
 
         //###############
