@@ -42,6 +42,8 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
         private const float DISTANCE_TO_OBJ = 2f;
         private const float IDLE_ANIM_DELAY_TIME = 10f;
         private const String ANIMATOR_BOOL = "IsActive";
+        private const float ATTACK_MOVE_SPEED_MULT = 1.5f;
+        private const int MAX_ATTACK_TIME_MILLIS = 1000;
 
         //###############
         //##  MEMBERS  ##
@@ -109,6 +111,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            //FIXME: this doesn't work, because it gets triggered as soon as enemy is in range ...
             if (other.tag.Equals(Tags.PLAYER))
             {
                 onPlayerCollision();
@@ -288,6 +291,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             yield return new WaitForSeconds(1f);
             mCanAttack = false;
             yield return new WaitForSeconds(5f);
+            mColorChanger.ChangeBack();
             mAttackState = new AttackPossible(this);
             yield return null;
         }

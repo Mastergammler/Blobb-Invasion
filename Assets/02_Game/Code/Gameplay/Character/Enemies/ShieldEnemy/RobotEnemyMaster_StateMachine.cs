@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using System;
 
@@ -7,6 +8,12 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
     //      That it has access to all that the robot enemy needs
     public partial class RobotEnemyMaster
     {
+
+        //###############
+        //##  ACTIONS  ##
+        //###############
+
+        #region Actions
 
         public delegate void RobotActionDefinition(RobotAction action, Func<bool> condition);
         public delegate void RobotAction(Action cb);
@@ -18,31 +25,28 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             void Execute();
         }
 
-        abstract class RobotState : IRobotState
+        class DefaultRobotAction : IRobotAction
         {
-            public abstract void Tick();
-
-            protected bool checkIf(Func<bool> condition)
+            private RobotAction mAction;
+            public DefaultRobotAction(RobotAction action, Func<bool> condition)
             {
-                return condition();
+                mAction = action;
+                Condition = condition;
             }
 
-            protected bool checkIf(Func<bool>[] conditions)
+            // --  Interface  --
+            public void Execute()
             {
-                bool result = true;
-
-                foreach (Func<bool> c in conditions)
-                {
-                    result = result && c();
-                }
-
-                return result;
+                mAction(OnActionFinished);
             }
+
+            // -- Accessors --
+            public Func<bool> Condition { private set; get; }
+            public event Action OnActionFinished;
         }
 
         class ShowIdleAnim : IRobotAction
         {
-
             private RobotAction mAction;
             public ShowIdleAnim(RobotAction action, Func<bool> condition)
             {
@@ -53,16 +57,35 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
             public Func<bool> Condition { private set; get; }
 
             public event Action OnActionFinished;
-            public void ActionFinished()
-            {
-                OnActionFinished?.Invoke();
-            }
-
             public void Execute()
             {
                 mAction(OnActionFinished);
             }
         }
+
+        class EnemyAttack : IRobotAction
+        {
+
+            private RobotAction mAction;
+
+            public EnemyAttack(RobotAction action, Func<bool> condition)
+            {
+                mAction = action;
+                Condition = condition;
+            }
+            public void Execute()
+            {
+                mAction(OnActionFinished);
+            }
+            public Func<bool> Condition { private set; get; }
+            public event Action OnActionFinished;
+        }
+
+        #endregion
+
+        //##############
+        //##  STATES  ##
+        //##############
 
         interface IRobotState
         {
@@ -71,16 +94,12 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
         class RobotStateMachine
         {
-
-
             private IRobotState mCurentState;
             private RobotEnemyMaster mParent;
-
 
             public RobotStateMachine(RobotEnemyMaster parent)
             {
                 mParent = parent;
-
             }
 
             public void Initialize()
@@ -96,6 +115,29 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
 
             #region States
 
+            abstract class RobotState : IRobotState
+            {
+                public abstract void Tick();
+
+                protected bool checkIf(Func<bool> condition)
+                {
+                    return condition();
+                }
+
+                protected bool checkIf(Func<bool>[] conditions)
+                {
+                    bool result = true;
+
+                    foreach (Func<bool> c in conditions)
+                    {
+                        result = result && c();
+                    }
+
+                    return result;
+                }
+            }
+
+
             // how to change state then?
 
             private class IdleState : RobotState
@@ -109,7 +151,7 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                     mParent = parent;
                     mStateMachine = stateMachine;
                     mParent.mMoveHandler.Move(Vector2.zero);
-                    mAction = new ShowIdleAnim(mParent.PlayIdleAnim, mParent.idleAnim());
+                    mAction = new DefaultRobotAction(mParent.PlayIdleAnim, mParent.idleAnim());
                     mAction.OnActionFinished += () => mBlockedByAction = false;
                     Debug.Log("Idle State");
                 }
@@ -140,34 +182,57 @@ namespace BlobbInvasion.Gameplay.Character.Enemies.ShieldEnemy
                 }
             }
 
+            //-------------
+            //  Chasing
+            //-------------
+
             private class ChasingState : RobotState
             {
                 private RobotEnemyMaster mParent;
                 private RobotStateMachine mStateMachine;
+                private IRobotAction mRobotAction;
+                private bool mBlockedByAction = false;
 
                 public ChasingState(RobotEnemyMaster parent, RobotStateMachine stateMachine)
                 {
                     mParent = parent;
                     mStateMachine = stateMachine;
+                    mRobotAction = new DefaultRobotAction(enemyAttackAction, mParent.canAttack());
+                    mRobotAction.OnActionFinished += () => mBlockedByAction = false;
                     Debug.Log("Chasing State");
                 }
 
                 public override void Tick()
                 {
-                    checkCondition(mParent.notAlert());
-                    if (checkCondition(mParent.notAlert()))
+                    if (checkIf(mParent.notAlert()))
                         mStateMachine.mCurentState = new ProtectionState(mParent, mStateMachine);
+                    else if (checkIf(mRobotAction.Condition))
+                        mRobotAction.Execute();
                     else
                         moveTowardsPlayer();
                 }
 
-                private bool checkCondition(Func<bool> condition)
+                private void enemyAttackAction(Action cb)
                 {
-                    return condition();
+                    Vector2 direction = mParent.Player.position - mParent.transform.position;
+                    mParent.mMoveHandler.MoveFaster(direction, ATTACK_MOVE_SPEED_MULT);
+                    mParent.mColorChanger.ChangeColor();
+                    mParent.mAttackState.ResetAttack();
+                    
+                    Task.Delay(MAX_ATTACK_TIME_MILLIS).ContinueWith(t => AttackFinisnhed(cb));
+                }
+
+                private void AttackFinisnhed(Action cb)
+                {
+                    mParent.mColorChanger.ChangeBack();
+                    mParent.mMoveHandler.Move(Vector2.zero);
+                    cb.Invoke();
                 }
 
                 private void moveTowardsPlayer()
                 {
+                    if (mBlockedByAction) return;
+
                     // move towards appearently works the other way around
                     Vector2 direction = mParent.Player.position - mParent.transform.position;
 

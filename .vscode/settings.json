@@ -51,6 +51,18 @@
         "Obj/":true,
         "ProjectSettings/":true,
         "temp/":true,
-        "Temp/":true
+        "Temp/":true,
+        // my non code folders
+        "Assets/00_Prototype/":true,
+        "Assets/01_Menus/":true,
+        "Assets/02_Game/Animation/":true,
+        "Assets/02_Game/Art/":true,
+        "Assets/02_Game/Gameplay/":true,
+        "Assets/06_Sounds/":true,
+        "Assets/07_Music/":true,
+        "Assets/SceneDependencyCache/":true,
+        "Assets/Settings/":true,
+        "Assets/TextMesh Pro/":true,
+        "Assets/Tayx/":true,
     }
 }
