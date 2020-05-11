@@ -10,6 +10,7 @@ TagManager:
   - Protector
   - Collectable
   - Detector
+  - Bullet
   layers:
   - Default
   - TransparentFX

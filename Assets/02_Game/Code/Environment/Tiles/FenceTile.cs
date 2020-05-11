@@ -1,3 +1,4 @@
+using System.Drawing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace UnityEngine.Tilemaps
     [CreateAssetMenu(fileName = "New Fence Tile", menuName = "Tiles/Fence Tile")]
     public class FenceTile : TileBase
     {
+        public Color TileModificationColor;
         public Tile.ColliderType colliderType;
         public Sprite LT, LR, LB, TR, TB, RB, LTR, TRB, LRB, LTB, LTRB, L, T, R, B, alone;
 
@@ -34,7 +36,8 @@ namespace UnityEngine.Tilemaps
         public override void GetTileData(Vector3Int location, ITilemap tileMap, ref TileData tileData)
         {
             tileData.transform = Matrix4x4.identity;
-            tileData.color = Color.white;
+            tileData.color = TileModificationColor;
+            //Color.white;
             tileData.sprite = alone;
             ConfigureTile(location, tileMap, ref tileData);
             tileData.flags = TileFlags.LockTransform | TileFlags.LockColor;
