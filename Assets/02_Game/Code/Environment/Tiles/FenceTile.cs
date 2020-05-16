@@ -12,10 +12,11 @@ using UnityEngine;
 namespace UnityEngine.Tilemaps
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "New Fence Tile", menuName = "Tiles/Fence Tile")]
+    [CreateAssetMenu(fileName = "New Fence Tile", menuName = "Tiles/ColliderTile")]
     public class FenceTile : TileBase
     {
         public Color TileModificationColor;
+        public Object CollisionObject;
         public Tile.ColliderType colliderType;
         public Sprite LT, LR, LB, TR, TB, RB, LTR, TRB, LRB, LTB, LTRB, L, T, R, B, alone;
 
