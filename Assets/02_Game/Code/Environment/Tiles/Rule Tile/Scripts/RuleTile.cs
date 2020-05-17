@@ -102,7 +102,6 @@ namespace UnityEngine
             var iden = Matrix4x4.identity;
 
             tileData.sprite = m_DefaultSprite;
-            Debug.Log("Getting tile data");
             tileData.color = m_ColorModification;
             tileData.gameObject = m_DefaultGameObject;
             tileData.colliderType = m_DefaultColliderType;
